@@ -29,8 +29,6 @@ const defineThreeElements = () => {
   */
   for (const thing of Object.getOwnPropertyNames(THREE)) {
     const klass = THREE[thing as keyof typeof THREE]
-
-    // const name = `three-${dasherize(underscore(thing))}`
     const name = `three-${dasherize(thing)}`
 
     if (klass instanceof Function && !customElements.get(name)) {
