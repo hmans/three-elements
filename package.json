@@ -28,7 +28,7 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "dev": "concurrently 'yarn watch' 'yarn examples'",
+    "dev": "concurrently 'yarn watch -f umd' 'yarn examples'",
     "watch": "yarn clean && microbundle watch --globals three=THREE,inflected=Inflector",
     "build": "yarn clean && microbundle --globals three=THREE,inflected=Inflector",
     "examples": "serve -S examples",
