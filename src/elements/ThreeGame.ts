@@ -29,4 +29,5 @@ export class ThreeGame extends HTMLElement {
     document.body.removeChild(this.renderer.domElement)
   }
 }
+
 customElements.define("three-game", ThreeGame)

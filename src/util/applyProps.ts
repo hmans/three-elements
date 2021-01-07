@@ -1,4 +1,4 @@
-import { IStringIndexable } from "./types"
+import { IStringIndexable } from "../types"
 
 const IGNORED_KEYS = ["id"]
 

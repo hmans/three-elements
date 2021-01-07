@@ -1,5 +1,5 @@
-import { applyProps } from "./applyProps"
-import { observeAttributeChange } from "./observeAttributeChange"
+import { applyProps } from "./util/applyProps"
+import { observeAttributeChange } from "./util/observeAttributeChange"
 import { ThreeGame } from "./elements/ThreeGame"
 import { IConstructable } from "./types"
 import * as THREE from "three"
