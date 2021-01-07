@@ -32,7 +32,6 @@ const defineThreeElements = () => {
     const name = `three-${dasherize(thing)}`
 
     if (typeof klass === "function" && "prototype" in klass && !customElements.get(name)) {
-      console.log(name)
       customElements.define(name, makeClass(klass as IConstructable))
     }
   }
