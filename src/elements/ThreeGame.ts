@@ -11,9 +11,11 @@ export class ThreeGame extends HTMLElement {
   private handleWindowResizeListener = this.handleWindowResize.bind(this)
 
   connectedCallback() {
+    this.attachShadow({ mode: "open" })
+
     /* Set up renderer */
     this.renderer.setSize(window.innerWidth, window.innerHeight)
-    document.body.appendChild(this.renderer.domElement)
+    this.shadowRoot!.appendChild(this.renderer.domElement)
 
     /* Set up camera */
     this.camera.position.z = 10
@@ -36,7 +38,7 @@ export class ThreeGame extends HTMLElement {
     window.removeEventListener("resize", this.handleWindowResizeListener, false)
 
     /* Remove canvas from page */
-    document.body.removeChild(this.renderer.domElement)
+    this.shadowRoot!.removeChild(this.renderer.domElement)
   }
 
   handleWindowResize() {
