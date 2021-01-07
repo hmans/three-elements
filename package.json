@@ -28,12 +28,15 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "dev": "yarn clean && microbundle watch --globals three=THREE,inflected=Inflector",
+    "dev": "concurrently 'yarn watch' 'yarn examples'",
+    "watch": "yarn clean && microbundle watch --globals three=THREE,inflected=Inflector",
     "build": "yarn clean && microbundle --globals three=THREE,inflected=Inflector",
+    "examples": "serve -S examples",
     "prepublishOnly": "yarn build"
   },
   "devDependencies": {
     "@types/inflected": "^1.1.29",
+    "concurrently": "^5.3.0",
     "microbundle": "^0.13.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.36.1",
