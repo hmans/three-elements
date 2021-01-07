@@ -39,9 +39,14 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
             object[key].setScalar(parsed)
             break
 
-          /* Otherwise, we'll just directly assign whatever value was passed. */
+          /* If we have a parsed value, set it directly */
+          case parsed:
+            object[key].set(parsed)
+            break
+
+          /* Otherwise, set the original string value, but split by commas */
           default:
-            object[key].set(parsed || value)
+            object[key].set(...value.split(","))
         }
         break
 
