@@ -1,0 +1,4 @@
+[build]
+  base = "."
+  publish = "examples/"
+  command = "yarn build && cp -r dist examples/"
