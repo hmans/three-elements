@@ -15,6 +15,7 @@
 
 ## SUMMARY
 
+<!-- prettier-ignore -->
 ```html
 <html>
   <body>
@@ -24,12 +25,13 @@
       <three-directional-light intensity="0.8" position="[10, 10, 50]"></three-directional-light>
 
       <!-- scene contents -->
-      <three-mesh scale="4" onupdate="this.object.rotation.x = this.object.rotation.y += 1 * delta">
+      <three-mesh
+        scale="4"
+        onupdate="this.object.rotation.x = this.object.rotation.y += 1 * delta">
+
         <three-dodecahedron-buffer-geometry attach="geometry"></three-dodecahedron-buffer-geometry>
-        <three-mesh-standard-material
-          attach="material"
-          color="hotpink"
-        ></three-mesh-standard-material>
+        <three-mesh-standard-material attach="material" color="hotpink"></three-mesh-standard-material>
+
       </three-mesh>
     </three-game>
   </body>
