@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import { ThreeGame } from "./ThreeGame"
 
-class ThreeBox extends HTMLElement {
+export class ThreeBox extends HTMLElement {
   material: THREE.Material
   geometry: THREE.BufferGeometry
   mesh: THREE.Mesh

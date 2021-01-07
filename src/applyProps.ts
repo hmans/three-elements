@@ -1,6 +1,4 @@
-export interface IStringIndexable {
-  [key: string]: any
-}
+import { IStringIndexable } from "./types"
 
 const IGNORED_KEYS = ["id"]
 
