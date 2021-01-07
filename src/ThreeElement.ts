@@ -3,6 +3,7 @@ import { observeAttributeChange } from "./util/observeAttributeChange"
 import { ThreeGame } from "./elements/ThreeGame"
 import { IConstructable } from "./types"
 import * as THREE from "three"
+import { CallbackKind, TickerFunction } from "./util/Ticker"
 
 export class ThreeElement<T> extends HTMLElement {
   /** Constructor of the THREE class we will be instancing. */
@@ -23,6 +24,14 @@ export class ThreeElement<T> extends HTMLElement {
   connectedCallback() {
     if (!this.klass) return
 
+    /* Find and store reference to game */
+    for (let node = this.parentElement; node; node = node.parentElement) {
+      if (node instanceof ThreeGame) {
+        this.game = <ThreeGame>node
+        break
+      }
+    }
+
     /* Extract props from element attributes */
     const attributes = this.getAttributeNames().reduce((acc, name) => {
       acc[name] = this.getAttribute(name)
@@ -32,6 +41,21 @@ export class ThreeElement<T> extends HTMLElement {
     const { attach, args, ...remainingProps } = attributes
     this.props = remainingProps
     this.attach = attach
+
+    /* Register callbacks */
+    for (const kind of ["onupdate", "onlateupdate", "onrender"] as CallbackKind[]) {
+      if (kind in remainingProps) {
+        /* Extract callback handler from props */
+        const value = remainingProps[kind]
+        delete remainingProps[kind]
+
+        /* Register callback function */
+        const fn = new Function(value).bind(this)
+        this.game!.ticker.addCallback(kind, fn as TickerFunction)
+
+        /* TODO: register function for cleanup on unmount! */
+      }
+    }
 
     /* Create managed object */
     this.object = args ? new this.klass(...JSON.parse(args)) : new this.klass()
@@ -51,14 +75,6 @@ export class ThreeElement<T> extends HTMLElement {
 
       if (parent instanceof ThreeElement) {
         parent.object[this.attach] = this.object
-      }
-    }
-
-    /* Find and store reference to game */
-    for (let node = this.parentElement; node; node = node.parentElement) {
-      if (node instanceof ThreeGame) {
-        this.game = <ThreeGame>node
-        break
       }
     }
 

@@ -28,9 +28,11 @@ export class ThreeGame extends HTMLElement {
     window.addEventListener("resize", this.handleWindowResizeListener, false)
 
     /* Start ticker */
-    this.ticker.start((dt) => {
+    this.ticker.addCallback("onrender", () => {
       this.renderer.render(this.scene, this.camera)
     })
+
+    this.ticker.start()
   }
 
   disconnectedCallback() {
