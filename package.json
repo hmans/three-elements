@@ -1,7 +1,31 @@
 {
   "name": "three-elements",
   "version": "0.0.2",
-  "main": "index.js",
   "author": "Hendrik Mans",
-  "license": "MIT"
+  "license": "MIT",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rimraf dist",
+    "dev": "yarn clean && rollup -c -w",
+    "build": "yarn clean && rollup -c",
+    "test": "jest",
+    "docs": "typedoc src/index.ts"
+  },
+  "devDependencies": {
+    "@types/inflected": "^1.1.29",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.36.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "three": "^0.124.0",
+    "typescript": "^4.1.3"
+  },
+  "peerDependencies": {
+    "three": "^0.122.0"
+  },
+  "dependencies": {
+    "inflected": "^2.1.0"
+  }
 }
