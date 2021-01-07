@@ -31,7 +31,8 @@ const defineThreeElements = () => {
     const klass = THREE[thing as keyof typeof THREE]
     const name = `three-${dasherize(thing)}`
 
-    if (klass instanceof Function && !customElements.get(name)) {
+    if (typeof klass === "function" && "prototype" in klass && !customElements.get(name)) {
+      console.log(name)
       customElements.define(name, makeClass(klass as IConstructable))
     }
   }
