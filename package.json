@@ -28,8 +28,8 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "dev": "yarn clean && microbundle watch",
-    "build": "yarn clean && microbundle",
+    "dev": "yarn clean && microbundle watch --globals three=THREE",
+    "build": "yarn clean && microbundle --globals three=THREE",
     "prepublishOnly": "yarn build"
   },
   "devDependencies": {
