@@ -29,7 +29,8 @@
   "scripts": {
     "clean": "rimraf dist",
     "dev": "yarn clean && microbundle watch",
-    "build": "yarn clean && microbundle"
+    "build": "yarn clean && microbundle",
+    "prepublishOnly": "yarn build"
   },
   "devDependencies": {
     "@types/inflected": "^1.1.29",
