@@ -5,7 +5,9 @@ export class ThreeGame extends HTMLElement {
   scene = new THREE.Scene()
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
   renderer = new THREE.WebGLRenderer()
-  ticking = true
+
+  private ticking = true
+  private handleWindowResizeListener = this.handleWindowResize.bind(this)
 
   connectedCallback() {
     this.renderer.setSize(window.innerWidth, window.innerHeight)
@@ -13,6 +15,8 @@ export class ThreeGame extends HTMLElement {
 
     this.camera.position.z = 10
     this.camera.lookAt(0, 0, 0)
+
+    window.addEventListener("resize", this.handleWindowResizeListener, false)
 
     this.scene.background = new Color("#333")
 
@@ -26,7 +30,14 @@ export class ThreeGame extends HTMLElement {
 
   disconnectedCallback() {
     this.ticking = false
+    window.removeEventListener("resize", this.handleWindowResizeListener, false)
     document.body.removeChild(this.renderer.domElement)
+  }
+
+  handleWindowResize() {
+    this.camera.aspect = window.innerWidth / window.innerHeight
+    this.camera.updateProjectionMatrix()
+    this.renderer.setSize(window.innerWidth, window.innerHeight)
   }
 }
 
