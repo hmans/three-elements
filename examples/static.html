@@ -21,7 +21,7 @@
       <three-orbit-controls></three-orbit-controls>
 
       <!-- scene contents -->
-      <three-mesh scale="4" onupdate="this.object.rotation.z += 0.01">
+      <three-mesh scale="4" onupdate="this.object.rotation.x = this.object.rotation.y += 0.01">
         <three-dodecahedron-buffer-geometry attach="geometry"></three-dodecahedron-buffer-geometry>
         <three-mesh-standard-material
           attach="material"
