@@ -1,10 +1,15 @@
 export * from "./elements"
-import { dasherize, underscore } from "inflected"
 import * as THREE from "three"
 import { ThreeElement } from "./ThreeElement"
 import { IConstructable } from "./types"
 
 const defineThreeElements = () => {
+  const dasherize = (str: string) =>
+    str
+      .replace(/([a-z])([A-Z])/g, "$1-$2")
+      .replace(/([A-Z])([A-Z][a-z])/g, "$1-$2")
+      .toLowerCase()
+
   /* Convenience function to create a custom element based on a generated class. */
   const makeClass = <T>(klass: IConstructable<T>) => {
     return class extends ThreeElement<T> {
@@ -24,7 +29,10 @@ const defineThreeElements = () => {
   */
   for (const thing of Object.getOwnPropertyNames(THREE)) {
     const klass = THREE[thing as keyof typeof THREE]
-    const name = `three-${dasherize(underscore(thing))}`
+
+    // const name = `three-${dasherize(underscore(thing))}`
+    const name = `three-${dasherize(thing)}`
+    console.log(name, thing)
 
     if (klass instanceof Function && !customElements.get(name)) {
       customElements.define(name, makeClass(klass as IConstructable))

@@ -29,8 +29,8 @@
   "scripts": {
     "clean": "rimraf dist",
     "dev": "concurrently 'yarn watch -f umd' 'yarn examples'",
-    "watch": "yarn clean && microbundle watch --globals three=THREE,inflected=Inflector",
-    "build": "yarn clean && microbundle --globals three=THREE,inflected=Inflector",
+    "watch": "yarn clean && microbundle watch --globals three=THREE",
+    "build": "yarn clean && microbundle --globals three=THREE",
     "examples": "serve -S examples",
     "prepublishOnly": "yarn build"
   },
@@ -48,8 +48,5 @@
   },
   "peerDependencies": {
     "three": "^0.122.0"
-  },
-  "dependencies": {
-    "inflected": "^2.1.0"
   }
 }
