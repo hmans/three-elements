@@ -5,6 +5,8 @@ import { IConstructable } from "./types"
 import * as THREE from "three"
 import { CallbackKind, TickerFunction } from "./util/Ticker"
 
+type EffectFunction = () => Function
+
 export class ThreeElement<T> extends HTMLElement {
   /** Constructor of the THREE class we will be instancing. */
   klass?: IConstructable
@@ -20,6 +22,8 @@ export class ThreeElement<T> extends HTMLElement {
 
   /** Name of the parent's property that this object should attach to. */
   attach?: string
+
+  private cleanupFns = new Array<Function>()
 
   connectedCallback() {
     if (!this.klass) return
@@ -45,15 +49,20 @@ export class ThreeElement<T> extends HTMLElement {
     /* Register callbacks */
     for (const kind of ["onupdate", "onlateupdate", "onrender"] as CallbackKind[]) {
       if (kind in remainingProps) {
-        /* Extract callback handler from props */
-        const value = remainingProps[kind]
-        delete remainingProps[kind]
+        this.effect(() => {
+          /* Extract callback handler from props */
+          const value = remainingProps[kind]
+          delete remainingProps[kind]
 
-        /* Register callback function */
-        const fn = new Function(value).bind(this)
-        this.game!.ticker.addCallback(kind, fn as TickerFunction)
+          /* Register callback function */
+          const fn = new Function(value).bind(this)
+          this.game!.ticker.addCallback(kind, fn as TickerFunction)
 
-        /* TODO: register function for cleanup on unmount! */
+          /* register function for cleanup on unmount! */
+          return () => {
+            this.game!.ticker.removeCallback(kind, fn as TickerFunction)
+          }
+        })
       }
     }
 
@@ -87,9 +96,18 @@ export class ThreeElement<T> extends HTMLElement {
   disconnectedCallback() {
     if (!this.object) return
 
+    /* Execute cleanup functions */
+    for (const cleanupFn of this.cleanupFns) cleanupFn()
+    this.cleanupFns = []
+
     /* If the wrapped object is parented, remove it from its parent */
     if (this.object.parent) {
       this.object.parent.remove(this.object)
     }
+  }
+
+  private effect(fn: EffectFunction) {
+    const cleanupFn = fn()
+    this.cleanupFns.push(cleanupFn)
   }
 }
