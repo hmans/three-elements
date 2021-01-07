@@ -32,7 +32,6 @@ const defineThreeElements = () => {
 
     // const name = `three-${dasherize(underscore(thing))}`
     const name = `three-${dasherize(thing)}`
-    console.log(name, thing)
 
     if (klass instanceof Function && !customElements.get(name)) {
       customElements.define(name, makeClass(klass as IConstructable))
