@@ -81,10 +81,9 @@ export class ThreeElement<T> extends HTMLElement {
 
   disconnectedCallback() {
     /* Unregister event handlers */
-    this.onupdate = undefined
-    this.onlateupdate = undefined
-    this.onframe = undefined
-    this.onrender = undefined
+    for (const kind in ["onupdate", "onlateupdate", "onframe", "onrender"]) {
+      this[kind as CallbackKind] = undefined
+    }
 
     /* If the wrapped object is parented, remove it from its parent */
     if (this.object instanceof THREE.Object3D && this.object.parent) {
