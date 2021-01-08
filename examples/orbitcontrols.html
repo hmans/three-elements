@@ -1,11 +1,13 @@
 <html>
   <head>
     <title>OrbitControls</title>
-    <script src="https://unpkg.com/three@0.124.0/build/three.js"></script>
-    <script src="./dist/index.umd.js"></script>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
+    <script type="module">
+      import "https://unpkg.com/three-elements?module"
+    </script>
+
     <three-game>
       <!-- lights -->
       <three-ambient-light intensity="0.2"></three-ambient-light>
