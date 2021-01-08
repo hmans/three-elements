@@ -53,4 +53,4 @@ export class ThreeGame extends HTMLElement {
   }
 }
 
-customElements.define("three-game", ThreeGame)
+if (!customElements.get("three-game")) customElements.define("three-game", ThreeGame)
