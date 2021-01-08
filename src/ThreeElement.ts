@@ -66,10 +66,8 @@ export class ThreeElement<T> extends HTMLElement {
     /* Find and store reference to game */
     this.game = this.find(ThreeGame)
 
-    /* Extract props from element attributes */
-    const { attach, args, ...remainingProps } = this.getAllAttributes()
-
     /* Use provided attach, or auto-set it based on the tag name. */
+    const attach = this.getAttribute("attach")
     if (attach) {
       this.attach = attach
     } else if (this.tagName.endsWith("-MATERIAL")) {
@@ -79,7 +77,7 @@ export class ThreeElement<T> extends HTMLElement {
     }
 
     /* Apply props */
-    this.handleAttributes(remainingProps)
+    this.handleAttributes(this.getAllAttributes())
 
     /* When one of this element's attributes changes, apply it to the object. */
     observeAttributeChange(this, (prop, value) => {
@@ -134,13 +132,20 @@ export class ThreeElement<T> extends HTMLElement {
   }
 
   private handleAttributes(attributes: IStringIndexable) {
-    const { onupdate, onlateupdate, onrender, ...wrappedObjectAttributes } = attributes
+    const {
+      attach,
+      args,
+      onupdate,
+      onlateupdate,
+      onrender,
+      ...wrappedObjectAttributes
+    } = attributes
 
     /* Assign some attributes to the element itself */
     applyProps(this, { onupdate, onlateupdate, onrender })
 
     /* Assign everything else to the wrapped Three.js object */
-    applyProps(this.object!, attributes)
+    applyProps(this.object!, wrappedObjectAttributes)
   }
 
   private setCallback(kind: CallbackKind, fn: TickerFunction | string) {
