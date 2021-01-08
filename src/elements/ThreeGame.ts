@@ -9,8 +9,6 @@ export class ThreeGame extends HTMLElement {
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
   renderer = new THREE.WebGLRenderer()
 
-  private handleWindowResizeListener = this.handleWindowResize.bind(this)
-
   connectedCallback() {
     this.attachShadow({ mode: "open" })
 
@@ -26,7 +24,8 @@ export class ThreeGame extends HTMLElement {
     this.scene.background = new Color("#333")
 
     /* Handle window resizing */
-    window.addEventListener("resize", this.handleWindowResizeListener, false)
+    this.handleWindowResize = this.handleWindowResize.bind(this)
+    window.addEventListener("resize", this.handleWindowResize, false)
 
     /* Start ticker */
     this.ticker.addCallback("onrender", () => {
@@ -38,7 +37,7 @@ export class ThreeGame extends HTMLElement {
 
   disconnectedCallback() {
     /* Unregister event handlers */
-    window.removeEventListener("resize", this.handleWindowResizeListener, false)
+    window.removeEventListener("resize", this.handleWindowResize, false)
 
     /* Remove canvas from page */
     this.shadowRoot!.removeChild(this.renderer.domElement)
