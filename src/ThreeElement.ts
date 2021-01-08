@@ -54,8 +54,6 @@ export class ThreeElement<T> extends HTMLElement {
     this.setCallback("onrender", fn)
   }
 
-  private cleanupFns = new Array<Function>()
-
   connectedCallback() {
     if (!this.klass) return
 
@@ -114,19 +112,10 @@ export class ThreeElement<T> extends HTMLElement {
   disconnectedCallback() {
     if (!this.object) return
 
-    /* Execute cleanup functions */
-    for (const cleanupFn of this.cleanupFns) cleanupFn()
-    this.cleanupFns = []
-
     /* If the wrapped object is parented, remove it from its parent */
     if (this.object.parent) {
       this.object.parent.remove(this.object)
     }
-  }
-
-  private effect(fn: EffectFunction) {
-    const cleanupFn = fn()
-    this.cleanupFns.push(cleanupFn)
   }
 
   private handleAttributes(attributes: IStringIndexable) {
