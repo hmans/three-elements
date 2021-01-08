@@ -16,8 +16,9 @@ const defineThreeElements = () => {
     }
   }
 
-  /* Custom elements we want to set up manually in order to get the naming right */
+  /* Custom elements we want to set up manually in order to get naming and order right */
   registerComponent("three-object3d", makeClass(THREE.Object3D))
+  registerComponent("three-mesh", makeClass(THREE.Mesh))
 
   /*
   For everything else inside THREE.* that can be constructed, automatically
