@@ -26,9 +26,9 @@ three-elements can be used standalone in **static HTML**, or together with the H
 three-elements can be used on its own, but it's best when coupled with some sort of framework. You can use it with any framework or technology that emits a HTML DOM, so there's plenty of options! Here's a couple of examples:
 
 - [three-elements with static HTML](https://codesandbox.io/s/three-elements-static-7orc4)
-  - **It Just Works.** ✅ Note how you can plug simple update functions directly into the `onupdate` attribute of any object.
+  - **It Just Works.** Note how you can plug simple update functions directly into the `onupdate` attribute of any object.
 - [three-elements with Svelte](https://codesandbox.io/s/three-elements-svelte-dx1gv?file=/App.svelte)
-  - **It Just Works.** ✅ Svelte works extremely close to the DOM, so there are no surprises here.
+  - **It Just Works.** Svelte works extremely close to the DOM, so there are no surprises here.
 - [three-elements with Vue](https://codesandbox.io/s/three-elements-vue-1swry?file=/src/App.vue)
   - **Caveat:** Vue really doesn't like custom elements much, requiring you to register them before emitting. We can eventually fix this three-elements with a bit of glue code.
 - [three-elements with React](https://codesandbox.io/s/three-elements-react-9nqh4?file=/src/App.js)
