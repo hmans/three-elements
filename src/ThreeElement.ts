@@ -18,6 +18,7 @@ export class ThreeElement<T> extends HTMLElement {
   /** Name of the parent's property that this object should attach to. */
   attach?: string
 
+  /** A dictionary of ticker callbacks (onupdate, etc.) */
   private callbacks = {} as Record<CallbackKind, TickerFunction>
 
   get onupdate() {
@@ -62,15 +63,8 @@ export class ThreeElement<T> extends HTMLElement {
   }
 
   connectedCallback() {
-    if (!this.object) return
-
     /* Find and store reference to game */
-    for (let node = this.parentElement; node; node = node.parentElement) {
-      if (node instanceof ThreeGame) {
-        this.game = <ThreeGame>node
-        break
-      }
-    }
+    this.game = this.find(ThreeGame)
 
     /* Extract props from element attributes */
     const attributes = this.getAttributeNames().reduce((acc, name) => {
@@ -119,6 +113,18 @@ export class ThreeElement<T> extends HTMLElement {
     /* If the wrapped object is parented, remove it from its parent */
     if (this.object instanceof THREE.Object3D && this.object.parent) {
       this.object.parent.remove(this.object)
+    }
+  }
+
+  /**
+   * Walks up the tree of elements until it finds one that is an instance of
+   * the constructor passed as the argument.
+   */
+  find<T extends HTMLElement>(klass: Function) {
+    for (let node = this.parentElement; node; node = node.parentElement) {
+      if (node instanceof klass) {
+        return node as T
+      }
     }
   }
 
