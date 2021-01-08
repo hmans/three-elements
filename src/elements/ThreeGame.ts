@@ -1,5 +1,6 @@
 import * as THREE from "three"
 import { Color } from "three"
+import { registerComponent } from "../util/registerComponent"
 import { Ticker } from "../util/Ticker"
 
 export class ThreeGame extends HTMLElement {
@@ -53,4 +54,4 @@ export class ThreeGame extends HTMLElement {
   }
 }
 
-if (!customElements.get("three-game")) customElements.define("three-game", ThreeGame)
+registerComponent("three-game", ThreeGame)

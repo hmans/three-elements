@@ -961,11 +961,6 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
   integrity sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==
 
-"@types/inflected@^1.1.29":
-  version "1.1.29"
-  resolved "https://registry.yarnpkg.com/@types/inflected/-/inflected-1.1.29.tgz#8ef717dcf618d84584f506108ea85cd852f6d3ab"
-  integrity sha1-jvcX3PYY2EWE9QYQjqhc2FL206s=
-
 "@types/node@*":
   version "14.14.20"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.20.tgz#f7974863edd21d1f8a494a73e8e2b3658615c340"
