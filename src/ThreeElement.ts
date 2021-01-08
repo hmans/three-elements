@@ -15,9 +15,6 @@ export class ThreeElement<T> extends HTMLElement {
   /** A reference to the game (with ticker, scene etc.) */
   game?: ThreeGame
 
-  /** Name of the parent's property that this object should attach to. */
-  attach?: string
-
   /** A dictionary of ticker callbacks (onupdate, etc.) */
   private callbacks = {} as Record<CallbackKind, TickerFunction>
 
@@ -66,15 +63,7 @@ export class ThreeElement<T> extends HTMLElement {
     /* Find and store reference to game */
     this.game = this.find(ThreeGame)
 
-    /* Use provided attach, or auto-set it based on the tag name. */
-    const attach = this.getAttribute("attach")
-    if (attach) {
-      this.attach = attach
-    } else if (this.tagName.endsWith("-MATERIAL")) {
-      this.attach = "material"
-    } else if (this.tagName.endsWith("-GEOMETRY")) {
-      this.attach = "geometry"
-    }
+    this.handleAttach()
 
     /* Apply props */
     this.handleAttributes(this.getAllAttributes())
@@ -83,16 +72,6 @@ export class ThreeElement<T> extends HTMLElement {
     observeAttributeChange(this, (prop, value) => {
       this.handleAttributes({ [prop]: value })
     })
-
-    /* If the wrapped object has an "attach" attribute, automatically assign it to the
-       value of the same name in the parent object. */
-    if (this.attach) {
-      const parent = this.parentElement
-
-      if (parent instanceof ThreeElement) {
-        parent.object[this.attach] = this.object
-      }
-    }
 
     /* If the wrapped object is an Object3D, add it to the scene */
     if (this.game && this.object instanceof THREE.Object3D) {
@@ -127,6 +106,27 @@ export class ThreeElement<T> extends HTMLElement {
     for (let node = this.parentElement; node; node = node.parentElement) {
       if (node instanceof klass) {
         return node as T
+      }
+    }
+  }
+
+  private handleAttach() {
+    /* Use provided attach, or auto-set it based on the tag name. */
+    let attach = this.getAttribute("attach")
+
+    if (attach === null && this.tagName.endsWith("-MATERIAL")) {
+      attach = "material"
+    } else if (attach === null && this.tagName.endsWith("-GEOMETRY")) {
+      attach = "geometry"
+    }
+
+    /* If the wrapped object has an "attach" attribute, automatically assign it to the
+       value of the same name in the parent object. */
+    if (attach) {
+      const parent = this.parentElement
+
+      if (parent instanceof ThreeElement) {
+        parent.object[attach] = this.object
       }
     }
   }
