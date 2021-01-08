@@ -56,7 +56,7 @@ export class ThreeElement<T> extends HTMLElement {
           delete remainingProps[kind]
 
           /* Register callback function */
-          const fn = new Function("delta = arguments[0]", value).bind(this)
+          const fn = new Function("delta = arguments[0]", `fun = ${value}`, "fun(delta)").bind(this)
           this.game!.ticker.addCallback(kind, fn as TickerFunction)
 
           /* register function for cleanup on unmount! */
