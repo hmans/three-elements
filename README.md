@@ -32,6 +32,8 @@ three-elements can be used on its own, but it's best when coupled with some sort
 - [three-elements with Vue](https://codesandbox.io/s/three-elements-vue-1swry?file=/src/App.vue)
   - **Caveat:** Vue really doesn't like custom elements much, requiring you to register them before emitting. We can eventually fix this with a bit of glue code.
 - [three-elements with React](https://codesandbox.io/s/three-elements-react-9nqh4?file=/src/App.js)
-  - **Caveat:** you can't currently directly assign function callbacks to `onupdate` and friends. Improvements to this are being [discussed in the React community](https://github.com/facebook/react/issues/11347), also see [this page on custom-elements-everywhere.com](https://custom-elements-everywhere.com/libraries/react/results/results.html). You can work around this caveat through refs, but if you really want to React, maybe consider using react-three-fiber instead.
+  - **Caveat:** you can't currently directly assign function callbacks to `onupdate` and friends. Improvements to this are being [discussed in the React community](https://github.com/facebook/react/issues/11347), also see [this page on custom-elements-everywhere.com](https://custom-elements-everywhere.com/libraries/react/results/results.html). You can work around this caveat through refs, but if you really want to React, maybe consider using [react-three-fiber] instead.
 - [three-elements with HyperApp](https://codesandbox.io/s/three-elements-hyperapp-rxhei?file=/index.html)
   - **Caveat:** apparently you can't currently assign `onupdate` attributes as they get swallowed by the framework for some reason. I'm not very familiar with HyperApp and will investigate and hopefully fix this eventually.
+
+[react-three-fiber]: https://github.com/pmndrs/react-three-fiber
