@@ -1,6 +1,6 @@
 export type TickerFunction = (dt: number) => any
 
-export type CallbackKind = "onupdate" | "onlateupdate" | "onrender"
+export type CallbackKind = "onupdate" | "onlateupdate" | "onframe" | "onrender"
 
 export class Ticker {
   private alive = false

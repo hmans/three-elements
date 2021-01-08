@@ -1,9 +1,9 @@
 import { applyProps } from "./util/applyProps"
 import { observeAttributeChange } from "./util/observeAttributeChange"
 import { ThreeGame } from "./elements/ThreeGame"
-import { IConstructable } from "./types"
+import { IConstructable, IStringIndexable } from "./types"
 import * as THREE from "three"
-import { CallbackKind, TickerFunction } from "./util/Ticker"
+import { CallbackKind, Ticker, TickerFunction } from "./util/Ticker"
 
 type EffectFunction = () => Function
 
@@ -17,11 +17,42 @@ export class ThreeElement<T> extends HTMLElement {
   /** A reference to the game (with ticker, scene etc.) */
   game?: ThreeGame
 
-  /** Properties that will automatically be applied to the managed object. */
-  props?: Record<string, any>
-
   /** Name of the parent's property that this object should attach to. */
   attach?: string
+
+  private callbacks = {} as Record<CallbackKind, TickerFunction>
+
+  get onupdate() {
+    return this.callbacks["onupdate"]
+  }
+
+  set onupdate(fn: TickerFunction | string) {
+    this.setCallback("onupdate", fn)
+  }
+
+  get onlateupdate() {
+    return this.callbacks["onlateupdate"]
+  }
+
+  set onlateupdate(fn: TickerFunction | string) {
+    this.setCallback("onlateupdate", fn)
+  }
+
+  get onframe() {
+    return this.callbacks["onframe"]
+  }
+
+  set onframe(fn: TickerFunction | string) {
+    this.setCallback("onframe", fn)
+  }
+
+  get onrender() {
+    return this.callbacks["onrender"]
+  }
+
+  set onrender(fn: TickerFunction | string) {
+    this.setCallback("onrender", fn)
+  }
 
   private cleanupFns = new Array<Function>()
 
@@ -43,7 +74,6 @@ export class ThreeElement<T> extends HTMLElement {
     }, {} as Record<string, any>)
 
     const { attach, args, ...remainingProps } = attributes
-    this.props = remainingProps
 
     /* Use provided attach, or auto-set it based on the tag name. */
     if (attach) {
@@ -54,36 +84,15 @@ export class ThreeElement<T> extends HTMLElement {
       this.attach = "geometry"
     }
 
-    /* Register callbacks */
-    /* TODO: this should really happen in applyProps, so it remains reactive. */
-    for (const kind of ["onupdate", "onlateupdate", "onrender"] as CallbackKind[]) {
-      if (kind in remainingProps) {
-        this.effect(() => {
-          /* Extract callback handler from props */
-          const value = remainingProps[kind]
-          delete remainingProps[kind]
-
-          /* Register callback function */
-          const fn = new Function("delta = arguments[0]", `fun = ${value}`, "fun(delta)").bind(this)
-          this.game!.ticker.addCallback(kind, fn as TickerFunction)
-
-          /* register function for cleanup on unmount! */
-          return () => {
-            this.game!.ticker.removeCallback(kind, fn as TickerFunction)
-          }
-        })
-      }
-    }
-
     /* Create managed object */
     this.object = args ? new this.klass(...JSON.parse(args)) : new this.klass()
 
     /* Apply props */
-    applyProps(this.object, this.props)
+    this.handleAttributes(remainingProps)
 
     /* When one of this element's attributes changes, apply it to the object. */
     observeAttributeChange(this, (prop, value) => {
-      applyProps(this.object, { [prop]: value })
+      this.handleAttributes({ [prop]: value })
     })
 
     /* If the wrapped object has an "attach" attribute, automatically assign it to the
@@ -118,5 +127,33 @@ export class ThreeElement<T> extends HTMLElement {
   private effect(fn: EffectFunction) {
     const cleanupFn = fn()
     this.cleanupFns.push(cleanupFn)
+  }
+
+  private handleAttributes(attributes: IStringIndexable) {
+    const { onupdate, onlateupdate, onrender, ...wrappedObjectAttributes } = attributes
+
+    /* Assign some attributes to the element itself */
+    applyProps(this, { onupdate, onlateupdate, onrender })
+
+    /* Assign everything else to the wrapped Three.js object */
+    applyProps(this.object, attributes)
+  }
+
+  private setCallback(kind: CallbackKind, fn: TickerFunction | string) {
+    /* Unregister previous callback */
+    if (this.callbacks[kind]) {
+      this.game!.ticker.removeCallback(kind, this.callbacks[kind])
+    }
+
+    /* Store new value, constructing a function from a string if necessary */
+    this.callbacks[kind] =
+      typeof fn === "string"
+        ? new Function("delta = arguments[0]", `fun = ${fn}`, "fun(delta)").bind(this)
+        : fn
+
+    /* Register new callback */
+    if (this.callbacks[kind]) {
+      this.game!.ticker.addCallback(kind, this.callbacks[kind])
+    }
   }
 }
