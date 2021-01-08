@@ -1,2 +1,2 @@
 export { ThreeGame } from "./ThreeGame"
-export { ThreeOrbitControls } from "./ThreeOrbitControls"
+// export { ThreeOrbitControls } from "./ThreeOrbitControls"

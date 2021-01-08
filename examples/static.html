@@ -1,11 +1,13 @@
 <html>
   <head>
     <title>Static HTML</title>
-    <script src="https://unpkg.com/three@0.124.0/build/three.js"></script>
-    <script src="./dist/index.umd.js"></script>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
+    <script type="module">
+      import * as THREE from "https://unpkg.com/three/build/three.module.js"
+      import "https://unpkg.com/three-elements/dist/index.esm.js?module"
+    </script>
     <three-game>
       <!-- lights -->
       <three-ambient-light intensity="0.2"></three-ambient-light>
