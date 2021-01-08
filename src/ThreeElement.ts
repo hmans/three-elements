@@ -44,7 +44,15 @@ export class ThreeElement<T> extends HTMLElement {
 
     const { attach, args, ...remainingProps } = attributes
     this.props = remainingProps
-    this.attach = attach
+
+    /* Use provided attach, or auto-set it based on the tag name. */
+    if (attach) {
+      this.attach = attach
+    } else if (this.tagName.endsWith("-MATERIAL")) {
+      this.attach = "material"
+    } else if (this.tagName.endsWith("-GEOMETRY")) {
+      this.attach = "geometry"
+    }
 
     /* Register callbacks */
     /* TODO: this should really happen in applyProps, so it remains reactive. */
