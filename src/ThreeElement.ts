@@ -1,18 +1,16 @@
-import { applyProps } from "./util/applyProps"
-import { observeAttributeChange } from "./util/observeAttributeChange"
+import * as THREE from "three"
 import { ThreeGame } from "./elements/ThreeGame"
 import { IConstructable, IStringIndexable } from "./types"
-import * as THREE from "three"
-import { CallbackKind, Ticker, TickerFunction } from "./util/Ticker"
-
-type EffectFunction = () => Function
+import { applyProps } from "./util/applyProps"
+import { observeAttributeChange } from "./util/observeAttributeChange"
+import { CallbackKind, TickerFunction } from "./util/Ticker"
 
 export class ThreeElement<T> extends HTMLElement {
   /** Constructor of the THREE class we will be instancing. */
-  klass?: IConstructable
+  protected static threeConstructor: IConstructable
 
   /** The THREE.* object managed by this element. */
-  object: any //T
+  object: T
 
   /** A reference to the game (with ticker, scene etc.) */
   game?: ThreeGame
@@ -54,8 +52,17 @@ export class ThreeElement<T> extends HTMLElement {
     this.setCallback("onrender", fn)
   }
 
+  constructor() {
+    super()
+
+    /* Create managed object */
+    const args = this.getAttribute("args")
+    const constructor = (this.constructor as typeof ThreeElement).threeConstructor
+    this.object = args ? new constructor(...JSON.parse(args)) : new constructor()
+  }
+
   connectedCallback() {
-    if (!this.klass) return
+    if (!this.object) return
 
     /* Find and store reference to game */
     for (let node = this.parentElement; node; node = node.parentElement) {
@@ -81,9 +88,6 @@ export class ThreeElement<T> extends HTMLElement {
     } else if (this.tagName.endsWith("-GEOMETRY")) {
       this.attach = "geometry"
     }
-
-    /* Create managed object */
-    this.object = args ? new this.klass(...JSON.parse(args)) : new this.klass()
 
     /* Apply props */
     this.handleAttributes(remainingProps)
@@ -113,7 +117,7 @@ export class ThreeElement<T> extends HTMLElement {
     if (!this.object) return
 
     /* If the wrapped object is parented, remove it from its parent */
-    if (this.object.parent) {
+    if (this.object instanceof THREE.Object3D && this.object.parent) {
       this.object.parent.remove(this.object)
     }
   }
@@ -125,7 +129,7 @@ export class ThreeElement<T> extends HTMLElement {
     applyProps(this, { onupdate, onlateupdate, onrender })
 
     /* Assign everything else to the wrapped Three.js object */
-    applyProps(this.object, attributes)
+    applyProps(this.object!, attributes)
   }
 
   private setCallback(kind: CallbackKind, fn: TickerFunction | string) {

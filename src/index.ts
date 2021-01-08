@@ -6,12 +6,13 @@ import { registerComponent } from "./util/registerComponent"
 
 const defineThreeElements = () => {
   /* Convenience function to create a custom element based on a generated class. */
-  const makeClass = <T>(klass: IConstructable<T>) => {
+  const makeClass = <T>(constructor: IConstructable<T>) => {
+    /*
+    Create an anonymous class that inherits from our cool base class, but sets
+    its own Three.js constructor property.
+    */
     return class extends ThreeElement<T> {
-      constructor() {
-        super()
-        this.klass = klass
-      }
+      protected static threeConstructor = constructor
     }
   }
 
