@@ -1,6 +1,6 @@
 import * as THREE from "three"
 import { ThreeGame } from "./elements/ThreeGame"
-import { IConstructable, IStringIndexable } from "./types"
+import { IConstructable, isDisposable, IStringIndexable } from "./types"
 import { applyProps } from "./util/applyProps"
 import { observeAttributeChange } from "./util/observeAttributeChange"
 import { CallbackKind, TickerFunction } from "./util/Ticker"
@@ -89,6 +89,11 @@ export class ThreeElement<T> extends HTMLElement {
     /* If the wrapped object is parented, remove it from its parent */
     if (this.object instanceof THREE.Object3D && this.object.parent) {
       this.object.parent.remove(this.object)
+    }
+
+    /* If the object can be disposed, dispose of it! */
+    if (isDisposable(this.object)) {
+      this.object.dispose()
     }
   }
 
