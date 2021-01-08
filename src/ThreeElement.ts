@@ -67,12 +67,7 @@ export class ThreeElement<T> extends HTMLElement {
     this.game = this.find(ThreeGame)
 
     /* Extract props from element attributes */
-    const attributes = this.getAttributeNames().reduce((acc, name) => {
-      acc[name] = this.getAttribute(name)
-      return acc
-    }, {} as Record<string, any>)
-
-    const { attach, args, ...remainingProps } = attributes
+    const { attach, args, ...remainingProps } = this.getAllAttributes()
 
     /* Use provided attach, or auto-set it based on the tag name. */
     if (attach) {
@@ -114,6 +109,16 @@ export class ThreeElement<T> extends HTMLElement {
     if (this.object instanceof THREE.Object3D && this.object.parent) {
       this.object.parent.remove(this.object)
     }
+  }
+
+  /**
+   * Returns a dictionary containing all attributes on this element.
+   */
+  getAllAttributes() {
+    return this.getAttributeNames().reduce((acc, name) => {
+      acc[name] = this.getAttribute(name)
+      return acc
+    }, {} as Record<string, any>)
   }
 
   /**
