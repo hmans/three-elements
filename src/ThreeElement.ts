@@ -22,7 +22,7 @@ export class ThreeElement<T> extends HTMLElement {
     return this.callbacks["onupdate"]
   }
 
-  set onupdate(fn: TickerFunction | string) {
+  set onupdate(fn: TickerFunction | string | undefined) {
     this.setCallback("onupdate", fn)
   }
 
@@ -30,7 +30,7 @@ export class ThreeElement<T> extends HTMLElement {
     return this.callbacks["onlateupdate"]
   }
 
-  set onlateupdate(fn: TickerFunction | string) {
+  set onlateupdate(fn: TickerFunction | string | undefined) {
     this.setCallback("onlateupdate", fn)
   }
 
@@ -38,7 +38,7 @@ export class ThreeElement<T> extends HTMLElement {
     return this.callbacks["onframe"]
   }
 
-  set onframe(fn: TickerFunction | string) {
+  set onframe(fn: TickerFunction | string | undefined) {
     this.setCallback("onframe", fn)
   }
 
@@ -46,7 +46,7 @@ export class ThreeElement<T> extends HTMLElement {
     return this.callbacks["onrender"]
   }
 
-  set onrender(fn: TickerFunction | string) {
+  set onrender(fn: TickerFunction | string | undefined) {
     this.setCallback("onrender", fn)
   }
 
@@ -80,7 +80,11 @@ export class ThreeElement<T> extends HTMLElement {
   }
 
   disconnectedCallback() {
-    if (!this.object) return
+    /* Unregister event handlers */
+    this.onupdate = undefined
+    this.onlateupdate = undefined
+    this.onframe = undefined
+    this.onrender = undefined
 
     /* If the wrapped object is parented, remove it from its parent */
     if (this.object instanceof THREE.Object3D && this.object.parent) {
@@ -148,7 +152,7 @@ export class ThreeElement<T> extends HTMLElement {
     applyProps(this.object!, wrappedObjectAttributes)
   }
 
-  private setCallback(kind: CallbackKind, fn: TickerFunction | string) {
+  private setCallback(kind: CallbackKind, fn?: TickerFunction | string) {
     /* Unregister previous callback */
     if (this.callbacks[kind]) {
       this.game!.ticker.removeCallback(kind, this.callbacks[kind])

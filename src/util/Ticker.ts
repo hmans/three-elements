@@ -1,5 +1,4 @@
 export type TickerFunction = (dt: number) => any
-
 export type CallbackKind = "onupdate" | "onlateupdate" | "onframe" | "onrender"
 
 export class Ticker {
