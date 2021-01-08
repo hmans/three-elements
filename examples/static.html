@@ -4,16 +4,18 @@
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
+    <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
       import * as THREE from "https://unpkg.com/three/build/three.module.js"
       import "https://unpkg.com/three-elements/dist/index.esm.js?module"
     </script>
+
     <three-game>
-      <!-- lights -->
+      <!-- Lights -->
       <three-ambient-light intensity="0.2"></three-ambient-light>
       <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
 
-      <!-- scene contents -->
+      <!-- Scene Contents -->
       <three-mesh
         scale="4"
         onupdate="dt => this.object.rotation.x = this.object.rotation.y += 1 * dt"
