@@ -15,6 +15,14 @@
 
 ## SUMMARY
 
+**three-elements is a set of Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences.** Instead of providing custom-built higher-level components (like many other libraries in this space), three-elements directly exposes all Three.js classes through automatically generated custom HTML elements.
+
+Elements are fully reactive; if their attributes change, this is reflected in the Three.js scene.
+
+three-elements can be used standalone in static HTML, or together with the HTML application framework of your choice.
+
+## EXAMPLE
+
 <!-- prettier-ignore -->
 ```html
 <html>
