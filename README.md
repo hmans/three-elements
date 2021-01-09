@@ -13,6 +13,10 @@
            . .::[ WEB COMPONENTS-POWERED THREE.JS ]::. .
 ```
 
+## WORK IN PROGRESS ☢️
+
+This library currently is extremely, heavily, absurdly **WORK IN PROGRESS**. Take a look at the examples listed below if you're curious, feel free to experiment around with it a bunch, but I would currently advise actually using it in any real project. I'm still dialing in the API, things will be very much in flux for some time, the entire thing may change completely from one patch version to the next.
+
 ## SUMMARY
 
 **three-elements is a set of Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences.** Instead of providing custom-built higher-level components (like many other libraries in this space), three-elements directly exposes all Three.js classes through automatically generated custom HTML elements, no matter which version of Three.js you're using.
