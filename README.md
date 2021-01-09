@@ -12,7 +12,7 @@
 |  -__||  ||  -__|        |  -__|     ||   _|__ --|
 |_____||__||_____|__|__|__|_____|__|__||____|_____|   🌳🌲 🏡🌲   🌲🌳  🐄   🌲 🌲🌳🌳
 
-. ..:[~ WEB COMPONENTS-POWERED THREE.JS ~]:.. .   .
+. ..:[  WEB COMPONENTS-POWERED THREE.JS  ]:.. .   .
 ```
 
 ## WORK IN PROGRESS ☢️
