@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>Custom Elements</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="https://jspm.dev/es-module-shims"></script>
+  </head>
+  <body>
+    <!-- Here's a simple Three.js scene. -->
+    <three-game>
+      <!-- Lights -->
+      <three-ambient-light intensity="0.2"></three-ambient-light>
+      <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
+
+      <!-- Scene Contents -->
+      <rotating-cube></rotating-cube>
+    </three-game>
+
+    <!-- Import dependencies via ESM. The future is now! -->
+    <script type="module">
+      importShim("/dist/index.esm.js")
+      import { LitElement, html, property, customElement } from "https://jspm.dev/lit-element"
+
+      class RotatingCube extends LitElement {
+        render() {
+          return html`
+            <three-mesh name="Cube" scale="2.5">
+              <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+              <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
+            </three-mesh>
+          `
+        }
+      }
+
+      customElements.define("rotating-cube", RotatingCube)
+    </script>
+    <script type="importmap-shim">
+      {
+        "imports": {
+          "three": "https://jspm.dev/three",
+          "three/": "https://jspm.dev/three/"
+        }
+      }
+    </script>
+  </body>
+</html>

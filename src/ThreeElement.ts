@@ -65,7 +65,7 @@ export class ThreeElement<T> extends HTMLElement {
     this.debug("connectedCallback")
 
     /* Find and store reference to game */
-    this.game = this.find(ThreeGame)
+    this.game = this.find((node) => node instanceof ThreeGame) as ThreeGame
 
     this.handleAttach()
 
@@ -88,8 +88,8 @@ export class ThreeElement<T> extends HTMLElement {
     */
     if (this.object instanceof THREE.Object3D) {
       if (!this.game) {
-        console.warn(
-          `Trying to insert a new Object3D into the scene, but no instance of ThreeGame was found! 😢  This may mean that we're failing to escape a custom element's shadow DOM. If you think this is a bug with three-elements, please open an issue! <https://github.com/hmans/three-elements/issues/new>`
+        console.error(
+          `Trying to insert a new Object3D into the scene, but no <three-game> tag was found! 😢  This may mean that we're failing to escape a custom element's shadow DOM. If you think this is a bug with three-elements, please open an issue! <https://github.com/hmans/three-elements/issues/new>`
         )
       } else {
         const parent = this.findElement(THREE.Object3D)
@@ -133,23 +133,29 @@ export class ThreeElement<T> extends HTMLElement {
   }
 
   /**
-   * Walks up the tree of elements until it finds one that is an instance of
-   * the constructor passed as the argument.
+   * Takes a function, then walks up the node tree and returns the first
+   * node where the function returns true.
    */
-  find<T extends HTMLElement>(klass: Function) {
-    for (let node = this.parentElement; node; node = node.parentElement) {
-      if (node instanceof klass) {
-        return node as T
+  find<T extends HTMLElement>(fn: (node: HTMLElement) => any) {
+    let node: HTMLElement | undefined = this
+
+    do {
+      node = node.parentElement || (node.getRootNode() as any).host
+
+      if (node && fn(node)) {
+        return node
       }
-    }
+    } while (node)
   }
 
   findElement<T>(klass: IConstructable<T>): ThreeElement<T> | undefined {
-    for (let node = this.parentElement; node; node = node.parentElement) {
-      if (node instanceof ThreeElement && node.object instanceof klass) {
-        return node
-      }
-    }
+    return this.find((node) => node instanceof ThreeElement && node.object instanceof klass) as
+      | ThreeElement<T>
+      | undefined
+  }
+
+  private getParentOrHost(): HTMLElement | undefined {
+    return
   }
 
   private handleAttach() {
