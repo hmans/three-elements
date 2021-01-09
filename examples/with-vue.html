@@ -5,6 +5,8 @@
     <script type="module" src="https://jspm.dev/es-module-shims"></script>
   </head>
   <body>
+    <script type="module"></script>
+
     <div id="game">
       <three-game>
         <three-ambient-light intensity="0.2"></three-ambient-light>
@@ -15,7 +17,7 @@
     </div>
 
     <script type="text/x-template" id="rotating-dodecahedron-template">
-      <three-mesh>
+      <three-mesh ref="mesh">
         <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
         <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
       </three-mesh>
@@ -26,41 +28,30 @@
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
       import Vue from "https://jspm.dev/vue@3"
+      importShim("/dist/index.esm.js").then(() => {
+        const app = Vue.createApp({})
 
-      const app = Vue.createApp({})
+        /* Stop Vue from complaining about our beautiful custom elements. */
+        app.config.isCustomElement = (tag) => tag.startsWith("three-")
 
-      /* Stop Vue from complaining about our beautiful custom elements. */
-      app.config.isCustomElement = (tag) => tag.startsWith("three-")
+        app.component("rotating-dodecahedron", {
+          template: "#rotating-dodecahedron-template",
 
-      app.component("rotating-dodecahedron", {
-        template: "#rotating-dodecahedron-template",
-        mounted() {
-          const animate = () => {
-            /*
-            When mounted first executes, the freshly rendered tags are not upgraded yet,
-            so we need to keep checking them before we can use the object. Woops!
-            */
-
+          mounted() {
             const { object } = this.$el
 
-            if (object) {
+            this.$el.onupdate = (dt) => {
               object.rotation.z = object.rotation.x += 0.03
               object.scale.setScalar(4 + Math.cos(Date.now() / 200) * 0.8)
             }
-
-            requestAnimationFrame(animate)
           }
-          animate()
-        }
+        })
+
+        /* Let's go! */
+        app.mount("#game")
       })
-
-      /* Let's go! */
-      app.mount("#game")
     </script>
 
-    <script type="module">
-      importShim("/dist/index.esm.js")
-    </script>
     <script type="importmap-shim">
       {
         "imports": {
