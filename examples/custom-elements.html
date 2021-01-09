@@ -20,12 +20,12 @@
       </three-template>
 
       <!-- Define a small helper function. -->
-      <script>
-        function rotate(amount) {
-          return function (dt, object) {
-            object.rotation.z += amount * dt
-          }
+      <script type="module">
+        const rotate = (amount) => (dt, object) => {
+          object.rotation.z += amount * dt
         }
+
+        window.rotate = rotate
       </script>
 
       <!-- A bunch of rotating cubes. They're really dodecahedrons, sorry! -->

@@ -1,3 +1,5 @@
+import { observeAttributeChange } from "../util/observeAttributeChange"
+
 /*
 It would be easier to just customize HTMLTemplateElement here, but that would
 not work on Safari, so we gotta do some extra work instead.
@@ -7,13 +9,13 @@ export class ThreeTemplate extends HTMLElement {
     super()
     this.attachShadow({ mode: "open" })
 
-    /* Steal the only child */
+    /* Steal the only/first child */
     const child = this.firstElementChild
 
     /* Clear our contents because we don't want to actually render them */
     this.innerHTML = ""
 
-    /* Create a new HTML element. It's a crazy world out there. */
+    /* Check the tag we will be using for this custom element */
     const tag = this.getAttribute("tag")
 
     if (!tag || tag === "") {
@@ -21,8 +23,9 @@ export class ThreeTemplate extends HTMLElement {
       return
     }
 
+    /* Create a class that will be handling the new custom element */
     const klass = class extends HTMLElement {
-      child = child
+      element?: HTMLElement
 
       constructor() {
         super()
@@ -33,20 +36,23 @@ export class ThreeTemplate extends HTMLElement {
         this.attachShadow({ mode: "open" })
 
         /* Copy the template over into our shadow DOM */
-        const element = this.child!.cloneNode(true) as HTMLElement
-        this.shadowRoot!.appendChild(element)
+        this.element = child!.cloneNode(true) as HTMLElement
+        this.shadowRoot!.appendChild(this.element)
 
-        // /* Apply all extra attributes we have */
+        /* Apply all extra attributes we have */
         for (const key of this.getAttributeNames()) {
-          element.setAttribute(key, this.getAttribute(key)!)
+          this.element.setAttribute(key, this.getAttribute(key)!)
         }
+
+        observeAttributeChange(this, (key, value) => {
+          this.element?.setAttribute(key, value)
+        })
       }
     }
 
+    /* and finally, create the custom element! It's a crazy, crazy world. */
     customElements.define(tag, klass)
   }
-
-  connectedCallback() {}
 }
 
 customElements.define("three-template", ThreeTemplate)
