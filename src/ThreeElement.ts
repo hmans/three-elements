@@ -68,12 +68,17 @@ export class ThreeElement<T> extends HTMLElement {
     /* Apply props */
     this.handleAttributes(this.getAllAttributes())
 
-    /* When one of this element's attributes changes, apply it to the object. */
+    /*
+    When one of this element's attributes changes, apply it to the object. Custom Elements have a built-in
+    mechanism for this (attributeChangedCallback and observedAttributes, but unfortunately we can't use it,
+    since we don't know the set of attributes the wrapped Three.js classes expose beforehand. So instead
+    we're hacking our way around it using a mutation observer. Fun times!)
+    */
     observeAttributeChange(this, (prop, value) => {
       this.handleAttributes({ [prop]: value })
     })
 
-    /* If the wrapped object is an Object3D, add it to the scene */
+    /* If the wrapped object is an Object3D, add it to the scene. */
     if (this.game && this.object instanceof THREE.Object3D) {
       this.game.scene.add(this.object)
     }
