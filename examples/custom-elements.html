@@ -12,22 +12,38 @@
       <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
 
       <!-- Scene Contents -->
-      <rotating-cube></rotating-cube>
+      <rotating-cube position="+2, +2, 0"></rotating-cube>
+      <rotating-cube position="+2, -2, 0"></rotating-cube>
+      <rotating-cube position="-2, -2, 0"></rotating-cube>
+      <rotating-cube position="-2, +2, 0"></rotating-cube>
+
+      <template id="rotating-cube-template">
+        <three-mesh>
+          <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+          <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
+        </three-mesh>
+      </template>
     </three-game>
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
       importShim("/dist/index.esm.js")
-      import { LitElement, html, property, customElement } from "https://jspm.dev/lit-element"
 
-      class RotatingCube extends LitElement {
-        render() {
-          return html`
-            <three-mesh name="Cube" scale="2.5">
-              <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-              <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
-            </three-mesh>
-          `
+      class RotatingCube extends HTMLElement {
+        connectedCallback() {
+          /* Let's make a shadow DOM! */
+          this.attachShadow({ mode: "open" })
+
+          /* Copy the template over into our shadow DOM */
+          const template = document.getElementById("rotating-cube-template")
+          const clone = template.content.cloneNode(true)
+          const element = clone.firstElementChild
+          this.shadowRoot.appendChild(element)
+
+          /* Apply all extra attributes we have */
+          for (const key of this.getAttributeNames()) {
+            element.setAttribute(key, this.getAttribute(key))
+          }
         }
       }
 

@@ -7,7 +7,7 @@ export * from "./elements"
 export { registerComponent }
 
 const banner = () =>
-  console.log(
+  console.warn(
     `🎉 three-elements firing up! Please remember that this is an experimental library. Expect breakage! If you find problems, please open an issue over at <https://github.com/hmans/three-elements/issues/new>. Thank you!`
   )
 
