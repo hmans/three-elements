@@ -3,6 +3,8 @@ import { ThreeElement } from "./ThreeElement"
 import { IConstructable } from "./types"
 import { dasherize } from "./util/dasherize"
 import { registerComponent } from "./util/registerComponent"
+export * from "./elements"
+export { registerComponent }
 
 const defineThreeElements = () => {
   /* Convenience function to create a custom element based on a generated class. */
@@ -16,8 +18,10 @@ const defineThreeElements = () => {
     }
   }
 
-  /* Custom elements we want to set up manually in order to get the naming right */
+  /* Custom elements we want to set up manually in order to get naming and order right */
   registerComponent("three-object3d", makeClass(THREE.Object3D))
+  registerComponent("three-group", makeClass(THREE.Group))
+  registerComponent("three-mesh", makeClass(THREE.Mesh))
 
   /*
   For everything else inside THREE.* that can be constructed, automatically
@@ -35,6 +39,3 @@ const defineThreeElements = () => {
 
 /* Let's gooo! */
 defineThreeElements()
-
-export * from "./elements"
-export { registerComponent }
