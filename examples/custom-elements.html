@@ -6,12 +6,21 @@
   </head>
   <body>
     <!-- Here's a simple Three.js scene. -->
+
     <three-game>
-      <!-- Lights -->
+      <!-- Lights on! -->
       <three-ambient-light intensity="0.2"></three-ambient-light>
       <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
 
-      <!-- Scene Contents -->
+      <!-- Define a template. It automatically becomes available as a new HTML tag. -->
+      <three-template tag="rotating-cube">
+        <three-mesh>
+          <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+          <three-mesh-standard-material color="red"></three-mesh-standard-material>
+        </three-mesh>
+      </three-template>
+
+      <!-- A bunch of rotating cubes. They're really dodecahedrons, sorry! -->
       <rotating-cube
         position="+2, +2, 0"
         onupdate="dt => this.object.rotation.z += dt"
@@ -28,13 +37,6 @@
         position="-2, +2, 0"
         onupdate="dt => this.object.rotation.z -= dt"
       ></rotating-cube>
-
-      <three-template tag="rotating-cube">
-        <three-mesh>
-          <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-          <three-mesh-standard-material color="red"></three-mesh-standard-material>
-        </three-mesh>
-      </three-template>
     </three-game>
 
     <!-- Import dependencies via ESM. The future is now! -->
@@ -51,24 +53,26 @@
           this.attachShadow({ mode: "open" })
 
           /* Steal the only child */
-          this.child = this.firstElementChild
+          const child = this.firstElementChild
+
+          /* Clear our contents because we don't want to actually render them */
           this.innerHTML = ""
-        }
 
-        connectedCallback() {
-          /* Create a new HTML element :-) */
+          /* Create a new HTML element. It's a crazy world out there. */
           const tag = this.getAttribute("tag")
-          console.log("Creating new tag:", tag)
-
-          const child = this.child
 
           const klass = class extends HTMLElement {
+            constructor() {
+              super()
+              this.child = child
+            }
+
             connectedCallback() {
               /* Let's make a shadow DOM! */
               this.attachShadow({ mode: "open" })
 
               /* Copy the template over into our shadow DOM */
-              const element = child.cloneNode(true)
+              const element = this.child.cloneNode(true)
               this.shadowRoot.appendChild(element)
 
               // /* Apply all extra attributes we have */
@@ -80,6 +84,8 @@
 
           customElements.define(tag, klass)
         }
+
+        connectedCallback() {}
       }
 
       customElements.define("three-template", ThreeTemplate)
