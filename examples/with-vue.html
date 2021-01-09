@@ -15,7 +15,7 @@
     </div>
 
     <script type="text/x-template" id="rotating-dodecahedron-template">
-      <three-mesh ref="mesh">
+      <three-mesh>
         <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
         <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
       </three-mesh>
@@ -41,7 +41,7 @@
             so we need to keep checking them before we can use the object. Woops!
             */
 
-            const { object } = this.$refs.mesh
+            const { object } = this.$el
 
             if (object) {
               object.rotation.z = object.rotation.x += 0.03
