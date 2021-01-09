@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>Shootybang</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="https://jspm.dev/es-module-shims"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Here's a simple Three.js scene. -->
+
+    <!-- Import dependencies via ESM. The future is now! -->
+    <script type="module">
+      import h from "https://jspm.dev/hyperscript"
+
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("ready!")
+        const root = document.getElementById("root")
+
+        const game = h("three-game")
+
+        root.appendChild(game)
+      })
+    </script>
+
+    <script type="module">
+      importShim("/dist/index.esm.js")
+    </script>
+    <script type="importmap-shim">
+      {
+        "imports": {
+          "three": "https://jspm.dev/three",
+          "three/": "https://jspm.dev/three/"
+        }
+      }
+    </script>
+  </body>
+</html>
