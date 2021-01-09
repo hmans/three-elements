@@ -21,9 +21,9 @@
 
 - Directly exposes all Three.js classes as **HTML elements**.
   **Elements are fully reactive**; if their attributes change, this is immediately reflected in the Three.js scene.
-- Works with **any version of Three.js**, including your own fork.
-- Use it with **any framework** that emits HTML, or **no framework** at all! Using modern JavaScript module browser support, build a full game on a static HTML page with no build step whatsoever.
-- Built-in templating support lets you reuse objects or entire scenes across your project without the need for any frontend framework.
+- Works with **any version of Three.js**, including your own fork if you have one.
+- Use it with **any framework** that emits HTML, or **no framework** at all!
+- Built-in templating support lets you reuse objects or entire scenes across your project without the need for any JavaScript component framework.
 
 ```html
 <!-- Create a Three.js game with a default camera. -->
