@@ -1,5 +1,4 @@
 import * as THREE from "three"
-import { Object3D } from "three"
 import { ThreeGame } from "./elements/ThreeGame"
 import { IConstructable, isDisposable, IStringIndexable } from "./types"
 import { applyProps } from "./util/applyProps"
@@ -54,6 +53,8 @@ export class ThreeElement<T> extends HTMLElement {
   constructor() {
     super()
 
+    this.debug("constructor", this.getAllAttributes())
+
     /* Create managed object */
     const args = this.getAttribute("args")
     const constructor = (this.constructor as typeof ThreeElement).threeConstructor
@@ -61,6 +62,8 @@ export class ThreeElement<T> extends HTMLElement {
   }
 
   connectedCallback() {
+    this.debug("connectedCallback")
+
     /* Find and store reference to game */
     this.game = this.find(ThreeGame)
 
@@ -83,13 +86,21 @@ export class ThreeElement<T> extends HTMLElement {
     If the wrapped object is an Object3D, add it to the scene. If we can find a parent somewhere in the
     tree above it, parent our object to that.
     */
-    if (this.game && this.object instanceof THREE.Object3D) {
-      const parent = this.findElement(THREE.Object3D)
-
-      if (parent) {
-        parent.object.add(this.object)
+    if (this.object instanceof THREE.Object3D) {
+      if (!this.game) {
+        console.warn(
+          `Trying to insert a new Object3D into the scene, but no instance of ThreeGame was found! 😢  This may mean that we're failing to escape a custom element's shadow DOM. If you think this is a bug with three-elements, please open an issue! <https://github.com/hmans/three-elements/issues/new>`
+        )
       } else {
-        this.game.scene.add(this.object)
+        const parent = this.findElement(THREE.Object3D)
+
+        if (parent) {
+          this.debug("Parenting under:", parent)
+          parent.object.add(this.object)
+        } else {
+          this.debug("No parent found, parenting into scene!")
+          this.game.scene.add(this.object)
+        }
       }
     }
   }
@@ -155,6 +166,7 @@ export class ThreeElement<T> extends HTMLElement {
        value of the same name in the parent object. */
     if (attach) {
       const parent = this.parentElement
+      this.debug("Attaching to:", parent)
 
       if (parent instanceof ThreeElement) {
         parent.object[attach] = this.object
@@ -195,5 +207,9 @@ export class ThreeElement<T> extends HTMLElement {
     if (this.callbacks[kind]) {
       this.game!.ticker.addCallback(kind, this.callbacks[kind])
     }
+  }
+
+  private debug(...output: any) {
+    console.debug(`<${this.tagName.toLowerCase()}>`, ...output)
   }
 }
