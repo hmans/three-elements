@@ -17,11 +17,13 @@
 
 > **WIP WARNING:** This library currently is extremely, heavily, absurdly **WORK IN PROGRESS**. Take a look at the examples listed below if you're curious, feel free to experiment around with it a bunch, but I would currently advise against actually using it in any real project. I'm still dialing in the API, things will be very much in flux for some time, the entire thing may change completely from one patch version to the next. Aaaaah! ☢️
 
-**three-elements is a set of Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences.** Instead of providing custom-built higher-level components (like many other libraries in this space), three-elements directly exposes all Three.js classes through automatically generated custom HTML elements, no matter which version of Three.js you're using.
+### **three-elements is a set of Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences.**
 
-**Elements are fully reactive**; if their attributes change, this is immediately reflected in the Three.js scene.
-
-three-elements can be used standalone in **static HTML**, or together with the HTML **application framework** of your choice.
+- Directly exposes all Three.js classes as **HTML elements**.
+  **Elements are fully reactive**; if their attributes change, this is immediately reflected in the Three.js scene.
+- Works with **any version of Three.js**, including your own fork.
+- Use it with **any framework** that emits HTML, or **no framework** at all! Using modern JavaScript module browser support, build a full game on a static HTML page with no build step whatsoever.
+- Built-in templating support lets you reuse objects or entire scenes across your project without the need for any frontend framework.
 
 ```html
 <!-- Create a Three.js game with a default camera. -->
