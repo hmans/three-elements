@@ -28,28 +28,30 @@
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
       import Vue from "https://jspm.dev/vue@3"
-      importShim("/dist/index.esm.js").then(() => {
-        const app = Vue.createApp({})
 
-        /* Stop Vue from complaining about our beautiful custom elements. */
-        app.config.isCustomElement = (tag) => tag.startsWith("three-")
+      const app = Vue.createApp({})
 
-        app.component("rotating-dodecahedron", {
-          template: "#rotating-dodecahedron-template",
+      /* Stop Vue from complaining about our beautiful custom elements. */
+      app.config.isCustomElement = (tag) => tag.startsWith("three-")
 
-          mounted() {
-            const { object } = this.$el
+      app.component("rotating-dodecahedron", {
+        template: "#rotating-dodecahedron-template",
 
-            this.$el.onupdate = (dt) => {
-              object.rotation.z = object.rotation.x += 0.03
-              object.scale.setScalar(4 + Math.cos(Date.now() / 200) * 0.8)
-            }
+        mounted() {
+          const { object } = this.$el
+
+          this.$el.onupdate = (dt) => {
+            object.rotation.z = object.rotation.x += 0.03
+            object.scale.setScalar(4 + Math.cos(Date.now() / 200) * 0.8)
           }
-        })
-
-        /* Let's go! */
-        app.mount("#game")
+        }
       })
+
+      /*
+      We need to ensure that three-elements is fully loaded before we start the app.
+      And we only need to do it here because we're loading it through importShim.
+      */
+      importShim("/dist/index.esm.js").then(() => app.mount("#game"))
     </script>
 
     <script type="importmap-shim">
