@@ -5,8 +5,7 @@
     <script type="module" src="https://jspm.dev/es-module-shims"></script>
   </head>
   <body>
-    <script type="module"></script>
-
+    <!-- The main game template. -->
     <div id="game">
       <three-game>
         <three-ambient-light intensity="0.2"></three-ambient-light>
@@ -16,14 +15,13 @@
       </three-game>
     </div>
 
+    <!-- A Vue template for our rotating-dodecahedron component. -->
     <script type="text/x-template" id="rotating-dodecahedron-template">
       <three-mesh ref="mesh">
         <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
         <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
       </three-mesh>
     </script>
-
-    <!-- Here's a simple Three.js scene. -->
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
