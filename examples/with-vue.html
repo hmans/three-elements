@@ -7,43 +7,37 @@
   <body>
     <div id="game">
       <three-game>
-        <!-- Lights -->
-        <three-ambient-light intensity="0.2"></three-ambient-light>
-        <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
-
-        <!-- A thing -->
-        <three-mesh v-bind:scale="scale" v-bind:rotation-z="rotation">
-          <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-          <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
-        </three-mesh>
+        <lights></lights>
+        <rotating-dodecahedron></rotating-dodecahedron>
       </three-game>
     </div>
+
+    <script type="text/x-template" id="rotating-dodecahedron-template">
+      <three-mesh>
+        <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+        <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
+      </three-mesh>
+    </script>
+
     <!-- Here's a simple Three.js scene. -->
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
       import Vue from "https://jspm.dev/vue@3"
 
-      const Game = {
-        data() {
-          return {
-            scale: 1,
-            rotation: 0
-          }
-        },
-        mounted() {
-          const animate = () => {
-            this.scale = 3 + Math.cos(Date.now() / 100) * 0.5
-            this.rotation += 0.03
-            requestAnimationFrame(animate)
-          }
-          animate()
-        }
-      }
-      const app = Vue.createApp(Game)
+      const app = Vue.createApp({})
 
       /* Stop Vue from complaining about our beautiful custom elements. */
-      app.config.isCustomElement = (tag) => (tag = ~/^three/)
+      app.config.isCustomElement = (tag) => tag.startsWith("three-")
+
+      app.component("lights", {
+        template: `
+          <three-ambient-light intensity="0.2"></three-ambient-light>
+          <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
+          `
+      })
+
+      app.component("rotating-dodecahedron", { template: "#rotating-dodecahedron-template" })
 
       /* Let's go! */
       app.mount("#game")
