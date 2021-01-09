@@ -1,4 +1,5 @@
 import * as THREE from "three"
+import { Object3D } from "three"
 import { ThreeGame } from "./elements/ThreeGame"
 import { IConstructable, isDisposable, IStringIndexable } from "./types"
 import { applyProps } from "./util/applyProps"
@@ -78,9 +79,18 @@ export class ThreeElement<T> extends HTMLElement {
       this.handleAttributes({ [prop]: value })
     })
 
-    /* If the wrapped object is an Object3D, add it to the scene. */
+    /*
+    If the wrapped object is an Object3D, add it to the scene. If we can find a parent somewhere in the
+    tree above it, parent our object to that.
+    */
     if (this.game && this.object instanceof THREE.Object3D) {
-      this.game.scene.add(this.object)
+      const parent = this.findElement(THREE.Object3D)
+
+      if (parent) {
+        parent.object.add(this.object)
+      } else {
+        this.game.scene.add(this.object)
+      }
     }
   }
 
@@ -119,6 +129,14 @@ export class ThreeElement<T> extends HTMLElement {
     for (let node = this.parentElement; node; node = node.parentElement) {
       if (node instanceof klass) {
         return node as T
+      }
+    }
+  }
+
+  findElement<T>(klass: IConstructable<T>): ThreeElement<T> | undefined {
+    for (let node = this.parentElement; node; node = node.parentElement) {
+      if (node instanceof ThreeElement && node.object instanceof klass) {
+        return node
       }
     }
   }
