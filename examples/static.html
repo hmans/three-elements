@@ -2,13 +2,10 @@
   <head>
     <title>Static HTML</title>
     <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="https://jspm.dev/es-module-shims"></script>
   </head>
   <body>
-    <!-- Import dependencies via ESM. The future is now! -->
-    <script type="module">
-      import "https://jspm.dev/three-elements@0.0.21"
-    </script>
-
+    <!-- Here's a simple Three.js scene. -->
     <three-game>
       <!-- Lights -->
       <three-ambient-light intensity="0.2"></three-ambient-light>
@@ -23,5 +20,18 @@
         <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
       </three-mesh>
     </three-game>
+
+    <!-- Import dependencies via ESM. The future is now! -->
+    <script type="module">
+      importShim("/dist/index.esm.js")
+    </script>
+    <script type="importmap-shim">
+      {
+        "imports": {
+          "three": "https://jspm.dev/three",
+          "three/": "https://jspm.dev/three/"
+        }
+      }
+    </script>
   </body>
 </html>
