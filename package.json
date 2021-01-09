@@ -8,6 +8,10 @@
   },
   "description": "Web Components for Three.js.",
   "homepage": "https://github.com/hmans/three-elements",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hmans/three-elements"
+  },
   "keywords": [
     "webgl",
     "three",
