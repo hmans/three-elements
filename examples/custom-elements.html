@@ -21,22 +21,10 @@
       </three-template>
 
       <!-- A bunch of rotating cubes. They're really dodecahedrons, sorry! -->
-      <rotating-cube
-        position="+2, +2, 0"
-        onupdate="dt => this.object.rotation.z += dt"
-      ></rotating-cube>
-      <rotating-cube
-        position="+2, -2, 0"
-        onupdate="dt => this.object.rotation.z -= dt"
-      ></rotating-cube>
-      <rotating-cube
-        position="-2, -2, 0"
-        onupdate="dt => this.object.rotation.z += dt"
-      ></rotating-cube>
-      <rotating-cube
-        position="-2, +2, 0"
-        onupdate="dt => this.object.rotation.z -= dt"
-      ></rotating-cube>
+      <rotating-cube position="+2, +2, 0" onupdate="dt => this.rotation.z += dt"></rotating-cube>
+      <rotating-cube position="+2, -2, 0" onupdate="dt => this.rotation.z -= dt"></rotating-cube>
+      <rotating-cube position="-2, -2, 0" onupdate="dt => this.rotation.z += dt"></rotating-cube>
+      <rotating-cube position="-2, +2, 0" onupdate="dt => this.rotation.z -= dt"></rotating-cube>
     </three-game>
 
     <!-- Import dependencies via ESM. The future is now! -->

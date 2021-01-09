@@ -202,7 +202,7 @@ export class ThreeElement<T> extends HTMLElement {
     /* Store new value, constructing a function from a string if necessary */
     this.callbacks[kind] =
       typeof fn === "string"
-        ? new Function("delta = arguments[0]", `fun = ${fn}`, "fun(delta)").bind(this)
+        ? new Function("delta = arguments[0]", `fun = ${fn}`, "fun(delta)").bind(this.object)
         : fn
 
     /* Register new callback */
