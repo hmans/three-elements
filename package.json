@@ -22,11 +22,13 @@
   "sideEffects": true,
   "license": "MIT",
   "source": "src/index.ts",
-  "main": "dist/index.ts",
+  "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "unpkg": "dist/index.umd.js",
   "types": "dist/index.d.ts",
-  "exports": "./dist/index.modern.js",
+  "exports": {
+    ".": "./dist/index.modern.js"
+  },
   "files": [
     "dist"
   ],
