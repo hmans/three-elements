@@ -154,10 +154,6 @@ export class ThreeElement<T> extends HTMLElement {
       | undefined
   }
 
-  private getParentOrHost(): HTMLElement | undefined {
-    return
-  }
-
   private handleAttach() {
     /* Use provided attach, or auto-set it based on the tag name. */
     let attach = this.getAttribute("attach")
