@@ -25,6 +25,21 @@ This library currently is extremely, heavily, absurdly **WORK IN PROGRESS**. Tak
 
 three-elements can be used standalone in **static HTML**, or together with the HTML **application framework** of your choice.
 
+```html
+<!-- Create a Three.js game with a default camera. -->
+<three-game>
+  <!-- Lights on! -->
+  <three-ambient-light intensity="0.2"></three-ambient-light>
+  <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
+
+  <!-- Spinning dodecahedron! -->
+  <three-mesh onupdate="dt => this.rotation.z += dt">
+    <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+    <three-mesh-standard-material color="red"></three-mesh-standard-material>
+  </three-mesh>
+</three-game>
+```
+
 ## EXAMPLES
 
 three-elements can be used on its own, but it's best when coupled with some sort of framework. You can use it with any framework or technology that emits a HTML DOM, so there's plenty of options! Here's a couple of examples:
