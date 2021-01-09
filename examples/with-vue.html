@@ -1,0 +1,64 @@
+<html>
+  <head>
+    <title>With Vue</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="https://jspm.dev/es-module-shims"></script>
+  </head>
+  <body>
+    <div id="game">
+      <three-game>
+        <!-- Lights -->
+        <three-ambient-light intensity="0.2"></three-ambient-light>
+        <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
+
+        <!-- A thing -->
+        <three-mesh v-bind:scale="scale" v-bind:rotation-z="rotation">
+          <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+          <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
+        </three-mesh>
+      </three-game>
+    </div>
+    <!-- Here's a simple Three.js scene. -->
+
+    <!-- Import dependencies via ESM. The future is now! -->
+    <script type="module">
+      import Vue from "https://jspm.dev/vue@3"
+
+      const Game = {
+        data() {
+          return {
+            scale: 1,
+            rotation: 0
+          }
+        },
+        mounted() {
+          const animate = () => {
+            this.scale = 3 + Math.cos(Date.now() / 100) * 0.5
+            this.rotation += 0.03
+            requestAnimationFrame(animate)
+          }
+          animate()
+        }
+      }
+      const app = Vue.createApp(Game)
+
+      /* Stop Vue from complaining about our beautiful custom elements. */
+      app.config.isCustomElement = (tag) => (tag = ~/^three/)
+
+      /* Let's go! */
+      app.mount("#game")
+    </script>
+
+    <script type="module">
+      importShim("/dist/index.esm.js")
+    </script>
+    <script type="importmap-shim">
+      {
+        "imports": {
+          "three": "https://jspm.dev/three",
+          "three/": "https://jspm.dev/three/"
+        }
+      }
+    </script>
+  </body>
+</html>
