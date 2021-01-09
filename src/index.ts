@@ -6,6 +6,11 @@ import { registerComponent } from "./util/registerComponent"
 export * from "./elements"
 export { registerComponent }
 
+const banner = () =>
+  console.log(
+    `🎉 three-elements firing up! Please remember that this is an experimental library. Expect breakage! If you find problems, please open an issue over at <https://github.com/hmans/three-elements/issues/new>. Thank you!`
+  )
+
 const defineThreeElements = () => {
   /* Convenience function to create a custom element based on a generated class. */
   const makeClass = <T>(constructor: IConstructable<T>) => {
@@ -38,4 +43,5 @@ const defineThreeElements = () => {
 }
 
 /* Let's gooo! */
+banner()
 defineThreeElements()
