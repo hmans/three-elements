@@ -34,7 +34,7 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "dev": "concurrently 'yarn watch' 'yarn examples' -p '{time} [{pid}]'",
+    "dev": "concurrently 'yarn watch -f esm' 'yarn examples' -p '{time} [{pid}]'",
     "watch": "yarn clean && microbundle watch --globals three=THREE",
     "build": "yarn clean && microbundle --globals three=THREE",
     "examples": "serve -S examples",
