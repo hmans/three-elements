@@ -6,7 +6,6 @@
   </head>
   <body>
     <!-- Here's a simple Three.js scene. -->
-
     <three-game>
       <!-- Lights on! -->
       <three-ambient-light intensity="0.2"></three-ambient-light>
@@ -20,11 +19,20 @@
         </three-mesh>
       </three-template>
 
+      <!-- Define a small helper function. -->
+      <script>
+        function rotate(amount) {
+          return function (dt, object) {
+            object.rotation.z += amount * dt
+          }
+        }
+      </script>
+
       <!-- A bunch of rotating cubes. They're really dodecahedrons, sorry! -->
-      <rotating-cube position="+2, +2, 0" onupdate="dt => this.rotation.z += dt"></rotating-cube>
-      <rotating-cube position="+2, -2, 0" onupdate="dt => this.rotation.z -= dt"></rotating-cube>
-      <rotating-cube position="-2, -2, 0" onupdate="dt => this.rotation.z += dt"></rotating-cube>
-      <rotating-cube position="-2, +2, 0" onupdate="dt => this.rotation.z -= dt"></rotating-cube>
+      <rotating-cube position="+2, +2, 0" onupdate="rotate(1)"></rotating-cube>
+      <rotating-cube position="+2, -2, 0" onupdate="rotate(2)"></rotating-cube>
+      <rotating-cube position="-2, -2, 0" onupdate="rotate(-2)"></rotating-cube>
+      <rotating-cube position="-2, +2, 0" onupdate="rotate(-1)"></rotating-cube>
     </three-game>
 
     <!-- Import dependencies via ESM. The future is now! -->
