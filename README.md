@@ -63,7 +63,10 @@ It's early days for three-elements, but development is moving fast. Here's a lis
 - [x] Compatibility with browser modules
 - [x] Templating (`<three-template>`)
 - [ ] A charming API for creating logic components without the need for any extra frameworks.
-- [ ] Documentation and tutorials!
+- [ ] Documentation! Specifically:
+  - [ ] A better README! :-)
+  - [ ] A separate step-by-step guide
+  - [ ] Some notes on how three-elements compares to [A-Frame], [react-three-fiber], and others
 - [ ] Implement some more of the game-specific primitives from [trinity], this library's precursor. Some of these may end up in a separate library, since people may want to solve these in a different fashion from how I do it. These include:
   - [ ] Optimized rendering (only render new frames when something has changed)
   - [ ] Pointer events
@@ -72,3 +75,4 @@ It's early days for three-elements, but development is moving fast. Here's a lis
 
 [react-three-fiber]: https://github.com/pmndrs/react-three-fiber
 [trinity]: https://github.com/hmans/trinity
+[a-frame]: https://aframe.io/
