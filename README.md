@@ -70,6 +70,7 @@ It's early days for three-elements, but development is moving fast. Here's a lis
   - [ ] Some notes on how three-elements compares to [A-Frame], [react-three-fiber], and others
 - [ ] Implement some more of the game-specific primitives from [trinity], this library's precursor. Some of these may end up in a separate library, since people may want to solve these in a different fashion from how I do it. These include:
   - [ ] Optimized rendering (only render new frames when something has changed)
+  - [ ] Primitives for easier handling of OrbitControls & friends, and registering the default camera for the current scene
   - [ ] Pointer events
   - [ ] Stacked scenes
   - [ ] Resource loading (GLTF, FBX et al)
