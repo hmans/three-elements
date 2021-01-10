@@ -57,7 +57,37 @@ export class ThreeElement<T> extends HTMLElement {
   connectedCallback() {
     this.debug("connectedCallback")
 
+    /* Find and store reference to game */
+    this.game = this.find((node) => node instanceof ThreeGame) as ThreeGame
+
     /*
+    If there already is an onupdate, onlateupdate etc. available at this point, before we've
+    handled the attributes of this element, it must be an instance method of a derived class,
+    so let's register it as our callback.
+    */
+    for (const kind of CALLBACKS) {
+      const callback = this[kind]
+      if (typeof callback === "function") {
+        this.setCallback(kind, callback.bind(this))
+      }
+    }
+
+    /* Apply props */
+    this.handleAttributes(this.getAllAttributes())
+
+    /*
+    When one of this element's attributes changes, apply it to the object. Custom Elements have a built-in
+    mechanism for this (attributeChangedCallback and observedAttributes, but unfortunately we can't use it,
+    since we don't know the set of attributes the wrapped Three.js classes expose beforehand. So instead
+    we're hacking our way around it using a mutation observer. Fun times!)
+    */
+    observeAttributeChange(this, (prop, value) => {
+      this.handleAttributes({ [prop]: value })
+    })
+
+    /*
+    Some stuff relies on all custom elements being fully defined and connected. However:
+
     If there are already tags in the DOM, newly created custom elements will connect in the order they
     are defined, which isn't always what we want (because a Material node that intends to attach itself to
     a Mesh might be defined before the element that represents that Mesh. Woops!)
@@ -70,34 +100,8 @@ export class ThreeElement<T> extends HTMLElement {
     more convenient to use `mount` and `unmount` methods.
     */
     setTimeout(() => {
-      /* Find and store reference to game */
-      this.game = this.find((node) => node instanceof ThreeGame) as ThreeGame
-
-      /*
-      If there already is an onupdate, onlateupdate etc. available at this point, before we've
-      handled the attributes of this element, it must be an instance method of a derived class,
-      so let's register it as our callback.
-      */
-      for (const kind of CALLBACKS) {
-        const callback = this[kind]
-        if (typeof callback === "function") {
-          this.setCallback(kind, callback.bind(this))
-        }
-      }
-
-      /* Apply props */
+      /* Handle attach attribute */
       this.handleAttach()
-      this.handleAttributes(this.getAllAttributes())
-
-      /*
-      When one of this element's attributes changes, apply it to the object. Custom Elements have a built-in
-      mechanism for this (attributeChangedCallback and observedAttributes, but unfortunately we can't use it,
-      since we don't know the set of attributes the wrapped Three.js classes expose beforehand. So instead
-      we're hacking our way around it using a mutation observer. Fun times!)
-      */
-      observeAttributeChange(this, (prop, value) => {
-        this.handleAttributes({ [prop]: value })
-      })
 
       /* Add object to scene */
       this.addObjectToScene()
