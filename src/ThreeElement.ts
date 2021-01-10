@@ -96,8 +96,7 @@ export class ThreeElement<T> extends HTMLElement {
     has passed, by way of setTimeout.
 
     Yeah, I know. Crazy. But it solves the problem elegantly. Except that classes overloading
-    connectedCallback() will need to remember doing this. For this reason, we're now offering slightly
-    more convenient to use `mount` and `unmount` methods.
+    connectedCallback() will need to remember doing this. But maybe we will find a better way in the future.
 
     Also see: https://javascript.info/custom-elements#rendering-order
     */
@@ -109,16 +108,13 @@ export class ThreeElement<T> extends HTMLElement {
       this.addObjectToScene()
 
       /* Invoke mount method */
-      this.mount()
+      this.readyCallback()
     })
   }
 
-  mount() {}
+  readyCallback() {}
 
   disconnectedCallback() {
-    /* Invoke unmount method */
-    this.unmount()
-
     /* Unregister event handlers */
     if (this.game) {
       for (const kind of CALLBACKS) {
@@ -140,8 +136,6 @@ export class ThreeElement<T> extends HTMLElement {
       this.object.dispose()
     }
   }
-
-  unmount() {}
 
   /**
    * Returns a dictionary containing all attributes on this element.

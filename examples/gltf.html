@@ -24,7 +24,7 @@
 
       importShim("/dist/index.esm.js").then(({ ThreeElement }) => {
         class GLTFAsset extends ThreeElement.for(THREE.Group) {
-          mount() {
+          readyCallback() {
             const loader = new GLTFLoader()
 
             loader.load(this.getAttribute("url"), (gltf) => {
