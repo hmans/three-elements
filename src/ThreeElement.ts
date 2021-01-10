@@ -6,11 +6,8 @@ import { observeAttributeChange } from "./util/observeAttributeChange"
 import { CallbackKind, TickerFunction } from "./util/Ticker"
 
 export class ThreeElement<T> extends HTMLElement {
-  /** Constructor of the THREE class we will be instancing. */
-  protected static threeConstructor: IConstructable
-
   /** The THREE.* object managed by this element. */
-  object: T
+  object?: T
 
   /** A reference to the game (with ticker, scene etc.) */
   game?: ThreeGame
@@ -52,13 +49,7 @@ export class ThreeElement<T> extends HTMLElement {
 
   constructor() {
     super()
-
     this.debug("constructor", this.getAllAttributes())
-
-    /* Create managed object */
-    const args = this.getAttribute("args")
-    const constructor = (this.constructor as typeof ThreeElement).threeConstructor
-    this.object = args ? new constructor(...JSON.parse(args)) : new constructor()
   }
 
   connectedCallback() {
@@ -67,9 +58,8 @@ export class ThreeElement<T> extends HTMLElement {
     /* Find and store reference to game */
     this.game = this.find((node) => node instanceof ThreeGame) as ThreeGame
 
-    this.handleAttach()
-
     /* Apply props */
+    this.handleAttach()
     this.handleAttributes(this.getAllAttributes())
 
     /*
@@ -82,6 +72,11 @@ export class ThreeElement<T> extends HTMLElement {
       this.handleAttributes({ [prop]: value })
     })
 
+    /* Add object to scene */
+    this.addObjectToScene()
+  }
+
+  private addObjectToScene() {
     /*
     If the wrapped object is an Object3D, add it to the scene. If we can find a parent somewhere in the
     tree above it, parent our object to that.
@@ -96,7 +91,14 @@ export class ThreeElement<T> extends HTMLElement {
 
         if (parent) {
           this.debug("Parenting under:", parent)
-          parent.object.add(this.object)
+
+          if (parent.object) {
+            parent.object.add(this.object)
+          } else {
+            console.error(
+              `Tried to parent my object under ${parent}, but it was not exposing a Three object itself! 😢`
+            )
+          }
         } else {
           this.debug("No parent found, parenting into scene!")
           this.game.scene.add(this.object)
@@ -154,7 +156,7 @@ export class ThreeElement<T> extends HTMLElement {
       | undefined
   }
 
-  private handleAttach() {
+  private async handleAttach() {
     /* Use provided attach, or auto-set it based on the tag name. */
     let attach = this.getAttribute("attach")
 
@@ -168,10 +170,22 @@ export class ThreeElement<T> extends HTMLElement {
        value of the same name in the parent object. */
     if (attach) {
       const parent = this.parentElement
-      this.debug("Attaching to:", parent)
+
+      if (!parent) {
+        console.error(`Tried to attach to the "${attach} property, but there was no parent! 😢`)
+        return
+      }
+
+      /* Wait until the parent's tag has been defined */
+      await customElements.whenDefined(parent.tagName.toLowerCase())
 
       if (parent instanceof ThreeElement) {
-        parent.object[attach] = this.object
+        this.debug("Attaching to:", parent)
+        parent.object[attach!] = this.object
+      } else {
+        console.error(
+          `Tried to attach to the "${attach} property of ${parent}, but it's not a ThreeElement! It's possible that the target element has not been upgraded to a ThreeElement yet. 😢`
+        )
       }
     }
   }
@@ -190,7 +204,9 @@ export class ThreeElement<T> extends HTMLElement {
     applyProps(this, { onupdate, onlateupdate, onrender })
 
     /* Assign everything else to the wrapped Three.js object */
-    applyProps(this.object!, wrappedObjectAttributes)
+    if (this.object) {
+      applyProps(this.object, wrappedObjectAttributes)
+    }
   }
 
   private setCallback(kind: CallbackKind, fn?: TickerFunction | string) {
@@ -213,5 +229,21 @@ export class ThreeElement<T> extends HTMLElement {
 
   private debug(...output: any) {
     console.debug(`<${this.tagName.toLowerCase()}>`, ...output)
+  }
+
+  static for<T>(constructor: IConstructable<T>): IConstructable<ThreeElement<T>> {
+    /*
+      Create an anonymous class that inherits from our cool base class, but sets
+      its own Three.js constructor property.
+      */
+    return class extends ThreeElement<T> {
+      constructor() {
+        super()
+
+        /* Create managed object */
+        const args = this.getAttribute("args")
+        this.object = args ? new constructor(...JSON.parse(args)) : new constructor()
+      }
+    }
   }
 }

@@ -5,26 +5,57 @@
     <script type="module" src="https://jspm.dev/es-module-shims"></script>
   </head>
   <body>
-    <div id="root"></div>
     <!-- Here's a simple Three.js scene. -->
+    <three-game id="game">
+      <three-ambient-light intensity="0.2"></three-ambient-light>
+      <three-directional-light position="10, 10, 40" intensity="0.8"></three-directional-light>
+
+      <rotating-thingy scale="4" speed="2">
+        <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+        <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
+      </rotating-thingy>
+
+      <orbit-controls></orbit-controls>
+    </three-game>
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
-      import h from "https://jspm.dev/hyperscript"
+      import * as THREE from "https://jspm.dev/three"
+      import { OrbitControls } from "https://jspm.dev/three/examples/jsm/controls/OrbitControls.js"
 
-      document.addEventListener("DOMContentLoaded", () => {
-        console.log("ready!")
-        const root = document.getElementById("root")
+      importShim("/dist/index.esm.js").then(({ ThreeElement }) => {
+        class RotatingThingy extends ThreeElement.for(THREE.Mesh) {
+          connectedCallback() {
+            super.connectedCallback()
 
-        const game = h("three-game")
+            const speed = this.getAttribute("speed")
 
-        root.appendChild(game)
+            this.onupdate = (dt) => {
+              this.object.rotation.x = 1.4 * (this.object.rotation.y += speed * dt)
+            }
+          }
+        }
+
+        customElements.define("rotating-thingy", RotatingThingy)
+
+        customElements.define(
+          "orbit-controls",
+          class extends ThreeElement {
+            connectedCallback() {
+              super.connectedCallback()
+              const { camera, renderer } = this.game
+              this.controls = new OrbitControls(camera, renderer.domElement)
+            }
+
+            disconnectedCallback() {
+              super.disconnectedCallback()
+              this.controls.dispose()
+            }
+          }
+        )
       })
     </script>
 
-    <script type="module">
-      importShim("/dist/index.esm.js")
-    </script>
     <script type="importmap-shim">
       {
         "imports": {
