@@ -49,7 +49,7 @@ three-elements can be used on its own, but it's best when coupled with some sort
 - [three-elements with Svelte](https://codesandbox.io/s/three-elements-svelte-dx1gv?file=/App.svelte)
   - **It Just Works.** Svelte works extremely close to the DOM, so there are no surprises here.
 - [three-elements with Vue](https://codesandbox.io/s/three-elements-vue-1swry?file=/src/App.vue)
-  - **Caveat:** Vue requires [a bit of configuration](https://v3.vuejs.org/guide/migration/custom-elements-interop.html#autonomous-custom-elements) to stop it from spitting out warnings about custom elements it doesn't know.
+  - **Caveat:** Vue requires [some minor configuration](https://v3.vuejs.org/guide/migration/custom-elements-interop.html#autonomous-custom-elements) to stop it from spitting out warnings about `<three-*>` tags.
 - [three-elements with React](https://codesandbox.io/s/three-elements-react-9nqh4?file=/src/App.js)
   - **Caveat:** you can't currently directly assign function callbacks to `onupdate` and friends. Improvements to this are being [discussed in the React community](https://github.com/facebook/react/issues/11347), also see [this page on custom-elements-everywhere.com](https://custom-elements-everywhere.com/libraries/react/results/results.html). You can work around this caveat by directly setting the `onupdate` etc. properties on element refs.
 - [three-elements with HyperApp](https://codesandbox.io/s/three-elements-hyperapp-rxhei?file=/index.html)
