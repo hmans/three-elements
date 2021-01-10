@@ -10,7 +10,9 @@
       <three-ambient-light intensity="0.2"></three-ambient-light>
       <three-directional-light position="10, 10, 40" intensity="0.8"></three-directional-light>
 
-      <gltf-asset url="/models/spaceship/spaceship05.gltf" scale="0.5"></gltf-asset>
+      <auto-rotate>
+        <gltf-asset url="/models/spaceship/spaceship05.gltf" scale="0.5"></gltf-asset>
+      </auto-rotate>
 
       <three-orbit-controls></three-orbit-controls>
     </three-game>
@@ -34,6 +36,18 @@
         }
 
         customElements.define("gltf-asset", GLTFAsset)
+
+        class AutoRotate extends ThreeElement.for(THREE.Group) {
+          connectedCallback() {
+            super.connectedCallback()
+            console.log("AutoRotate Group: ", this.object)
+          }
+          onupdate(dt) {
+            this.object.rotation.y += 1 * dt
+          }
+        }
+
+        customElements.define("auto-rotate", AutoRotate)
       })
     </script>
 
