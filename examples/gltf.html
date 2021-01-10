@@ -12,13 +12,12 @@
 
       <gltf-asset url="/models/spaceship/spaceship05.gltf" scale="0.5"></gltf-asset>
 
-      <orbit-controls></orbit-controls>
+      <three-orbit-controls></three-orbit-controls>
     </three-game>
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
       import * as THREE from "https://jspm.dev/three"
-      import { OrbitControls } from "https://jspm.dev/three/examples/jsm/controls/OrbitControls.js"
       import { GLTFLoader } from "https://jspm.dev/three/examples/jsm/loaders/GLTFLoader"
 
       importShim("/dist/index.esm.js").then(({ ThreeElement }) => {
@@ -35,22 +34,6 @@
         }
 
         customElements.define("gltf-asset", GLTFAsset)
-
-        customElements.define(
-          "orbit-controls",
-          class extends ThreeElement {
-            connectedCallback() {
-              super.connectedCallback()
-              const { camera, renderer } = this.game
-              this.controls = new OrbitControls(camera, renderer.domElement)
-            }
-
-            disconnectedCallback() {
-              super.disconnectedCallback()
-              this.controls.dispose()
-            }
-          }
-        )
       })
     </script>
 

@@ -12,13 +12,12 @@
 
       <rotating-thingy scale="4" speed="2"> </rotating-thingy>
 
-      <orbit-controls></orbit-controls>
+      <three-orbit-controls></three-orbit-controls>
     </three-game>
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
       import * as THREE from "https://jspm.dev/three"
-      import { OrbitControls } from "https://jspm.dev/three/examples/jsm/controls/OrbitControls.js"
 
       importShim("/dist/index.esm.js").then(({ ThreeElement }) => {
         class RotatingThingy extends ThreeElement.for(THREE.Mesh) {
@@ -40,22 +39,6 @@
         }
 
         customElements.define("rotating-thingy", RotatingThingy)
-
-        customElements.define(
-          "orbit-controls",
-          class extends ThreeElement {
-            connectedCallback() {
-              super.connectedCallback()
-              const { camera, renderer } = this.game
-              this.controls = new OrbitControls(camera, renderer.domElement)
-            }
-
-            disconnectedCallback() {
-              super.disconnectedCallback()
-              this.controls.dispose()
-            }
-          }
-        )
       })
     </script>
 
