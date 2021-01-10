@@ -55,4 +55,17 @@ three-elements can be used on its own, but it's best when coupled with some sort
 - [three-elements with HyperApp](https://codesandbox.io/s/three-elements-hyperapp-rxhei?file=/index.html)
   - **Caveat:** apparently you can't currently assign `onupdate` attributes as they get swallowed by the framework for some reason. I'm not very familiar with HyperApp and will investigate and hopefully fix this eventually.
 
+## TODO
+
+It's early days for three-elements, but development is moving fast. Here's a list of some stuff that I am and will be working on:
+
+- [ ] A charming API for creating logic components without the need for any extra frameworks.
+- [ ] Documentation and tutorials!
+- [ ] Implement some more of the game-specific primitives from [trinity], this library's precursor. Some of these may end up in a separate library, since people may want to solve these in a different fashion from how I do it. These include:
+  - [ ] Optimized rendering (only render new frames when something has changed)
+  - [ ] Pointer events
+  - [ ] Stacked scenes
+  - [ ] Resource loading (GLTF, FBX et al)
+
 [react-three-fiber]: https://github.com/pmndrs/react-three-fiber
+[trinity]: https://github.com/hmans/trinity
