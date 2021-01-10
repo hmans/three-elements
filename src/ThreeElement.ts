@@ -244,7 +244,7 @@ export class ThreeElement<T> extends HTMLElement {
   }
 
   private debug(...output: any) {
-    console.debug(`<${this.tagName.toLowerCase()}>`, ...output)
+    // console.debug(`<${this.tagName.toLowerCase()}>`, ...output)
   }
 
   static for<T>(constructor: IConstructable<T>): IConstructable<ThreeElement<T>> {
