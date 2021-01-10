@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <title>GLTF Loading</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="https://jspm.dev/es-module-shims"></script>
+  </head>
+  <body>
+    <!-- Here's a simple Three.js scene. -->
+    <three-game id="game">
+      <three-ambient-light intensity="0.2"></three-ambient-light>
+      <three-directional-light position="10, 10, 40" intensity="0.8"></three-directional-light>
+
+      <gltf-asset url="/models/spaceship/spaceship05.gltf" scale="0.5"></gltf-asset>
+
+      <orbit-controls></orbit-controls>
+    </three-game>
+
+    <!-- Import dependencies via ESM. The future is now! -->
+    <script type="module">
+      import * as THREE from "https://jspm.dev/three"
+      import { OrbitControls } from "https://jspm.dev/three/examples/jsm/controls/OrbitControls.js"
+      import { GLTFLoader } from "https://jspm.dev/three/examples/jsm/loaders/GLTFLoader"
+
+      importShim("/dist/index.esm.js").then(({ ThreeElement }) => {
+        class GLTFAsset extends ThreeElement.for(THREE.Group) {
+          connectedCallback() {
+            super.connectedCallback()
+
+            const loader = new GLTFLoader()
+
+            loader.load(this.getAttribute("url"), (gltf) => {
+              this.object.add(gltf.scene)
+            })
+          }
+        }
+
+        customElements.define("gltf-asset", GLTFAsset)
+
+        customElements.define(
+          "orbit-controls",
+          class extends ThreeElement {
+            connectedCallback() {
+              super.connectedCallback()
+              const { camera, renderer } = this.game
+              this.controls = new OrbitControls(camera, renderer.domElement)
+            }
+
+            disconnectedCallback() {
+              super.disconnectedCallback()
+              this.controls.dispose()
+            }
+          }
+        )
+      })
+    </script>
+
+    <script type="importmap-shim">
+      {
+        "imports": {
+          "three": "https://jspm.dev/three",
+          "three/": "https://jspm.dev/three/"
+        }
+      }
+    </script>
+  </body>
+</html>
