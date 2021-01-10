@@ -5,6 +5,8 @@ import { applyProps } from "./util/applyProps"
 import { observeAttributeChange } from "./util/observeAttributeChange"
 import { CallbackKind, TickerFunction } from "./util/Ticker"
 
+const CALLBACKS: CallbackKind[] = ["onupdate", "onlateupdate", "onframe", "onrender"]
+
 export class ThreeElement<T> extends HTMLElement {
   /** The THREE.* object managed by this element. */
   object?: T
@@ -13,7 +15,7 @@ export class ThreeElement<T> extends HTMLElement {
   game?: ThreeGame
 
   /** A dictionary of ticker callbacks (onupdate, etc.) */
-  private callbacks = {} as Record<CallbackKind, TickerFunction>
+  private callbacks = {} as Record<CallbackKind, TickerFunction | undefined>
 
   get onupdate() {
     return this.callbacks["onupdate"]
@@ -58,6 +60,18 @@ export class ThreeElement<T> extends HTMLElement {
     /* Find and store reference to game */
     this.game = this.find((node) => node instanceof ThreeGame) as ThreeGame
 
+    /*
+    If there already is an onupdate, onlateupdate etc. available at this point, before we've
+    handled the attributes of this element, it must be an instance method of a derived class,
+    so let's register it as our callback.
+    */
+    for (const kind of CALLBACKS) {
+      const callback = this[kind]
+      if (typeof callback === "function") {
+        this.setCallback(kind, callback.bind(this))
+      }
+    }
+
     /* Apply props */
     this.handleAttach()
     this.handleAttributes(this.getAllAttributes())
@@ -76,41 +90,12 @@ export class ThreeElement<T> extends HTMLElement {
     this.addObjectToScene()
   }
 
-  private addObjectToScene() {
-    /*
-    If the wrapped object is an Object3D, add it to the scene. If we can find a parent somewhere in the
-    tree above it, parent our object to that.
-    */
-    if (this.object instanceof THREE.Object3D) {
-      if (!this.game) {
-        console.error(
-          `Trying to insert a new Object3D into the scene, but no <three-game> tag was found! 😢  This may mean that we're failing to escape a custom element's shadow DOM. If you think this is a bug with three-elements, please open an issue! <https://github.com/hmans/three-elements/issues/new>`
-        )
-      } else {
-        const parent = this.findElement(THREE.Object3D)
-
-        if (parent) {
-          this.debug("Parenting under:", parent)
-
-          if (parent.object) {
-            parent.object.add(this.object)
-          } else {
-            console.error(
-              `Tried to parent my object under ${parent}, but it was not exposing a Three object itself! 😢`
-            )
-          }
-        } else {
-          this.debug("No parent found, parenting into scene!")
-          this.game.scene.add(this.object)
-        }
-      }
-    }
-  }
-
   disconnectedCallback() {
     /* Unregister event handlers */
-    for (const kind in ["onupdate", "onlateupdate", "onframe", "onrender"]) {
-      this[kind as CallbackKind] = undefined
+    for (const kind of CALLBACKS) {
+      this.game!.ticker.removeCallback(kind, this.callbacks[kind]!)
+      this.callbacks[kind] = undefined
+      this[kind] = undefined
     }
 
     /* If the wrapped object is parented, remove it from its parent */
@@ -154,6 +139,37 @@ export class ThreeElement<T> extends HTMLElement {
     return this.find((node) => node instanceof ThreeElement && node.object instanceof klass) as
       | ThreeElement<T>
       | undefined
+  }
+
+  private addObjectToScene() {
+    /*
+    If the wrapped object is an Object3D, add it to the scene. If we can find a parent somewhere in the
+    tree above it, parent our object to that.
+    */
+    if (this.object instanceof THREE.Object3D) {
+      if (!this.game) {
+        console.error(
+          `Trying to insert a new Object3D into the scene, but no <three-game> tag was found! 😢  This may mean that we're failing to escape a custom element's shadow DOM. If you think this is a bug with three-elements, please open an issue! <https://github.com/hmans/three-elements/issues/new>`
+        )
+      } else {
+        const parent = this.findElement(THREE.Object3D)
+
+        if (parent) {
+          this.debug("Parenting under:", parent)
+
+          if (parent.object) {
+            parent.object.add(this.object)
+          } else {
+            console.error(
+              `Tried to parent my object under ${parent}, but it was not exposing a Three object itself! 😢`
+            )
+          }
+        } else {
+          this.debug("No parent found, parenting into scene!")
+          this.game.scene.add(this.object)
+        }
+      }
+    }
   }
 
   private async handleAttach() {
@@ -212,7 +228,7 @@ export class ThreeElement<T> extends HTMLElement {
   private setCallback(kind: CallbackKind, fn?: TickerFunction | string) {
     /* Unregister previous callback */
     if (this.callbacks[kind]) {
-      this.game!.ticker.removeCallback(kind, this.callbacks[kind])
+      this.game!.ticker.removeCallback(kind, this.callbacks[kind]!)
     }
 
     /* Store new value, constructing a function from a string if necessary */
@@ -223,7 +239,7 @@ export class ThreeElement<T> extends HTMLElement {
 
     /* Register new callback */
     if (this.callbacks[kind]) {
-      this.game!.ticker.addCallback(kind, this.callbacks[kind])
+      this.game!.ticker.addCallback(kind, this.callbacks[kind]!)
     }
   }
 

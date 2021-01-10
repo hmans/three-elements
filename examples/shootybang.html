@@ -27,12 +27,11 @@
         class RotatingThingy extends ThreeElement.for(THREE.Mesh) {
           connectedCallback() {
             super.connectedCallback()
+            this.speed = this.getAttribute("speed")
+          }
 
-            const speed = this.getAttribute("speed")
-
-            this.onupdate = (dt) => {
-              this.object.rotation.x = 1.4 * (this.object.rotation.y += speed * dt)
-            }
+          onupdate(dt) {
+            this.object.rotation.x = 1.4 * (this.object.rotation.y += this.speed * dt)
           }
         }
 
