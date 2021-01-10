@@ -10,7 +10,9 @@
       <three-ambient-light intensity="0.2"></three-ambient-light>
       <three-directional-light position="10, 10, 40" intensity="0.8"></three-directional-light>
 
-      <gltf-asset url="/models/spaceship/spaceship05.gltf" scale="0.5"></gltf-asset>
+      <auto-rotate speed="0.3">
+        <gltf-asset url="/models/spaceship/spaceship05.gltf" scale="0.5"></gltf-asset>
+      </auto-rotate>
 
       <three-orbit-controls></three-orbit-controls>
     </three-game>
@@ -22,9 +24,7 @@
 
       importShim("/dist/index.esm.js").then(({ ThreeElement }) => {
         class GLTFAsset extends ThreeElement.for(THREE.Group) {
-          connectedCallback() {
-            super.connectedCallback()
-
+          readyCallback() {
             const loader = new GLTFLoader()
 
             loader.load(this.getAttribute("url"), (gltf) => {
@@ -34,6 +34,14 @@
         }
 
         customElements.define("gltf-asset", GLTFAsset)
+
+        class AutoRotate extends ThreeElement.for(THREE.Group) {
+          onupdate(dt) {
+            this.object.rotation.y += this.getAttribute("speed") * dt
+          }
+        }
+
+        customElements.define("auto-rotate", AutoRotate)
       })
     </script>
 

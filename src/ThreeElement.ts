@@ -73,7 +73,6 @@ export class ThreeElement<T> extends HTMLElement {
     }
 
     /* Apply props */
-    this.handleAttach()
     this.handleAttributes(this.getAllAttributes())
 
     /*
@@ -86,16 +85,45 @@ export class ThreeElement<T> extends HTMLElement {
       this.handleAttributes({ [prop]: value })
     })
 
-    /* Add object to scene */
-    this.addObjectToScene()
+    /*
+    Some stuff relies on all custom elements being fully defined and connected. However:
+
+    If there are already tags in the DOM, newly created custom elements will connect in the order they
+    are defined, which isn't always what we want (because a Material node that intends to attach itself to
+    a Mesh might be defined before the element that represents that Mesh. Woops!)
+
+    For this reason, we'll use a simple trick -- we will wait with the actual mounting until another tick
+    has passed, by way of setTimeout.
+
+    Yeah, I know. Crazy. But it solves the problem elegantly. Except that classes overloading
+    connectedCallback() will need to remember doing this. But maybe we will find a better way in the future.
+
+    Also see: https://javascript.info/custom-elements#rendering-order
+    */
+    setTimeout(() => {
+      /* Handle attach attribute */
+      this.handleAttach()
+
+      /* Add object to scene */
+      this.addObjectToScene()
+
+      /* Invoke mount method */
+      this.readyCallback()
+    })
   }
+
+  readyCallback() {}
 
   disconnectedCallback() {
     /* Unregister event handlers */
-    for (const kind of CALLBACKS) {
-      this.game!.ticker.removeCallback(kind, this.callbacks[kind]!)
-      this.callbacks[kind] = undefined
-      this[kind] = undefined
+    if (this.game) {
+      for (const kind of CALLBACKS) {
+        if (this.callbacks[kind]) {
+          this.game.ticker.removeCallback(kind, this.callbacks[kind]!)
+          this.callbacks[kind] = undefined
+        }
+        this[kind] = undefined
+      }
     }
 
     /* If the wrapped object is parented, remove it from its parent */
@@ -124,21 +152,24 @@ export class ThreeElement<T> extends HTMLElement {
    * node where the function returns true.
    */
   find<T extends HTMLElement>(fn: (node: HTMLElement) => any) {
+    /* Start here */
     let node: HTMLElement | undefined = this
 
     do {
+      /* Get the immediate parent, or, if we're inside a shaodow DOM, the host element */
       node = node.parentElement || (node.getRootNode() as any).host
 
+      /* Check against the supplied function */
       if (node && fn(node)) {
         return node
       }
     } while (node)
   }
 
-  findElement<T>(klass: IConstructable<T>): ThreeElement<T> | undefined {
-    return this.find((node) => node instanceof ThreeElement && node.object instanceof klass) as
-      | ThreeElement<T>
-      | undefined
+  findElementWith<T>(constructor: IConstructable<T>): ThreeElement<T> | undefined {
+    return this.find(
+      (node) => node instanceof ThreeElement && node.object instanceof constructor
+    ) as ThreeElement<T> | undefined
   }
 
   private addObjectToScene() {
@@ -152,7 +183,7 @@ export class ThreeElement<T> extends HTMLElement {
           `Trying to insert a new Object3D into the scene, but no <three-game> tag was found! 😢  This may mean that we're failing to escape a custom element's shadow DOM. If you think this is a bug with three-elements, please open an issue! <https://github.com/hmans/three-elements/issues/new>`
         )
       } else {
-        const parent = this.findElement(THREE.Object3D)
+        const parent = this.findElementWith(THREE.Object3D)
 
         if (parent) {
           this.debug("Parenting under:", parent)
@@ -172,7 +203,7 @@ export class ThreeElement<T> extends HTMLElement {
     }
   }
 
-  private async handleAttach() {
+  private handleAttach() {
     /* Use provided attach, or auto-set it based on the tag name. */
     let attach = this.getAttribute("attach")
 
@@ -190,12 +221,7 @@ export class ThreeElement<T> extends HTMLElement {
       if (!parent) {
         console.error(`Tried to attach to the "${attach} property, but there was no parent! 😢`)
         return
-      }
-
-      /* Wait until the parent's tag has been defined */
-      await customElements.whenDefined(parent.tagName.toLowerCase())
-
-      if (parent instanceof ThreeElement) {
+      } else if (parent instanceof ThreeElement) {
         this.debug("Attaching to:", parent)
         parent.object[attach!] = this.object
       } else {
