@@ -75,6 +75,12 @@ It's early days for three-elements, but development is moving fast. Here's a lis
   - [ ] Resource loading (GLTF, FBX et al)
 - [ ] Figure out automated testing. Hooooboi, this one's going to be interesting! (#8)
 
+## CONTRIBUTING
+
+**Please get in touch _before_ submitting Pull Requests** (ideally, _before_ even implementing them.) At this stage in its development, three-elements still is heavily in flux. If there is something you would like to contribute, please open an issue and describe your suggestion.
+
+If you want to do some hacking, just run `yarn dev`, which will compile the package in watch mode and spawn a server on `localhost:5000` that serves the contents of the `examples/` directory.
+
 ## THANKS
 
 - [Three.js] for being _the_ 3D library for the web.
