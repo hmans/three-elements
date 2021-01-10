@@ -74,7 +74,7 @@ It's early days for three-elements, but development is moving fast. Here's a lis
   - [ ] Pointer events
   - [ ] Stacked scenes
   - [ ] Resource loading (GLTF, FBX et al)
-- [ ] Figure out automated testing. Hooooboi, this one's going to be interesting!
+- [ ] Figure out automated testing. Hooooboi, this one's going to be interesting! (#8)
 
 [react-three-fiber]: https://github.com/pmndrs/react-three-fiber
 [trinity]: https://github.com/hmans/trinity
