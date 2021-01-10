@@ -191,7 +191,7 @@ export class ThreeElement<T> extends HTMLElement {
     }
   }
 
-  private async handleAttach() {
+  private handleAttach() {
     /* Use provided attach, or auto-set it based on the tag name. */
     let attach = this.getAttribute("attach")
 
@@ -210,9 +210,6 @@ export class ThreeElement<T> extends HTMLElement {
         console.error(`Tried to attach to the "${attach} property, but there was no parent! 😢`)
         return
       }
-
-      /* Wait until the parent's tag has been defined */
-      await customElements.whenDefined(parent.tagName.toLowerCase())
 
       if (parent instanceof ThreeElement) {
         this.debug("Attaching to:", parent)
