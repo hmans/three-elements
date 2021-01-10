@@ -124,11 +124,14 @@ export class ThreeElement<T> extends HTMLElement {
    * node where the function returns true.
    */
   find<T extends HTMLElement>(fn: (node: HTMLElement) => any) {
+    /* Start here */
     let node: HTMLElement | undefined = this
 
     do {
+      /* Get the immediate parent, or, if we're inside a shaodow DOM, the host element */
       node = node.parentElement || (node.getRootNode() as any).host
 
+      /* Check against the supplied function */
       if (node && fn(node)) {
         return node
       }
