@@ -12,10 +12,8 @@ const banner = () =>
   )
 
 const defineThreeElements = () => {
-  /* Custom elements we want to set up manually in order to get naming and order right */
+  /* Custom elements we want to set up manually in order to get the naming right */
   registerElement("three-object3d", ThreeElement.for(THREE.Object3D))
-  registerElement("three-group", ThreeElement.for(THREE.Group))
-  registerElement("three-mesh", ThreeElement.for(THREE.Mesh))
 
   /*
   For everything else inside THREE.* that can be constructed, automatically
