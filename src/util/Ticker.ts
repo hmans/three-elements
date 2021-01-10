@@ -42,7 +42,7 @@ export class Ticker {
     }
 
     this.alive = true
-    tick()
+    requestAnimationFrame(tick)
   }
 
   stop() {

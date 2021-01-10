@@ -38,12 +38,10 @@
         mounted() {
           const { object } = this.$el
 
-          setTimeout(() => {
-            this.$el.onupdate = (dt) => {
-              object.rotation.z = object.rotation.x += 0.03
-              object.scale.setScalar(4 + Math.cos(Date.now() / 200) * 0.8)
-            }
-          })
+          this.$el.onupdate = (dt) => {
+            object.rotation.z = object.rotation.x += 0.03
+            object.scale.setScalar(4 + Math.cos(Date.now() / 200) * 0.8)
+          }
         }
       })
 

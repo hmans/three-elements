@@ -57,6 +57,18 @@ export class ThreeElement<T> extends HTMLElement {
   connectedCallback() {
     this.debug("connectedCallback")
 
+    /*
+    If there are already tags in the DOM, newly created custom elements will connect in the order they
+    are defined, which isn't always what we want (because a Material node that intends to attach itself to
+    a Mesh might be defined before the element that represents that Mesh. Woops!)
+
+    For this reason, we'll use a simple trick -- we will wait with the actual mounting until another tick
+    has passed, by way of setTimeout.
+
+    Yeah, I know. Crazy. But it solves the problem elegantly. Except that classes overloading
+    connectedCallback() will need to remember doing this. For this reason, we're now offering slightly
+    more convenient to use `mount` and `unmount` methods.
+    */
     setTimeout(() => {
       /* Find and store reference to game */
       this.game = this.find((node) => node instanceof ThreeGame) as ThreeGame
