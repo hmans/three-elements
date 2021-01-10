@@ -59,6 +59,9 @@ three-elements can be used on its own, but it's best when coupled with some sort
 
 It's early days for three-elements, but development is moving fast. Here's a list of some stuff that I am and will be working on:
 
+- [x] Basic functionality (registration of `<three-*>` elements)
+- [x] Compatibility with browser modules
+- [x] Templating (`<three-template>`)
 - [ ] A charming API for creating logic components without the need for any extra frameworks.
 - [ ] Documentation and tutorials!
 - [ ] Implement some more of the game-specific primitives from [trinity], this library's precursor. Some of these may end up in a separate library, since people may want to solve these in a different fashion from how I do it. These include:
