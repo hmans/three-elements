@@ -24,9 +24,7 @@
 
       importShim("/dist/index.esm.js").then(({ ThreeElement }) => {
         class GLTFAsset extends ThreeElement.for(THREE.Group) {
-          connectedCallback() {
-            super.connectedCallback()
-
+          mount() {
             const loader = new GLTFLoader()
 
             loader.load(this.getAttribute("url"), (gltf) => {
@@ -38,11 +36,8 @@
         customElements.define("gltf-asset", GLTFAsset)
 
         class AutoRotate extends ThreeElement.for(THREE.Group) {
-          connectedCallback() {
-            super.connectedCallback()
-          }
           onupdate(dt) {
-            this.object.rotation.y += 1 * dt
+            this.object.rotation.y += 0.5 * dt
           }
         }
 
