@@ -52,6 +52,6 @@
     "typescript": "^4.1.3"
   },
   "peerDependencies": {
-    "three": "^0.122.0"
+    "three": ">=0.121.0"
   }
 }
