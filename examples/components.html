@@ -10,10 +10,7 @@
       <three-ambient-light intensity="0.2"></three-ambient-light>
       <three-directional-light position="10, 10, 40" intensity="0.8"></three-directional-light>
 
-      <rotating-thingy scale="4" speed="2">
-        <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-        <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
-      </rotating-thingy>
+      <rotating-thingy scale="4" speed="2"> </rotating-thingy>
 
       <orbit-controls></orbit-controls>
     </three-game>
@@ -28,6 +25,13 @@
           connectedCallback() {
             super.connectedCallback()
             this.speed = this.getAttribute("speed")
+
+            const geometry = document.createElement("three-dodecahedron-buffer-geometry")
+            const material = document.createElement("three-mesh-standard-material")
+            material.setAttribute("color", "red")
+
+            this.appendChild(geometry)
+            this.appendChild(material)
           }
 
           onupdate(dt) {
