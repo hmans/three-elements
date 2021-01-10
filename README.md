@@ -62,8 +62,7 @@ It's early days for three-elements, but development is moving fast. Here's a lis
 - [x] Basic functionality (registration of `<three-*>` elements)
 - [x] Compatibility with browser modules
 - [x] Templating (`<three-template>`)
-- [ ] A charming API for creating logic components without the need for any extra frameworks.
-  - [ ] There has been some work elsewhere to provide component primitives, it's possible we can just refer to one of those instead of building our own solution.
+- [x] A charming API for creating logic components without the need for any extra frameworks.
 - [ ] Documentation! Specifically:
   - [ ] A better README! :-)
   - [ ] A separate step-by-step guide
