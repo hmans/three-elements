@@ -209,9 +209,7 @@ export class ThreeElement<T> extends HTMLElement {
       if (!parent) {
         console.error(`Tried to attach to the "${attach} property, but there was no parent! 😢`)
         return
-      }
-
-      if (parent instanceof ThreeElement) {
+      } else if (parent instanceof ThreeElement) {
         this.debug("Attaching to:", parent)
         parent.object[attach!] = this.object
       } else {
