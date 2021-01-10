@@ -98,6 +98,8 @@ export class ThreeElement<T> extends HTMLElement {
     Yeah, I know. Crazy. But it solves the problem elegantly. Except that classes overloading
     connectedCallback() will need to remember doing this. For this reason, we're now offering slightly
     more convenient to use `mount` and `unmount` methods.
+
+    Also see: https://javascript.info/custom-elements#rendering-order
     */
     setTimeout(() => {
       /* Handle attach attribute */
