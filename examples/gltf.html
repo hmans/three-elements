@@ -40,7 +40,6 @@
         class AutoRotate extends ThreeElement.for(THREE.Group) {
           connectedCallback() {
             super.connectedCallback()
-            console.log("AutoRotate Group: ", this.object)
           }
           onupdate(dt) {
             this.object.rotation.y += 1 * dt

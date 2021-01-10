@@ -57,45 +57,59 @@ export class ThreeElement<T> extends HTMLElement {
   connectedCallback() {
     this.debug("connectedCallback")
 
-    /* Find and store reference to game */
-    this.game = this.find((node) => node instanceof ThreeGame) as ThreeGame
+    setTimeout(() => {
+      /* Find and store reference to game */
+      this.game = this.find((node) => node instanceof ThreeGame) as ThreeGame
 
-    /*
-    If there already is an onupdate, onlateupdate etc. available at this point, before we've
-    handled the attributes of this element, it must be an instance method of a derived class,
-    so let's register it as our callback.
-    */
-    for (const kind of CALLBACKS) {
-      const callback = this[kind]
-      if (typeof callback === "function") {
-        this.setCallback(kind, callback.bind(this))
+      /*
+      If there already is an onupdate, onlateupdate etc. available at this point, before we've
+      handled the attributes of this element, it must be an instance method of a derived class,
+      so let's register it as our callback.
+      */
+      for (const kind of CALLBACKS) {
+        const callback = this[kind]
+        if (typeof callback === "function") {
+          this.setCallback(kind, callback.bind(this))
+        }
       }
-    }
 
-    /* Apply props */
-    this.handleAttach()
-    this.handleAttributes(this.getAllAttributes())
+      /* Apply props */
+      this.handleAttach()
+      this.handleAttributes(this.getAllAttributes())
 
-    /*
-    When one of this element's attributes changes, apply it to the object. Custom Elements have a built-in
-    mechanism for this (attributeChangedCallback and observedAttributes, but unfortunately we can't use it,
-    since we don't know the set of attributes the wrapped Three.js classes expose beforehand. So instead
-    we're hacking our way around it using a mutation observer. Fun times!)
-    */
-    observeAttributeChange(this, (prop, value) => {
-      this.handleAttributes({ [prop]: value })
+      /*
+      When one of this element's attributes changes, apply it to the object. Custom Elements have a built-in
+      mechanism for this (attributeChangedCallback and observedAttributes, but unfortunately we can't use it,
+      since we don't know the set of attributes the wrapped Three.js classes expose beforehand. So instead
+      we're hacking our way around it using a mutation observer. Fun times!)
+      */
+      observeAttributeChange(this, (prop, value) => {
+        this.handleAttributes({ [prop]: value })
+      })
+
+      /* Add object to scene */
+      this.addObjectToScene()
+
+      /* Invoke mount method */
+      this.mount()
     })
-
-    /* Add object to scene */
-    this.addObjectToScene()
   }
 
+  mount() {}
+
   disconnectedCallback() {
+    /* Invoke unmount method */
+    this.unmount()
+
     /* Unregister event handlers */
-    for (const kind of CALLBACKS) {
-      this.game!.ticker.removeCallback(kind, this.callbacks[kind]!)
-      this.callbacks[kind] = undefined
-      this[kind] = undefined
+    if (this.game) {
+      for (const kind of CALLBACKS) {
+        if (this.callbacks[kind]) {
+          this.game.ticker.removeCallback(kind, this.callbacks[kind]!)
+          this.callbacks[kind] = undefined
+        }
+        this[kind] = undefined
+      }
     }
 
     /* If the wrapped object is parented, remove it from its parent */
@@ -108,6 +122,8 @@ export class ThreeElement<T> extends HTMLElement {
       this.object.dispose()
     }
   }
+
+  unmount() {}
 
   /**
    * Returns a dictionary containing all attributes on this element.
