@@ -135,10 +135,10 @@ export class ThreeElement<T> extends HTMLElement {
     } while (node)
   }
 
-  findElement<T>(klass: IConstructable<T>): ThreeElement<T> | undefined {
-    return this.find((node) => node instanceof ThreeElement && node.object instanceof klass) as
-      | ThreeElement<T>
-      | undefined
+  findElementWith<T>(constructor: IConstructable<T>): ThreeElement<T> | undefined {
+    return this.find(
+      (node) => node instanceof ThreeElement && node.object instanceof constructor
+    ) as ThreeElement<T> | undefined
   }
 
   private addObjectToScene() {
@@ -152,7 +152,7 @@ export class ThreeElement<T> extends HTMLElement {
           `Trying to insert a new Object3D into the scene, but no <three-game> tag was found! 😢  This may mean that we're failing to escape a custom element's shadow DOM. If you think this is a bug with three-elements, please open an issue! <https://github.com/hmans/three-elements/issues/new>`
         )
       } else {
-        const parent = this.findElement(THREE.Object3D)
+        const parent = this.findElementWith(THREE.Object3D)
 
         if (parent) {
           this.debug("Parenting under:", parent)
