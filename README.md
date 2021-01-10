@@ -19,7 +19,7 @@
 
 ### **three-elements is a set of Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences.**
 
-- Directly exposes all Three.js classes as **HTML elements**.
+- Directly exposes all [Three.js] classes as **HTML elements**.
   **Elements are fully reactive**; if their attributes change, this is immediately reflected in the Three.js scene.
 - Works with **any version of Three.js**, including your own fork if you have one.
 - Use it with **any framework** that emits HTML, or **no framework** at all!
@@ -76,6 +76,13 @@ It's early days for three-elements, but development is moving fast. Here's a lis
   - [ ] Resource loading (GLTF, FBX et al)
 - [ ] Figure out automated testing. Hooooboi, this one's going to be interesting! (#8)
 
+## THANKS
+
+- [Three.js] for being _the_ 3D library for the web.
+- [A-Frame] for introducing Web Components-powered easy to use 3D and VR.
+- [react-three-fiber] for its smart approach of mirroring `THREE.*` classes 1:1 instead of building a library of custom components.
+
 [react-three-fiber]: https://github.com/pmndrs/react-three-fiber
 [trinity]: https://github.com/hmans/trinity
 [a-frame]: https://aframe.io/
+[three.js]: https://threejs.org/
