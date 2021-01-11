@@ -23,7 +23,7 @@ export class PointerEvents {
 
     /* Set up pointer event handling */
     renderer.domElement.addEventListener("pointermove", (e) => {
-      this.position = normalizePointerPosition(renderer, e.x, e.y)
+      normalizePointerPosition(renderer, e.x, e.y, this.position)
 
       /* Raycast against all objects in scene, and keep the intersections for later. */
       this.raycaster.layers.enableAll()
