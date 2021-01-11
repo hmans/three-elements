@@ -1,13 +1,16 @@
 import * as THREE from "three"
-import { Color } from "three"
 import { registerElement } from "../util/registerElement"
-import { Ticker } from "../util/Ticker"
+import EventEmitter from "eventemitter3"
+
+export type TickerFunction = (dt: number) => any
+
+export const CALLBACKS = new Set<string>(["onupdate", "onlateupdate", "onframe", "onrender"])
 
 export class ThreeGame extends HTMLElement {
-  ticker = new Ticker()
-  scene = new THREE.Scene()
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
   renderer = new THREE.WebGLRenderer({ antialias: true })
+  events = new EventEmitter()
+
+  private ticking = false
 
   connectedCallback() {
     this.attachShadow({ mode: "open" })
@@ -16,26 +19,18 @@ export class ThreeGame extends HTMLElement {
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.shadowRoot!.appendChild(this.renderer.domElement)
 
-    /* Set up camera */
-    this.camera.position.z = 10
-    this.camera.lookAt(0, 0, 0)
-
-    /* Configure scene */
-    this.scene.background = new Color("#333")
-
     /* Handle window resizing */
     this.handleWindowResize = this.handleWindowResize.bind(this)
     window.addEventListener("resize", this.handleWindowResize, false)
 
     /* Start ticker */
-    this.ticker.addCallback("onrender", () => {
-      this.renderer.render(this.scene, this.camera)
-    })
-
-    this.ticker.start()
+    this.startTicking()
   }
 
   disconnectedCallback() {
+    /* Stop ticking */
+    this.stopTicking()
+
     /* Unregister event handlers */
     window.removeEventListener("resize", this.handleWindowResize, false)
 
@@ -44,12 +39,45 @@ export class ThreeGame extends HTMLElement {
   }
 
   handleWindowResize() {
-    /* Update camera */
-    this.camera.aspect = window.innerWidth / window.innerHeight
-    this.camera.updateProjectionMatrix()
-
     /* Update canvas */
     this.renderer.setSize(window.innerWidth, window.innerHeight)
+
+    /* Emit event */
+    this.events.emit("resize")
+  }
+
+  startTicking() {
+    let lastNow = performance.now()
+
+    const tick = () => {
+      /*
+      Figure out deltatime. This is a very naive way of doing this, we'll eventually
+      replace it with a better one.
+      */
+      const now = performance.now()
+      const dt = (now - lastNow) / 1000
+      lastNow = now
+
+      /* Execute update and lateupdate callbacls. */
+      this.events.emit("update", dt)
+      this.events.emit("lateupdate", dt)
+
+      /* If we know that we're rendering a frame, execute frame callbacks. */
+      this.events.emit("frame", dt)
+
+      /* Finally, emit render event. This will trigger scenes to render. */
+      this.events.emit("render", dt)
+
+      /* Loop as long as this ticker is active. */
+      if (this.ticking) requestAnimationFrame(tick)
+    }
+
+    this.ticking = true
+    requestAnimationFrame(tick)
+  }
+
+  stopTicking() {
+    this.ticking = false
   }
 }
 

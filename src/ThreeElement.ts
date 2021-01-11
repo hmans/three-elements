@@ -1,21 +1,24 @@
 import * as THREE from "three"
-import { ThreeGame } from "./elements/ThreeGame"
+import { Scene } from "three"
+import { ThreeGame, TickerFunction } from "./elements/ThreeGame"
+import { ThreeScene } from "./elements/ThreeScene"
 import { IConstructable, isDisposable, IStringIndexable } from "./types"
 import { applyProps } from "./util/applyProps"
 import { observeAttributeChange } from "./util/observeAttributeChange"
-import { CallbackKind, TickerFunction } from "./util/Ticker"
-
-const CALLBACKS: CallbackKind[] = ["onupdate", "onlateupdate", "onframe", "onrender"]
 
 export class ThreeElement<T> extends HTMLElement {
   /** The THREE.* object managed by this element. */
   object?: T
 
-  /** A reference to the game (with ticker, scene etc.) */
-  game?: ThreeGame
-
   /** A dictionary of ticker callbacks (onupdate, etc.) */
-  private callbacks = {} as Record<CallbackKind, TickerFunction | undefined>
+  private callbacks = {} as Record<string, TickerFunction | undefined>
+
+  /**
+   * Returns this element's tag name, formatted as an actual HTML tag (eg. "<three-mesh>").
+   */
+  get htmlTagName() {
+    return `<${this.tagName.toLowerCase()}>`
+  }
 
   get onupdate() {
     return this.callbacks["onupdate"]
@@ -49,6 +52,30 @@ export class ThreeElement<T> extends HTMLElement {
     this.setCallback("onrender", fn)
   }
 
+  /**
+   * Returns the instance of ThreeGame that this element is nested under.
+   */
+  get game(): ThreeGame {
+    if (!this._game) {
+      this._game = this.find((node) => node instanceof ThreeGame) as ThreeGame
+      if (!this._game) throw "No <three-game> tag found!"
+    }
+    return this._game
+  }
+  private _game?: ThreeGame
+
+  /**
+   * Returns the instance of ThreeScene that this element is nested under.
+   */
+  get scene(): ThreeScene {
+    if (!this._scene) {
+      this._scene = this.findElementWith(Scene) as ThreeScene
+      if (!this._scene) throw "No <three-scene> tag found!"
+    }
+    return this._scene
+  }
+  private _scene?: ThreeScene
+
   constructor() {
     super()
     this.debug("constructor", this.getAllAttributes())
@@ -56,21 +83,6 @@ export class ThreeElement<T> extends HTMLElement {
 
   connectedCallback() {
     this.debug("connectedCallback")
-
-    /* Find and store reference to game */
-    this.game = this.find((node) => node instanceof ThreeGame) as ThreeGame
-
-    /*
-    If there already is an onupdate, onlateupdate etc. available at this point, before we've
-    handled the attributes of this element, it must be an instance method of a derived class,
-    so let's register it as our callback.
-    */
-    for (const kind of CALLBACKS) {
-      const callback = this[kind]
-      if (typeof callback === "function") {
-        this.setCallback(kind, callback.bind(this))
-      }
-    }
 
     /* Apply props */
     this.handleAttributes(this.getAllAttributes())
@@ -115,17 +127,6 @@ export class ThreeElement<T> extends HTMLElement {
   readyCallback() {}
 
   disconnectedCallback() {
-    /* Unregister event handlers */
-    if (this.game) {
-      for (const kind of CALLBACKS) {
-        if (this.callbacks[kind]) {
-          this.game.ticker.removeCallback(kind, this.callbacks[kind]!)
-          this.callbacks[kind] = undefined
-        }
-        this[kind] = undefined
-      }
-    }
-
     /* If the wrapped object is parented, remove it from its parent */
     if (this.object instanceof THREE.Object3D && this.object.parent) {
       this.object.parent.remove(this.object)
@@ -153,7 +154,8 @@ export class ThreeElement<T> extends HTMLElement {
    */
   find<T extends HTMLElement>(fn: (node: HTMLElement) => any) {
     /* Start here */
-    let node: HTMLElement | undefined = this
+    let node: HTMLElement | undefined
+    node = this
 
     do {
       /* Get the immediate parent, or, if we're inside a shaodow DOM, the host element */
@@ -177,28 +179,14 @@ export class ThreeElement<T> extends HTMLElement {
     If the wrapped object is an Object3D, add it to the scene. If we can find a parent somewhere in the
     tree above it, parent our object to that.
     */
-    if (this.object instanceof THREE.Object3D) {
-      if (!this.game) {
-        console.error(
-          `Trying to insert a new Object3D into the scene, but no <three-game> tag was found! 😢  This may mean that we're failing to escape a custom element's shadow DOM. If you think this is a bug with three-elements, please open an issue! <https://github.com/hmans/three-elements/issues/new>`
-        )
+    if (this.object instanceof THREE.Object3D && !(this.object instanceof THREE.Scene)) {
+      const parent = this.findElementWith(THREE.Object3D)
+
+      if (parent) {
+        this.debug("Parenting under:", parent)
+        parent.object!.add(this.object)
       } else {
-        const parent = this.findElementWith(THREE.Object3D)
-
-        if (parent) {
-          this.debug("Parenting under:", parent)
-
-          if (parent.object) {
-            parent.object.add(this.object)
-          } else {
-            console.error(
-              `Tried to parent my object under ${parent}, but it was not exposing a Three object itself! 😢`
-            )
-          }
-        } else {
-          this.debug("No parent found, parenting into scene!")
-          this.game.scene.add(this.object)
-        }
+        throw `Found no suitable parent for ${this.htmlTagName}. Did you forget to add a <three-scene> tag? 😢`
       }
     }
   }
@@ -219,13 +207,13 @@ export class ThreeElement<T> extends HTMLElement {
       const parent = this.parentElement
 
       if (!parent) {
-        console.error(`Tried to attach to the "${attach} property, but there was no parent! 😢`)
+        this.error(`Tried to attach to the "${attach} property, but there was no parent! 😢`)
         return
       } else if (parent instanceof ThreeElement) {
         this.debug("Attaching to:", parent)
         parent.object[attach!] = this.object
       } else {
-        console.error(
+        this.error(
           `Tried to attach to the "${attach} property of ${parent}, but it's not a ThreeElement! It's possible that the target element has not been upgraded to a ThreeElement yet. 😢`
         )
       }
@@ -251,26 +239,32 @@ export class ThreeElement<T> extends HTMLElement {
     }
   }
 
-  private setCallback(kind: CallbackKind, fn?: TickerFunction | string) {
+  private setCallback(propName: string, fn?: TickerFunction | string) {
+    const eventName = propName.replace(/^on/, "")
+
     /* Unregister previous callback */
-    if (this.callbacks[kind]) {
-      this.game!.ticker.removeCallback(kind, this.callbacks[kind]!)
+    if (this.callbacks[eventName]) {
+      this.game.events.removeListener(eventName, this.callbacks[eventName])
     }
 
     /* Store new value, constructing a function from a string if necessary */
-    this.callbacks[kind] =
+    this.callbacks[eventName] =
       typeof fn === "string"
         ? new Function("delta", `fun = ${fn}`, "fun(delta, this)").bind(this.object)
         : fn
 
     /* Register new callback */
-    if (this.callbacks[kind]) {
-      this.game!.ticker.addCallback(kind, this.callbacks[kind]!)
+    if (this.callbacks[eventName]) {
+      this.game.events.on(eventName, this.callbacks[eventName]!)
     }
   }
 
   private debug(...output: any) {
-    // console.debug(`<${this.tagName.toLowerCase()}>`, ...output)
+    // console.debug(`${this.htmlTagName}>`, ...output)
+  }
+
+  private error(...output: any) {
+    console.error(`${this.htmlTagName}>`, ...output)
   }
 
   static for<T>(constructor: IConstructable<T>): IConstructable<ThreeElement<T>> {

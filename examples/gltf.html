@@ -7,14 +7,16 @@
   <body>
     <!-- Here's a simple Three.js scene. -->
     <three-game id="game">
-      <three-ambient-light intensity="0.2"></three-ambient-light>
-      <three-directional-light position="10, 10, 40" intensity="0.8"></three-directional-light>
+      <three-scene>
+        <three-ambient-light intensity="0.2"></three-ambient-light>
+        <three-directional-light position="10, 10, 40" intensity="0.8"></three-directional-light>
 
-      <auto-rotate speed="0.3">
-        <gltf-asset url="/models/spaceship/spaceship05.gltf" scale="0.5"></gltf-asset>
-      </auto-rotate>
+        <auto-rotate speed="0.3">
+          <gltf-asset url="/models/spaceship/spaceship05.gltf" scale="0.5"></gltf-asset>
+        </auto-rotate>
 
-      <three-orbit-controls></three-orbit-controls>
+        <three-orbit-controls></three-orbit-controls>
+      </three-scene>
     </three-game>
 
     <!-- Import dependencies via ESM. The future is now! -->
@@ -36,8 +38,10 @@
         customElements.define("gltf-asset", GLTFAsset)
 
         class AutoRotate extends ThreeElement.for(THREE.Group) {
-          onupdate(dt) {
-            this.object.rotation.y += this.getAttribute("speed") * dt
+          readyCallback() {
+            this.onupdate = (dt) => {
+              this.object.rotation.y += this.getAttribute("speed") * dt
+            }
           }
         }
 
@@ -48,6 +52,7 @@
     <script type="importmap-shim">
       {
         "imports": {
+          "eventemitter3": "https://jspm.dev/eventemitter3",
           "three": "https://jspm.dev/three",
           "three/": "https://jspm.dev/three/"
         }

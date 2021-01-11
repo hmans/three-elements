@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Custom Camera</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="https://jspm.dev/es-module-shims"></script>
+  </head>
+  <body>
+    <three-game>
+      <three-scene id="scene" camera="#camera">
+        <!-- This camera will replace the one that's automatically provided by the scene itself. -->
+        <three-perspective-camera id="camera" position="5, 5, 150"></three-perspective-camera>
+
+        <!-- Lights on! -->
+        <three-ambient-light intensity="0.2"></three-ambient-light>
+        <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
+
+        <three-mesh>
+          <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+          <three-mesh-standard-material color="red"></three-mesh-standard-material>
+        </three-mesh>
+
+        <three-orbit-controls></three-orbit-controls>
+      </three-scene>
+    </three-game>
+
+    <!-- Import dependencies via ESM. The future is now! -->
+    <script type="module">
+      importShim("/dist/index.esm.js").then(() => {})
+    </script>
+
+    <script type="importmap-shim">
+      {
+        "imports": {
+          "eventemitter3": "https://jspm.dev/eventemitter3",
+          "three": "https://jspm.dev/three",
+          "three/": "https://jspm.dev/three/"
+        }
+      }
+    </script>
+  </body>
+</html>

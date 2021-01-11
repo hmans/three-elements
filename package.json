@@ -53,5 +53,8 @@
   },
   "peerDependencies": {
     "three": ">=0.121.0"
+  },
+  "dependencies": {
+    "eventemitter3": "^4.0.7"
   }
 }
