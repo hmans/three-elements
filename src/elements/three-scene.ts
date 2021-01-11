@@ -1,7 +1,6 @@
-import { Camera, Color, PerspectiveCamera, Raycaster, Scene } from "three"
-import { EventProcessor } from "../EventProcessor"
+import { Camera, Color, PerspectiveCamera, Scene } from "three"
+import { PointerEvents } from "../PointerEvents"
 import { ThreeElement } from "../ThreeElement"
-import { normalizePointerPosition } from "../util/normalizePointerPosition"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
   static get observedAttributes() {
@@ -22,11 +21,12 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
   set camera(camera) {
     this._camera = camera
-    this.eventProcessor.camera = camera
+    this.pointer.camera = camera
     this.handleWindowResize()
   }
 
-  eventProcessor = new EventProcessor(this.game.renderer, this.object!, this.camera)
+  /** The pointer events system. */
+  pointer = new PointerEvents(this.game.renderer, this.object!, this.camera)
 
   constructor() {
     super()
@@ -55,7 +55,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     })
 
     /* Start processing events */
-    this.eventProcessor.start()
+    this.pointer.start()
   }
 
   disconnectedCallback() {

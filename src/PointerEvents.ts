@@ -2,9 +2,9 @@ import { Camera, Intersection, Raycaster, Renderer, Scene, Vector2 } from "three
 import { ThreeElement } from "./ThreeElement"
 import { normalizePointerPosition } from "./util/normalizePointerPosition"
 
-export class EventProcessor {
+export class PointerEvents {
   /** Stores the current (normalized) mouse position. */
-  mouse = new Vector2()
+  position = new Vector2()
 
   /** A list of intersections for the last pointer event that performed a raycast. */
   intersections = new Array<Intersection>()
@@ -23,11 +23,11 @@ export class EventProcessor {
 
     /* Set up pointer event handling */
     renderer.domElement.addEventListener("pointermove", (e) => {
-      this.mouse = normalizePointerPosition(renderer, e.x, e.y)
+      this.position = normalizePointerPosition(renderer, e.x, e.y)
 
       /* Raycast against all objects in scene, and keep the intersections for later. */
       this.raycaster.layers.enableAll()
-      this.raycaster.setFromCamera(this.mouse, camera)
+      this.raycaster.setFromCamera(this.position, camera)
 
       previousIntersections = this.intersections
       previousIntersection = this.intersection
