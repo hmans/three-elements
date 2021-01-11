@@ -1,4 +1,5 @@
 import { Intersection } from "three"
+import { intersectionEquals } from "./intersectionEquals"
 
 export const intersectionInList = (intersection: Intersection, list: Intersection[]) =>
-  list.find((i) => i.object === intersection.object && i.instanceId === intersection.instanceId)
+  list.find((i) => intersectionEquals(i, intersection))

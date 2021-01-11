@@ -78,6 +78,8 @@ It's early days for three-elements, but development is moving fast. Here's a lis
   - [x] Resource loading (GLTF, FBX et al)
 - [ ] Figure out automated testing. Hooooboi, this one's going to be interesting! (#8)
 - [ ] Figure out if it's in any way possible to provide typings for `<three-*>` tags for popular editors
+- [ ] Figure out a cool way to bring low-friction animation into the mix
+- [ ] Experiment with variable bindings (but maybe we should leave that to the frameworks?)
 
 ## CONTRIBUTING
 

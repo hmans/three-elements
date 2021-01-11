@@ -1,5 +1,6 @@
 import { Camera, Intersection, Raycaster, Renderer, Scene, Vector2 } from "three"
 import { ThreeElement } from "./ThreeElement"
+import { intersectionEquals } from "./util/intersectionEquals"
 import { intersectionInList } from "./util/intersectionInList"
 import { normalizePointerPosition } from "./util/normalizePointerPosition"
 
@@ -15,6 +16,7 @@ export class EventProcessor {
   start() {
     const { renderer, scene, camera } = this
     let previousIntersections: Intersection[]
+    let previousIntersection: Intersection | undefined
 
     /* Set up pointer event handling */
     renderer.domElement.addEventListener("pointermove", (e) => {
@@ -25,27 +27,30 @@ export class EventProcessor {
       this.raycaster.setFromCamera(this.mouse, camera)
 
       previousIntersections = this.intersections
+      previousIntersection = this.intersection
       this.intersections = this.raycaster.intersectObjects(scene.children, true)
       this.intersection = this.intersections[0]
 
-      /* Forward pointermove event */
-      if (this.intersection) this.forwardEventToIntersection(e, this.intersection)
-
-      /* Simulate pointerenter */
-      for (const intersection of this.intersections) {
-        if (!intersectionInList(intersection, previousIntersections)) {
-          this.forwardEventToIntersection(new PointerEvent("pointerenter"), intersection)
-        }
+      /* pointermove and pointerover */
+      if (this.intersection) {
+        this.forwardEventToIntersection(e, this.intersection)
+        this.dispatchEventToIntersection(new PointerEvent("pointerover", e), this.intersection)
       }
 
-      /* Simulate pointerleave */
-      for (const intersection of previousIntersections) {
-        if (!intersectionInList(intersection, this.intersections)) {
-          this.forwardEventToIntersection(new PointerEvent("pointerleave"), intersection)
+      /* Simulate pointerenter and friends */
+      if (this.intersection?.object !== previousIntersection?.object) {
+        if (previousIntersection) {
+          this.dispatchEventToIntersection(
+            new PointerEvent("pointerleave", e),
+            previousIntersection
+          )
+          this.dispatchEventToIntersection(new PointerEvent("pointerout", e), previousIntersection)
+        }
+
+        if (this.intersection) {
+          this.dispatchEventToIntersection(new PointerEvent("pointerenter"), this.intersection)
         }
       }
-
-      /* TODO: pointerenter/pointerleave? */
     })
 
     /* Now just forward a bunch of DOM events to the current intersect. */
