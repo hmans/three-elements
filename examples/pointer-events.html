@@ -6,7 +6,7 @@
   </head>
   <body>
     <!-- Here's a simple Three.js scene. -->
-    <three-game autorender>
+    <three-game>
       <three-scene background-color="#222">
         <!-- Lights on! -->
         <three-ambient-light intensity="0.2"></three-ambient-light>
@@ -14,10 +14,10 @@
 
         <!-- Define a template. It automatically becomes available as a new HTML tag. -->
         <three-template tag="rotating-cube">
-          <three-group onpointerdown="this.object.rotateZ(0.4)">
+          <three-group onpointerdown="$$.rotateZ(0.4)">
             <three-mesh
-              onpointerover="this.object.material.color.set('#fff'); this.object.scale.setScalar(1.2)"
-              onpointerout="this.object.material.color.set('#666'); this.object.scale.setScalar(1)"
+              onpointerover="$$.material.color.set('#fff'); $$.scale.setScalar(1.2)"
+              onpointerout="$$.material.color.set('#666'); $$.scale.setScalar(1)"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="#666"></three-mesh-standard-material>

@@ -247,6 +247,30 @@ export class ThreeElement<T> extends HTMLElement {
       ...wrappedObjectAttributes
     } = attributes
 
+    /*
+    When pointer event handlers are set as attributes, we'll construct new function from them. Typically,
+    HTMLElement would already do this for us, but we're going to hook a bit of functionality in there, including making
+    sure that a new frame is requested, and some convenient shortcuts.
+    */
+    for (const event of [
+      "pointerdown",
+      "pointerup",
+      "pointerenter",
+      "pointerleave",
+      "pointerover",
+      "pointerout",
+      "click",
+      "dblclick"
+    ]) {
+      const prop = `on${event}`
+      const value = wrappedObjectAttributes[prop]
+      if (value) {
+        delete wrappedObjectAttributes[prop]
+        const fun = new Function("$", "$$", `${value}; this.game.requestFrame()`).bind(this)
+        Object.assign(this, { [prop]: () => fun(this, this.object) })
+      }
+    }
+
     /* Assign some attributes to the element itself */
     applyProps(this, { onupdate, onlateupdate, onframe, onrender })
 
