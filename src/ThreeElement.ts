@@ -1,5 +1,4 @@
 import * as THREE from "three"
-import { Scene } from "three"
 import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { IConstructable, isDisposable, IStringIndexable } from "./types"
@@ -69,7 +68,7 @@ export class ThreeElement<T> extends HTMLElement {
    */
   get scene(): ThreeScene {
     if (!this._scene) {
-      this._scene = this.findElementWith(Scene) as ThreeScene
+      this._scene = this.findElementWith(THREE.Scene) as ThreeScene
       if (!this._scene) throw "No <three-scene> tag found!"
     }
     return this._scene
@@ -83,6 +82,11 @@ export class ThreeElement<T> extends HTMLElement {
 
   connectedCallback() {
     this.debug("connectedCallback")
+
+    /* Store a reference to this element in the wrapped object's userData. */
+    if (this.object instanceof THREE.Object3D) {
+      this.object!.userData.threeElement = this
+    }
 
     /* Apply props */
     this.handleAttributeChange(this.getAllAttributes())

@@ -14,26 +14,19 @@
 
         <!-- Define a template. It automatically becomes available as a new HTML tag. -->
         <three-template tag="rotating-cube">
-          <three-mesh>
-            <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-            <three-mesh-standard-material color="red"></three-mesh-standard-material>
-          </three-mesh>
+          <three-group onpointermove="this.object.rotateZ(0.1)">
+            <three-mesh onpointermove="this.object.material.color.set('green')">
+              <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+              <three-mesh-standard-material color="red"></three-mesh-standard-material>
+            </three-mesh>
+          </three-group>
         </three-template>
 
-        <!-- Define a small helper function. -->
-        <script type="module">
-          const rotate = (amount) => (dt, object) => {
-            object.rotation.z += amount * dt
-          }
-
-          window.rotate = rotate
-        </script>
-
         <!-- A bunch of rotating cubes. They're really dodecahedrons, sorry! -->
-        <rotating-cube position="+2, +2, 0" onupdate="rotate(1)"></rotating-cube>
-        <rotating-cube position="+2, -2, 0" onupdate="rotate(2)"></rotating-cube>
-        <rotating-cube position="-2, -2, 0" onupdate="rotate(-2)"></rotating-cube>
-        <rotating-cube position="-2, +2, 0" onupdate="rotate(-1)"></rotating-cube>
+        <rotating-cube position="+2, +2, 0"></rotating-cube>
+        <rotating-cube position="+2, -2, 0"></rotating-cube>
+        <rotating-cube position="-2, -2, 0"></rotating-cube>
+        <rotating-cube position="-2, +2, 0"></rotating-cube>
 
         <three-orbit-controls></three-orbit-controls>
       </three-scene>

@@ -1,4 +1,5 @@
 import { Camera, Intersection, Raycaster, Renderer, Scene, Vector2 } from "three"
+import { ThreeElement } from "./ThreeElement"
 import { normalizePointerPosition } from "./util/normalizePointerPosition"
 
 export class EventProcessor {
@@ -25,7 +26,15 @@ export class EventProcessor {
 
       /* If we have an intersection, find the element representing the object */
       if (this.intersection) {
+        const element = this.intersection.object.userData.threeElement as ThreeElement<any>
+
         /* Pass the event on to that element */
+        const event = new PointerEvent("pointermove", {
+          view: window,
+          bubbles: true,
+          cancelable: true
+        })
+        element.dispatchEvent(event)
       }
     })
   }
