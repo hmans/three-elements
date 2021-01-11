@@ -1,8 +1,17 @@
-import { Color, PerspectiveCamera, Scene } from "three"
+import { Camera, Color, PerspectiveCamera, Scene } from "three"
 import { ThreeElement } from "../ThreeElement"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
-  private _camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+  static get observedAttributes() {
+    return ["camera"]
+  }
+
+  private _camera: Camera = new PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  )
 
   get camera() {
     return this._camera
@@ -13,11 +22,15 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     this.handleWindowResize()
   }
 
-  readyCallback() {
+  constructor() {
+    super()
+
     /* Set up camera */
     this.camera.position.z = 10
     this.camera.lookAt(0, 0, 0)
+  }
 
+  readyCallback() {
     /* Handle window resizing */
     this.handleWindowResize = this.handleWindowResize.bind(this)
     window.addEventListener("resize", this.handleWindowResize, false)
@@ -36,10 +49,29 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     window.removeEventListener("resize", this.handleWindowResize, false)
   }
 
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    switch (name) {
+      case "camera":
+        setTimeout(() => {
+          const el = document.getElementById(newValue) as ThreeElement<Camera>
+
+          if (!el) {
+            throw `A scene referenced a camera element with the ID "${newValue}", but no element with that ID could be found.`
+          } else if (!(el.object instanceof Camera)) {
+            throw `A scene referenced a camera element with the ID "${newValue}", but that element did not provide a camera object.`
+          } else {
+            this.camera = el.object!
+          }
+        })
+    }
+  }
+
   handleWindowResize() {
     /* Update camera */
-    this._camera.aspect = window.innerWidth / window.innerHeight
-    this._camera.updateProjectionMatrix()
+    if (this._camera instanceof PerspectiveCamera) {
+      this._camera.aspect = window.innerWidth / window.innerHeight
+      this._camera.updateProjectionMatrix()
+    }
   }
 }
 
