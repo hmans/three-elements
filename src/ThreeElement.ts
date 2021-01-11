@@ -201,9 +201,12 @@ export class ThreeElement<T> extends HTMLElement {
     let attach = this.getAttribute("attach")
 
     if (attach === null) {
-      if (this.tagName.endsWith("-MATERIAL")) {
+      if (this.object instanceof THREE.Material) {
         attach = "material"
-      } else if (this.tagName.endsWith("-GEOMETRY")) {
+      } else if (
+        this.object instanceof THREE.Geometry ||
+        this.object instanceof THREE.BufferGeometry
+      ) {
         attach = "geometry"
       } else if (this.object instanceof THREE.Fog) {
         attach = "fog"
@@ -273,7 +276,7 @@ export class ThreeElement<T> extends HTMLElement {
   }
 
   private debug(...output: any) {
-    console.debug(`${this.htmlTagName}`, ...output)
+    // console.debug(`${this.htmlTagName}`, ...output)
   }
 
   private error(...output: any) {
