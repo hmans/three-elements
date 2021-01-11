@@ -1,4 +1,4 @@
-export { ThreeGame } from "./ThreeGame"
-export { ThreeScene } from "./ThreeScene"
-export { ThreeTemplate } from "./ThreeTemplate"
-export { ThreeOrbitControls } from "./ThreeOrbitControls"
+export * from "./three-game"
+export * from "./three-scene"
+export * from "./three-template"
+export * from "./three-orbit-controls"
