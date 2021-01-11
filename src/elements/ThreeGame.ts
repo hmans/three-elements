@@ -41,6 +41,9 @@ export class ThreeGame extends HTMLElement {
   handleWindowResize() {
     /* Update canvas */
     this.renderer.setSize(window.innerWidth, window.innerHeight)
+
+    /* Emit event */
+    this.events.emit("resize")
   }
 
   startTicking() {

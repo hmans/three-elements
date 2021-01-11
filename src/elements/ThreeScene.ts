@@ -33,7 +33,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
   readyCallback() {
     /* Handle window resizing */
     this.handleWindowResize = this.handleWindowResize.bind(this)
-    window.addEventListener("resize", this.handleWindowResize, false)
+    this.game.events.on("resize", this.handleWindowResize)
 
     /* Configure scene */
     const scene = this.object!
@@ -46,7 +46,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
   disconnectedCallback() {
     /* Unregister event handlers */
-    window.removeEventListener("resize", this.handleWindowResize, false)
+    this.game.events.off("resize", this.handleWindowResize)
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
