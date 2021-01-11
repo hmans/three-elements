@@ -155,7 +155,8 @@ export class ThreeElement<T> extends HTMLElement {
    */
   find<T extends HTMLElement>(fn: (node: HTMLElement) => any) {
     /* Start here */
-    let node: HTMLElement | undefined = this
+    let node: HTMLElement | undefined
+    node = this
 
     do {
       /* Get the immediate parent, or, if we're inside a shaodow DOM, the host element */
