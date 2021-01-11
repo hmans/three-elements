@@ -17,6 +17,10 @@ export class ThreeElement<T> extends HTMLElement {
   /** A dictionary of ticker callbacks (onupdate, etc.) */
   private callbacks = {} as Record<CallbackKind, TickerFunction | undefined>
 
+  get htmlTagName() {
+    return `<${this.tagName.toLowerCase()}>`
+  }
+
   get onupdate() {
     return this.callbacks["onupdate"]
   }
@@ -177,28 +181,16 @@ export class ThreeElement<T> extends HTMLElement {
     If the wrapped object is an Object3D, add it to the scene. If we can find a parent somewhere in the
     tree above it, parent our object to that.
     */
-    if (this.object instanceof THREE.Object3D) {
-      if (!this.game) {
-        console.error(
-          `Trying to insert a new Object3D into the scene, but no <three-game> tag was found! 😢  This may mean that we're failing to escape a custom element's shadow DOM. If you think this is a bug with three-elements, please open an issue! <https://github.com/hmans/three-elements/issues/new>`
-        )
+    if (this.object instanceof THREE.Object3D && !(this.object instanceof THREE.Scene)) {
+      const parent = this.findElementWith(THREE.Object3D)
+
+      if (parent) {
+        this.debug("Parenting under:", parent)
+        parent.object!.add(this.object)
       } else {
-        const parent = this.findElementWith(THREE.Object3D)
-
-        if (parent) {
-          this.debug("Parenting under:", parent)
-
-          if (parent.object) {
-            parent.object.add(this.object)
-          } else {
-            console.error(
-              `Tried to parent my object under ${parent}, but it was not exposing a Three object itself! 😢`
-            )
-          }
-        } else {
-          this.debug("No parent found, parenting into scene!")
-          this.game.scene.add(this.object)
-        }
+        console.error(
+          `Found no suitable parent for ${this.htmlTagName}. Did you forget to add a <three-scene> tag? 😢`
+        )
       }
     }
   }
