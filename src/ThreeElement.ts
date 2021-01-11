@@ -14,6 +14,9 @@ export class ThreeElement<T> extends HTMLElement {
   /** A dictionary of ticker callbacks (onupdate, etc.) */
   private callbacks = {} as Record<CallbackKind, TickerFunction | undefined>
 
+  /**
+   * Returns this element's tag name, formatted as an actual HTML tag (eg. "<three-mesh>").
+   */
   get htmlTagName() {
     return `<${this.tagName.toLowerCase()}>`
   }
@@ -50,17 +53,23 @@ export class ThreeElement<T> extends HTMLElement {
     this.setCallback("onrender", fn)
   }
 
-  private _game?: ThreeGame
+  /**
+   * Returns the instance of ThreeGame that this element is nested under.
+   */
   get game(): ThreeGame {
     if (!this._game) this._game = this.find((node) => node instanceof ThreeGame) as ThreeGame
     return this._game
   }
+  private _game?: ThreeGame
 
-  private _scene?: ThreeScene
+  /**
+   * Returns the instance of ThreeScene that this element is nested under.
+   */
   get scene(): ThreeScene {
     if (!this._scene) this._scene = this.findElementWith(Scene) as ThreeScene
     return this._scene
   }
+  private _scene?: ThreeScene
 
   constructor() {
     super()
