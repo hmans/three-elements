@@ -1,11 +1,14 @@
 import { ThreeElement } from "../ThreeElement"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
+import { Scene } from "three"
+import { ThreeScene } from "./ThreeScene"
 
 export class ThreeOrbitControls extends ThreeElement<OrbitControls> {
   controls?: OrbitControls
 
   readyCallback() {
-    const { camera, renderer } = this.game!
+    const { renderer } = this.game!
+    const { camera } = this.findElementWith(Scene)! as ThreeScene
     this.controls = new OrbitControls(camera, renderer.domElement)
   }
 
