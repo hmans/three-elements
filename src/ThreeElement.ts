@@ -124,6 +124,8 @@ export class ThreeElement<T> extends HTMLElement {
 
       /* Invoke mount method */
       this.readyCallback()
+
+      this.debug("Object is ready:", this.object)
     })
   }
 
@@ -202,6 +204,8 @@ export class ThreeElement<T> extends HTMLElement {
       attach = "material"
     } else if (attach === null && this.tagName.endsWith("-GEOMETRY")) {
       attach = "geometry"
+    } else if (this.object instanceof THREE.Fog) {
+      attach = "fog"
     }
 
     /* If the wrapped object has an "attach" attribute, automatically assign it to the
@@ -267,7 +271,7 @@ export class ThreeElement<T> extends HTMLElement {
   }
 
   private debug(...output: any) {
-    // console.debug(`${this.htmlTagName}>`, ...output)
+    console.debug(`${this.htmlTagName}`, ...output)
   }
 
   private error(...output: any) {
