@@ -12,8 +12,8 @@ export class ThreeElement<T> extends HTMLElement {
   object?: T
 
   /** A reference to the game (with ticker, scene etc.) */
-  game?: ThreeGame
-  scene?: ThreeScene
+  game: ThreeGame
+  scene: ThreeScene
 
   /** A dictionary of ticker callbacks (onupdate, etc.) */
   private callbacks = {} as Record<CallbackKind, TickerFunction | undefined>
@@ -57,14 +57,16 @@ export class ThreeElement<T> extends HTMLElement {
   constructor() {
     super()
     this.debug("constructor", this.getAllAttributes())
+
+    /* Find and store reference to game */
+    this.game = this.find((node) => node instanceof ThreeGame) as ThreeGame
+
+    /* Find and store reference to scene */
+    this.scene = this.findElementWith(Scene) as ThreeScene
   }
 
   connectedCallback() {
     this.debug("connectedCallback")
-
-    /* Find and store reference to game */
-    this.game = this.find((node) => node instanceof ThreeGame) as ThreeGame
-    this.scene = this.findElementWith(Scene) as ThreeScene
 
     /*
     If there already is an onupdate, onlateupdate etc. available at this point, before we've
