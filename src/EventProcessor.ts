@@ -25,16 +25,23 @@ export class EventProcessor {
       this.intersection = this.intersections[0]
 
       this.forwardEventToIntersection(e)
+
+      /* TODO: pointerenter/pointerleave? */
     })
+
+    /* Now just forward a bunch of DOM events to the current intersect. */
+    for (const type of ["pointerdown", "pointerup", "click", "dblclick"]) {
+      renderer.domElement.addEventListener(type, this.forwardEventToIntersection.bind(this))
+    }
   }
 
-  forwardEventToIntersection(originalEvent: Event) {
+  forwardEventToIntersection(originalEvent: Event, asType?: string) {
     if (this.intersection) {
       /* Find the element representing the hovered scene object */
       const element = this.intersection.object.userData.threeElement as ThreeElement<any>
 
       /* Clone the original event... */
-      const event = new Event(originalEvent.type, originalEvent)
+      const event = new Event(asType || originalEvent.type, originalEvent)
 
       /* ...and dispatch it! */
       element.dispatchEvent(event)
