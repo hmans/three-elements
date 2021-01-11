@@ -14,7 +14,7 @@
 
         <!-- Define a template. It automatically becomes available as a new HTML tag. -->
         <three-template tag="rotating-cube">
-          <three-group ondblclick="this.object.rotateZ(0.1)">
+          <three-group onpointerdown="this.object.rotateZ(0.1)">
             <three-mesh onpointermove="this.object.material.color.set('green')">
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="red"></three-mesh-standard-material>

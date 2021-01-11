@@ -41,7 +41,8 @@ export class EventProcessor {
       const element = this.intersection.object.userData.threeElement as ThreeElement<any>
 
       /* Clone the original event... */
-      const event = new Event(asType || originalEvent.type, originalEvent)
+      const eventClass = originalEvent.constructor as typeof Event
+      const event = new eventClass(asType || originalEvent.type, originalEvent)
 
       /* ...and dispatch it! */
       element.dispatchEvent(event)
