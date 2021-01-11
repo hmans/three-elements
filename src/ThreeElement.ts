@@ -5,7 +5,7 @@ import { ThreeScene } from "./elements/ThreeScene"
 import { IConstructable, isDisposable, IStringIndexable } from "./types"
 import { applyProps } from "./util/applyProps"
 import { observeAttributeChange } from "./util/observeAttributeChange"
-import { CallbackKind, CALLBACKS, TickerFunction } from "./util/Ticker"
+import { CallbackKind, CALLBACKS, TickerFunction } from "./elements/ThreeGame"
 
 export class ThreeElement<T> extends HTMLElement {
   /** The THREE.* object managed by this element. */
@@ -140,17 +140,6 @@ export class ThreeElement<T> extends HTMLElement {
   readyCallback() {}
 
   disconnectedCallback() {
-    /* Unregister event handlers */
-    if (this.game) {
-      for (const kind of CALLBACKS) {
-        if (this.callbacks[kind]) {
-          this.game.ticker.removeCallback(kind, this.callbacks[kind]!)
-          this.callbacks[kind] = undefined
-        }
-        this[kind] = undefined
-      }
-    }
-
     /* If the wrapped object is parented, remove it from its parent */
     if (this.object instanceof THREE.Object3D && this.object.parent) {
       this.object.parent.remove(this.object)
@@ -266,7 +255,7 @@ export class ThreeElement<T> extends HTMLElement {
   private setCallback(kind: CallbackKind, fn?: TickerFunction | string) {
     /* Unregister previous callback */
     if (this.callbacks[kind]) {
-      this.game!.ticker.removeCallback(kind, this.callbacks[kind]!)
+      // this.game!.ticker.removeCallback(kind, this.callbacks[kind]!)
     }
 
     /* Store new value, constructing a function from a string if necessary */
@@ -277,7 +266,7 @@ export class ThreeElement<T> extends HTMLElement {
 
     /* Register new callback */
     if (this.callbacks[kind]) {
-      this.game!.ticker.addCallback(kind, this.callbacks[kind]!)
+      // this.game!.ticker.addCallback(kind, this.callbacks[kind]!)
     }
   }
 

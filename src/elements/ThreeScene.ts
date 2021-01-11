@@ -5,8 +5,6 @@ export class ThreeScene extends ThreeElement.for(Scene) {
   camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 
   readyCallback() {
-    const scene = this.object!
-
     /* Set up camera */
     this.camera.position.z = 10
     this.camera.lookAt(0, 0, 0)
@@ -15,10 +13,13 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     this.handleWindowResize = this.handleWindowResize.bind(this)
     window.addEventListener("resize", this.handleWindowResize, false)
 
+    /* Configure scene */
+    const scene = this.object!
     scene.background = new Color("#c93")
-    this.onupdate = (dt) => {
+
+    this.game.events.on("update", (dt) => {
       this.game?.renderer.render(scene, this.camera)
-    }
+    })
   }
 
   disconnectedCallback() {

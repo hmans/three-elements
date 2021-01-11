@@ -1,11 +1,17 @@
 import * as THREE from "three"
-import { Color, Scene } from "three"
 import { registerElement } from "../util/registerElement"
-import { Ticker } from "../util/Ticker"
+import EventEmitter from "eventemitter3"
+
+export type TickerFunction = (dt: number) => any
+export type CallbackKind = "onupdate" | "onlateupdate" | "onframe" | "onrender"
+
+export const CALLBACKS = new Set<CallbackKind>(["onupdate", "onlateupdate", "onframe", "onrender"])
 
 export class ThreeGame extends HTMLElement {
-  ticker = new Ticker()
   renderer = new THREE.WebGLRenderer({ antialias: true })
+  events = new EventEmitter()
+
+  private ticking = false
 
   connectedCallback() {
     this.attachShadow({ mode: "open" })
@@ -19,10 +25,13 @@ export class ThreeGame extends HTMLElement {
     window.addEventListener("resize", this.handleWindowResize, false)
 
     /* Start ticker */
-    this.ticker.start()
+    this.startTicking()
   }
 
   disconnectedCallback() {
+    /* Stop ticking */
+    this.stopTicking()
+
     /* Unregister event handlers */
     window.removeEventListener("resize", this.handleWindowResize, false)
 
@@ -33,6 +42,40 @@ export class ThreeGame extends HTMLElement {
   handleWindowResize() {
     /* Update canvas */
     this.renderer.setSize(window.innerWidth, window.innerHeight)
+  }
+
+  startTicking() {
+    let lastNow = performance.now()
+
+    const tick = () => {
+      /*
+      Figure out deltatime. This is a very naive way of doing this, we'll eventually
+      replace it with a better one.
+      */
+      const now = performance.now()
+      const dt = (now - lastNow) / 1000
+      lastNow = now
+
+      /* Execute update and lateupdate callbacls. */
+      this.events.emit("update", dt)
+      this.events.emit("lateupdate", dt)
+
+      /* If we know that we're rendering a frame, execute frame callbacks. */
+      this.events.emit("frame", dt)
+
+      /* Finally, emit render event. This will trigger scenes to render. */
+      this.events.emit("render", dt)
+
+      /* Loop as long as this ticker is active. */
+      if (this.ticking) requestAnimationFrame(tick)
+    }
+
+    this.ticking = true
+    requestAnimationFrame(tick)
+  }
+
+  stopTicking() {
+    this.ticking = false
   }
 }
 
