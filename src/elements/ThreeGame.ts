@@ -5,7 +5,6 @@ import { Ticker } from "../util/Ticker"
 
 export class ThreeGame extends HTMLElement {
   ticker = new Ticker()
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
   renderer = new THREE.WebGLRenderer({ antialias: true })
 
   connectedCallback() {
@@ -14,10 +13,6 @@ export class ThreeGame extends HTMLElement {
     /* Set up renderer */
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.shadowRoot!.appendChild(this.renderer.domElement)
-
-    /* Set up camera */
-    this.camera.position.z = 10
-    this.camera.lookAt(0, 0, 0)
 
     /* Handle window resizing */
     this.handleWindowResize = this.handleWindowResize.bind(this)
@@ -36,10 +31,6 @@ export class ThreeGame extends HTMLElement {
   }
 
   handleWindowResize() {
-    /* Update camera */
-    this.camera.aspect = window.innerWidth / window.innerHeight
-    this.camera.updateProjectionMatrix()
-
     /* Update canvas */
     this.renderer.setSize(window.innerWidth, window.innerHeight)
   }
