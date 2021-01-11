@@ -188,7 +188,7 @@ export class ThreeElement<T> extends HTMLElement {
         this.debug("Parenting under:", parent)
         parent.object!.add(this.object)
       } else {
-        console.error(
+        this.error(
           `Found no suitable parent for ${this.htmlTagName}. Did you forget to add a <three-scene> tag? 😢`
         )
       }
@@ -211,13 +211,13 @@ export class ThreeElement<T> extends HTMLElement {
       const parent = this.parentElement
 
       if (!parent) {
-        console.error(`Tried to attach to the "${attach} property, but there was no parent! 😢`)
+        this.error(`Tried to attach to the "${attach} property, but there was no parent! 😢`)
         return
       } else if (parent instanceof ThreeElement) {
         this.debug("Attaching to:", parent)
         parent.object[attach!] = this.object
       } else {
-        console.error(
+        this.error(
           `Tried to attach to the "${attach} property of ${parent}, but it's not a ThreeElement! It's possible that the target element has not been upgraded to a ThreeElement yet. 😢`
         )
       }
@@ -262,7 +262,11 @@ export class ThreeElement<T> extends HTMLElement {
   }
 
   private debug(...output: any) {
-    // console.debug(`<${this.tagName.toLowerCase()}>`, ...output)
+    // console.debug(`${this.htmlTagName}>`, ...output)
+  }
+
+  private error(...output: any) {
+    console.error(`${this.htmlTagName}>`, ...output)
   }
 
   static for<T>(constructor: IConstructable<T>): IConstructable<ThreeElement<T>> {
