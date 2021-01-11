@@ -53,12 +53,12 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     switch (name) {
       case "camera":
         setTimeout(() => {
-          const el = document.getElementById(newValue) as ThreeElement<Camera>
+          const el = document.querySelector(newValue) as ThreeElement<Camera>
 
           if (!el) {
-            throw `A scene referenced a camera element with the ID "${newValue}", but no element with that ID could be found.`
+            throw `A scene referenced a camera element with the selector "${newValue}", but it could not be found.`
           } else if (!(el.object instanceof Camera)) {
-            throw `A scene referenced a camera element with the ID "${newValue}", but that element did not provide a camera object.`
+            throw `A scene referenced a camera element with the selector "${newValue}", but that element did not provide a camera object.`
           } else {
             this.camera = el.object!
           }
