@@ -11,10 +11,6 @@ export class ThreeElement<T> extends HTMLElement {
   /** The THREE.* object managed by this element. */
   object?: T
 
-  /** A reference to the game (with ticker, scene etc.) */
-  game: ThreeGame
-  scene: ThreeScene
-
   /** A dictionary of ticker callbacks (onupdate, etc.) */
   private callbacks = {} as Record<CallbackKind, TickerFunction | undefined>
 
@@ -54,15 +50,21 @@ export class ThreeElement<T> extends HTMLElement {
     this.setCallback("onrender", fn)
   }
 
+  private _game?: ThreeGame
+  get game(): ThreeGame {
+    if (!this._game) this._game = this.find((node) => node instanceof ThreeGame) as ThreeGame
+    return this._game
+  }
+
+  private _scene?: ThreeScene
+  get scene(): ThreeScene {
+    if (!this._scene) this._scene = this.findElementWith(Scene) as ThreeScene
+    return this._scene
+  }
+
   constructor() {
     super()
     this.debug("constructor", this.getAllAttributes())
-
-    /* Find and store reference to game */
-    this.game = this.find((node) => node instanceof ThreeGame) as ThreeGame
-
-    /* Find and store reference to scene */
-    this.scene = this.findElementWith(Scene) as ThreeScene
   }
 
   connectedCallback() {
