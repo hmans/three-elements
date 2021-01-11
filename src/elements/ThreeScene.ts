@@ -2,7 +2,16 @@ import { Color, PerspectiveCamera, Scene } from "three"
 import { ThreeElement } from "../ThreeElement"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
-  camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+  private _camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+
+  get camera() {
+    return this._camera
+  }
+
+  set camera(camera) {
+    this._camera = camera
+    this.handleWindowResize()
+  }
 
   readyCallback() {
     /* Set up camera */
@@ -29,8 +38,8 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
   handleWindowResize() {
     /* Update camera */
-    this.camera.aspect = window.innerWidth / window.innerHeight
-    this.camera.updateProjectionMatrix()
+    this._camera.aspect = window.innerWidth / window.innerHeight
+    this._camera.updateProjectionMatrix()
   }
 }
 
