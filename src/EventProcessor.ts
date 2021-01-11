@@ -13,6 +13,8 @@ export class EventProcessor {
 
   start() {
     const { renderer, scene, camera } = this
+    let previousIntersections: Intersection[]
+
     /* Set up pointer event handling */
     renderer.domElement.addEventListener("pointermove", (e) => {
       this.mouse = normalizePointerPosition(renderer, e.x, e.y)
@@ -21,6 +23,7 @@ export class EventProcessor {
       this.raycaster.layers.enableAll()
       this.raycaster.setFromCamera(this.mouse, camera)
 
+      previousIntersections = this.intersections
       this.intersections = this.raycaster.intersectObjects(scene.children, true)
       this.intersection = this.intersections[0]
 
@@ -38,6 +41,10 @@ export class EventProcessor {
   forwardEventToIntersection(originalEvent: Event, asType?: string) {
     if (this.intersection) {
       /* Find the element representing the hovered scene object */
+      /*
+      FIXME: it's possible that the intersected event is not represented by an element.
+      In this case, we will need to walk up the scene graph to find the first element that is.
+      */
       const element = this.intersection.object.userData.threeElement as ThreeElement<any>
 
       /* Clone the original event... */
