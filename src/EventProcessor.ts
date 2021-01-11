@@ -24,18 +24,20 @@ export class EventProcessor {
       this.intersections = this.raycaster.intersectObjects(scene.children, true)
       this.intersection = this.intersections[0]
 
-      /* If we have an intersection, find the element representing the object */
-      if (this.intersection) {
-        const element = this.intersection.object.userData.threeElement as ThreeElement<any>
-
-        /* Pass the event on to that element */
-        const event = new PointerEvent("pointermove", {
-          view: window,
-          bubbles: true,
-          cancelable: true
-        })
-        element.dispatchEvent(event)
-      }
+      this.forwardEventToIntersection(e)
     })
+  }
+
+  forwardEventToIntersection(originalEvent: Event) {
+    if (this.intersection) {
+      /* Find the element representing the hovered scene object */
+      const element = this.intersection.object.userData.threeElement as ThreeElement<any>
+
+      /* Clone the original event... */
+      const event = new Event(originalEvent.type, originalEvent)
+
+      /* ...and dispatch it! */
+      element.dispatchEvent(event)
+    }
   }
 }
