@@ -200,12 +200,14 @@ export class ThreeElement<T> extends HTMLElement {
     /* Use provided attach, or auto-set it based on the tag name. */
     let attach = this.getAttribute("attach")
 
-    if (attach === null && this.tagName.endsWith("-MATERIAL")) {
-      attach = "material"
-    } else if (attach === null && this.tagName.endsWith("-GEOMETRY")) {
-      attach = "geometry"
-    } else if (this.object instanceof THREE.Fog) {
-      attach = "fog"
+    if (attach === null) {
+      if (this.tagName.endsWith("-MATERIAL")) {
+        attach = "material"
+      } else if (this.tagName.endsWith("-GEOMETRY")) {
+        attach = "geometry"
+      } else if (this.object instanceof THREE.Fog) {
+        attach = "fog"
+      }
     }
 
     /* If the wrapped object has an "attach" attribute, automatically assign it to the
