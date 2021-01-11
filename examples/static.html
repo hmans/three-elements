@@ -7,57 +7,59 @@
   <body>
     <!-- Here's a simple Three.js scene. -->
     <three-game>
-      <!-- Lights -->
-      <three-ambient-light intensity="0.2"></three-ambient-light>
-      <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
+      <three-scene>
+        <!-- Lights -->
+        <three-ambient-light intensity="0.2"></three-ambient-light>
+        <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
 
-      <!-- Scene Contents -->
-      <three-group onupdate="dt => this.rotation.x = this.rotation.y += 1 * dt">
-        <three-mesh scale="2.5">
-          <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-          <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
-        </three-mesh>
-
-        <three-group onupdate="dt => this.rotation.x = this.rotation.y += 0.5 * dt">
-          <three-mesh
-            position="-4, 0, 0"
-            onupdate="dt => this.rotation.x = this.rotation.z += 1 * dt"
-          >
+        <!-- Scene Contents -->
+        <three-group onupdate="dt => this.rotation.x = this.rotation.y += 1 * dt">
+          <three-mesh scale="2.5">
             <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-            <three-mesh-standard-material color="red"></three-mesh-standard-material>
+            <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
           </three-mesh>
-        </three-group>
 
-        <three-group onupdate="dt => this.rotation.x = this.rotation.z += 1.5 * dt">
-          <three-mesh
-            position="4, 0, 0"
-            onupdate="dt => this.rotation.x = this.rotation.z += 1 * dt"
-          >
-            <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-            <three-mesh-standard-material color="yellow"></three-mesh-standard-material>
-          </three-mesh>
-        </three-group>
+          <three-group onupdate="dt => this.rotation.x = this.rotation.y += 0.5 * dt">
+            <three-mesh
+              position="-4, 0, 0"
+              onupdate="dt => this.rotation.x = this.rotation.z += 1 * dt"
+            >
+              <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+              <three-mesh-standard-material color="red"></three-mesh-standard-material>
+            </three-mesh>
+          </three-group>
 
-        <three-group onupdate="dt => this.rotation.x = this.rotation.y += 2 * dt">
-          <three-mesh
-            position="0, 4, 0"
-            onupdate="dt => this.rotation.x = this.rotation.z += 1 * dt"
-          >
-            <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-            <three-mesh-standard-material color="green"></three-mesh-standard-material>
-          </three-mesh>
-        </three-group>
+          <three-group onupdate="dt => this.rotation.x = this.rotation.z += 1.5 * dt">
+            <three-mesh
+              position="4, 0, 0"
+              onupdate="dt => this.rotation.x = this.rotation.z += 1 * dt"
+            >
+              <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+              <three-mesh-standard-material color="yellow"></three-mesh-standard-material>
+            </three-mesh>
+          </three-group>
 
-        <three-group onupdate="dt => this.rotation.x = this.rotation.z += 2.5 * dt">
-          <three-mesh
-            position="0, -4, 0"
-            onupdate="dt => this.rotation.x = this.rotation.z += 1 * dt"
-          >
-            <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-            <three-mesh-standard-material color="blue"></three-mesh-standard-material>
-          </three-mesh>
+          <three-group onupdate="dt => this.rotation.x = this.rotation.y += 2 * dt">
+            <three-mesh
+              position="0, 4, 0"
+              onupdate="dt => this.rotation.x = this.rotation.z += 1 * dt"
+            >
+              <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+              <three-mesh-standard-material color="green"></three-mesh-standard-material>
+            </three-mesh>
+          </three-group>
+
+          <three-group onupdate="dt => this.rotation.x = this.rotation.z += 2.5 * dt">
+            <three-mesh
+              position="0, -4, 0"
+              onupdate="dt => this.rotation.x = this.rotation.z += 1 * dt"
+            >
+              <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+              <three-mesh-standard-material color="blue"></three-mesh-standard-material>
+            </three-mesh>
+          </three-group>
         </three-group>
-      </three-group>
+      </three-scene>
     </three-game>
 
     <!-- Import dependencies via ESM. The future is now! -->

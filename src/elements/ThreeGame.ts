@@ -1,11 +1,10 @@
 import * as THREE from "three"
-import { Color } from "three"
+import { Color, Scene } from "three"
 import { registerElement } from "../util/registerElement"
 import { Ticker } from "../util/Ticker"
 
 export class ThreeGame extends HTMLElement {
   ticker = new Ticker()
-  scene = new THREE.Scene()
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
   renderer = new THREE.WebGLRenderer({ antialias: true })
 
@@ -20,18 +19,11 @@ export class ThreeGame extends HTMLElement {
     this.camera.position.z = 10
     this.camera.lookAt(0, 0, 0)
 
-    /* Configure scene */
-    this.scene.background = new Color("#333")
-
     /* Handle window resizing */
     this.handleWindowResize = this.handleWindowResize.bind(this)
     window.addEventListener("resize", this.handleWindowResize, false)
 
     /* Start ticker */
-    this.ticker.addCallback("onrender", () => {
-      this.renderer.render(this.scene, this.camera)
-    })
-
     this.ticker.start()
   }
 
