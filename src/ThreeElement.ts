@@ -1,11 +1,10 @@
 import * as THREE from "three"
 import { Scene } from "three"
-import { ThreeGame } from "./elements/ThreeGame"
+import { ThreeGame, TickerFunction } from "./elements/ThreeGame"
 import { ThreeScene } from "./elements/ThreeScene"
 import { IConstructable, isDisposable, IStringIndexable } from "./types"
 import { applyProps } from "./util/applyProps"
 import { observeAttributeChange } from "./util/observeAttributeChange"
-import { CALLBACKS, TickerFunction } from "./elements/ThreeGame"
 
 export class ThreeElement<T> extends HTMLElement {
   /** The THREE.* object managed by this element. */
