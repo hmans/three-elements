@@ -3,9 +3,8 @@ import { registerElement } from "../util/registerElement"
 import EventEmitter from "eventemitter3"
 
 export type TickerFunction = (dt: number) => any
-export type CallbackKind = "onupdate" | "onlateupdate" | "onframe" | "onrender"
 
-export const CALLBACKS = new Set<CallbackKind>(["onupdate", "onlateupdate", "onframe", "onrender"])
+export const CALLBACKS = new Set<string>(["onupdate", "onlateupdate", "onframe", "onrender"])
 
 export class ThreeGame extends HTMLElement {
   renderer = new THREE.WebGLRenderer({ antialias: true })

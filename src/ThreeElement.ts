@@ -5,14 +5,14 @@ import { ThreeScene } from "./elements/ThreeScene"
 import { IConstructable, isDisposable, IStringIndexable } from "./types"
 import { applyProps } from "./util/applyProps"
 import { observeAttributeChange } from "./util/observeAttributeChange"
-import { CallbackKind, CALLBACKS, TickerFunction } from "./elements/ThreeGame"
+import { CALLBACKS, TickerFunction } from "./elements/ThreeGame"
 
 export class ThreeElement<T> extends HTMLElement {
   /** The THREE.* object managed by this element. */
   object?: T
 
   /** A dictionary of ticker callbacks (onupdate, etc.) */
-  private callbacks = {} as Record<CallbackKind, TickerFunction | undefined>
+  private callbacks = {} as Record<string, TickerFunction | undefined>
 
   /**
    * Returns this element's tag name, formatted as an actual HTML tag (eg. "<three-mesh>").
@@ -84,18 +84,6 @@ export class ThreeElement<T> extends HTMLElement {
 
   connectedCallback() {
     this.debug("connectedCallback")
-
-    /*
-    If there already is an onupdate, onlateupdate etc. available at this point, before we've
-    handled the attributes of this element, it must be an instance method of a derived class,
-    so let's register it as our callback.
-    */
-    for (const kind of CALLBACKS) {
-      const callback = this[kind]
-      if (typeof callback === "function") {
-        this.setCallback(kind, callback.bind(this))
-      }
-    }
 
     /* Apply props */
     this.handleAttributes(this.getAllAttributes())
@@ -252,21 +240,23 @@ export class ThreeElement<T> extends HTMLElement {
     }
   }
 
-  private setCallback(kind: CallbackKind, fn?: TickerFunction | string) {
+  private setCallback(propName: string, fn?: TickerFunction | string) {
+    const eventName = propName.replace(/^on/, "")
+
     /* Unregister previous callback */
-    if (this.callbacks[kind]) {
-      // this.game!.ticker.removeCallback(kind, this.callbacks[kind]!)
+    if (this.callbacks[eventName]) {
+      this.game.events.removeListener(eventName, this.callbacks[eventName])
     }
 
     /* Store new value, constructing a function from a string if necessary */
-    this.callbacks[kind] =
+    this.callbacks[eventName] =
       typeof fn === "string"
         ? new Function("delta", `fun = ${fn}`, "fun(delta, this)").bind(this.object)
         : fn
 
     /* Register new callback */
-    if (this.callbacks[kind]) {
-      // this.game!.ticker.addCallback(kind, this.callbacks[kind]!)
+    if (this.callbacks[eventName]) {
+      this.game.events.on(eventName, this.callbacks[eventName]!)
     }
   }
 
