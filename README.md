@@ -2,7 +2,7 @@
 [![CI](https://github.com/hmans/three-elements/workflows/CI/badge.svg)](https://github.com/hmans/three-elements/actions?query=workflow%3ACI)
 [![Downloads](https://img.shields.io/npm/dt/three-elements.svg)](https://www.npmjs.com/package/three-elements)
 [![Bundle Size](https://img.shields.io/bundlephobia/min/three-elements?label=bundle%20size)](https://bundlephobia.com/result?p=three-elements)
-![Twitter](https://img.shields.io/twitter/follow/hmans?style=social)
+[![Discord](https://img.shields.io/discord/766340976125542430?color=hotpink&label=discord)](https://discord.gg/ybuUjFM)
 
 ```
  __   __    🗻     🗻   ⛰
