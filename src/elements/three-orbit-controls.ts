@@ -6,11 +6,23 @@ export class ThreeOrbitControls extends ThreeElement<OrbitControls> {
 
   readyCallback() {
     const { renderer } = this.game
-    const { camera } = this.scene
+    let { camera } = this.scene
     this.controls = new OrbitControls(camera, renderer.domElement)
 
     this.onupdate = () => {
-      this.controls?.update()
+      if (!this.controls) return
+
+      /*
+      Check if the scene's camera has changed.
+      TODO: in the future, the scene may event a "camerachanged" event that we could hook into.
+      */
+      if (this.scene.camera !== camera) {
+        this.controls.dispose
+        camera = this.scene.camera
+        this.controls = new OrbitControls(camera, renderer.domElement)
+      }
+
+      this.controls.update()
     }
 
     this.controls.addEventListener("change", () => {
