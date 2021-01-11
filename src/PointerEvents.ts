@@ -1,4 +1,4 @@
-import { Camera, Intersection, Raycaster, Renderer, Scene, Vector2 } from "three"
+import { Camera, Intersection, Object3D, Raycaster, Renderer, Scene, Vector2 } from "three"
 import { ThreeElement } from "./ThreeElement"
 import { normalizePointerPosition } from "./util/normalizePointerPosition"
 
@@ -74,14 +74,19 @@ export class PointerEvents {
   }
 
   private dispatchEventToIntersection(event: Event, intersection: Intersection) {
-    /* Find the element representing the hovered scene object */
-    /*
-    FIXME: it's possible that the intersected event is not represented by an element.
-    In this case, we will need to walk up the scene graph to find the first element that is.
-    */
-    const element = intersection.object.userData.threeElement as ThreeElement<any>
+    /* Find the first object that actually has a reference to an element */
+    let object: Object3D | null
 
-    /* ...and dispatch it! */
-    element.dispatchEvent(event)
+    for (object = intersection.object; object; object = object.parent) {
+      if (object.userData.threeElement) {
+        /* Find the element representing the hovered scene object */
+        const element = object.userData.threeElement as ThreeElement<any>
+
+        /* ...and dispatch it! */
+        element.dispatchEvent(event)
+
+        return
+      }
+    }
   }
 }
