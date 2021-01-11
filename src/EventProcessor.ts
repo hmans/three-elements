@@ -1,5 +1,6 @@
 import { Camera, Intersection, Raycaster, Renderer, Scene, Vector2 } from "three"
 import { ThreeElement } from "./ThreeElement"
+import { intersectionInList } from "./util/intersectionInList"
 import { normalizePointerPosition } from "./util/normalizePointerPosition"
 
 export class EventProcessor {
@@ -27,32 +28,52 @@ export class EventProcessor {
       this.intersections = this.raycaster.intersectObjects(scene.children, true)
       this.intersection = this.intersections[0]
 
-      this.forwardEventToIntersection(e)
+      /* Forward pointermove event */
+      if (this.intersection) this.forwardEventToIntersection(e, this.intersection)
+
+      /* Simulate pointerenter */
+      for (const intersection of this.intersections) {
+        if (!intersectionInList(intersection, previousIntersections)) {
+          this.forwardEventToIntersection(new PointerEvent("pointerenter"), intersection)
+        }
+      }
+
+      /* Simulate pointerleave */
+      for (const intersection of previousIntersections) {
+        if (!intersectionInList(intersection, this.intersections)) {
+          this.forwardEventToIntersection(new PointerEvent("pointerleave"), intersection)
+        }
+      }
 
       /* TODO: pointerenter/pointerleave? */
     })
 
     /* Now just forward a bunch of DOM events to the current intersect. */
     for (const type of ["pointerdown", "pointerup", "click", "dblclick"]) {
-      renderer.domElement.addEventListener(type, this.forwardEventToIntersection.bind(this))
+      renderer.domElement.addEventListener(type, (e) => {
+        if (this.intersection) this.forwardEventToIntersection(e, this.intersection)
+      })
     }
   }
 
-  forwardEventToIntersection(originalEvent: Event, asType?: string) {
-    if (this.intersection) {
-      /* Find the element representing the hovered scene object */
-      /*
-      FIXME: it's possible that the intersected event is not represented by an element.
-      In this case, we will need to walk up the scene graph to find the first element that is.
-      */
-      const element = this.intersection.object.userData.threeElement as ThreeElement<any>
+  private forwardEventToIntersection(originalEvent: Event, intersection: Intersection) {
+    /* Clone the original event... */
+    const eventClass = originalEvent.constructor as typeof Event
+    const event = new eventClass(originalEvent.type, originalEvent)
 
-      /* Clone the original event... */
-      const eventClass = originalEvent.constructor as typeof Event
-      const event = new eventClass(asType || originalEvent.type, originalEvent)
+    /* ...and dispatch it! */
+    this.dispatchEventToIntersection(event, intersection)
+  }
 
-      /* ...and dispatch it! */
-      element.dispatchEvent(event)
-    }
+  private dispatchEventToIntersection(event: Event, intersection: Intersection) {
+    /* Find the element representing the hovered scene object */
+    /*
+    FIXME: it's possible that the intersected event is not represented by an element.
+    In this case, we will need to walk up the scene graph to find the first element that is.
+    */
+    const element = intersection.object.userData.threeElement as ThreeElement<any>
+
+    /* ...and dispatch it! */
+    element.dispatchEvent(event)
   }
 }
