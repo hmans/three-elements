@@ -3,9 +3,10 @@ import { ThreeElement } from "../ThreeElement"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
   static get observedAttributes() {
-    return ["camera"]
+    return ["background-color", "camera"]
   }
 
+  /** The current camera that is being used to render the scene. */
   private _camera: Camera = new PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
@@ -37,10 +38,13 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
     /* Configure scene */
     const scene = this.object!
-    scene.background = new Color("#c93")
 
     this.game.events.on("render", (dt) => {
-      this.game?.renderer.render(scene, this.camera)
+      const { renderer } = this.game
+
+      renderer.clearDepth()
+      // renderer.clearColor()
+      renderer.render(scene, this.camera)
     })
   }
 
@@ -51,6 +55,10 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     switch (name) {
+      case "background-color":
+        this.object!.background = new Color(newValue)
+        break
+
       case "camera":
         setTimeout(() => {
           const el = document.querySelector(newValue) as ThreeElement<Camera>
@@ -61,12 +69,17 @@ export class ThreeScene extends ThreeElement.for(Scene) {
             throw `A scene referenced a camera element with the selector "${newValue}", but that element did not provide a camera object.`
           } else {
             this.camera = el.object!
+            this.camera.lookAt(0, 0, 0)
           }
         })
+        break
     }
   }
 
   handleWindowResize() {
+    /* No matter what, we want to request a frame to be rendered. */
+    this.game.requestFrame()
+
     /* Update camera */
     if (this._camera instanceof PerspectiveCamera) {
       this._camera.aspect = window.innerWidth / window.innerHeight

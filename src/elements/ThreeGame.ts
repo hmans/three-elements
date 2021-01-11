@@ -7,7 +7,13 @@ export type TickerFunction = (dt: number) => any
 export const CALLBACKS = new Set<string>(["onupdate", "onlateupdate", "onframe", "onrender"])
 
 export class ThreeGame extends HTMLElement {
-  renderer = new THREE.WebGLRenderer({ antialias: true })
+  renderer = new THREE.WebGLRenderer({
+    powerPreference: "high-performance",
+    antialias: true,
+    stencil: true,
+    depth: true
+  })
+
   events = new EventEmitter()
 
   /** Is the ticker running? */
@@ -30,6 +36,15 @@ export class ThreeGame extends HTMLElement {
 
     /* Set up renderer */
     this.renderer.setSize(window.innerWidth, window.innerHeight)
+    this.renderer.autoClear = false
+
+    /* Configure color space */
+    this.renderer.outputEncoding = THREE.sRGBEncoding
+
+    /* Enable shadow map */
+    this.renderer.shadowMap.enabled = true
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
+
     this.shadowRoot!.appendChild(this.renderer.domElement)
 
     /* Handle window resizing */
