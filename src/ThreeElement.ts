@@ -1,5 +1,7 @@
 import * as THREE from "three"
+import { Scene } from "three"
 import { ThreeGame } from "./elements/ThreeGame"
+import { ThreeScene } from "./elements/ThreeScene"
 import { IConstructable, isDisposable, IStringIndexable } from "./types"
 import { applyProps } from "./util/applyProps"
 import { observeAttributeChange } from "./util/observeAttributeChange"
@@ -11,6 +13,7 @@ export class ThreeElement<T> extends HTMLElement {
 
   /** A reference to the game (with ticker, scene etc.) */
   game?: ThreeGame
+  scene?: ThreeScene
 
   /** A dictionary of ticker callbacks (onupdate, etc.) */
   private callbacks = {} as Record<CallbackKind, TickerFunction | undefined>
@@ -61,6 +64,7 @@ export class ThreeElement<T> extends HTMLElement {
 
     /* Find and store reference to game */
     this.game = this.find((node) => node instanceof ThreeGame) as ThreeGame
+    this.scene = this.findElementWith(Scene) as ThreeScene
 
     /*
     If there already is an onupdate, onlateupdate etc. available at this point, before we've

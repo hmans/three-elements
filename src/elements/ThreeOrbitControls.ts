@@ -8,7 +8,7 @@ export class ThreeOrbitControls extends ThreeElement<OrbitControls> {
 
   readyCallback() {
     const { renderer } = this.game!
-    const { camera } = this.findElementWith(Scene)! as ThreeScene
+    const { camera } = this.scene!
     this.controls = new OrbitControls(camera, renderer.domElement)
   }
 
