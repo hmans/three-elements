@@ -1,17 +1,20 @@
 import { Camera, Intersection, Raycaster, Renderer, Scene, Vector2 } from "three"
 import { ThreeElement } from "./ThreeElement"
-import { intersectionEquals } from "./util/intersectionEquals"
-import { intersectionInList } from "./util/intersectionInList"
 import { normalizePointerPosition } from "./util/normalizePointerPosition"
 
 export class EventProcessor {
-  constructor(public renderer: Renderer, public scene: Scene, public camera: Camera) {}
-
+  /** Stores the current (normalized) mouse position. */
   mouse = new Vector2()
+
+  /** A list of intersections for the last pointer event that performed a raycast. */
   intersections = new Array<Intersection>()
+
+  /** The top-most of our current intersections. */
   intersection?: Intersection
 
   private raycaster = new Raycaster()
+
+  constructor(public renderer: Renderer, public scene: Scene, public camera: Camera) {}
 
   start() {
     const { renderer, scene, camera } = this
