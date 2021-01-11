@@ -3,9 +3,7 @@ import { ThreeGame } from "./elements/ThreeGame"
 import { IConstructable, isDisposable, IStringIndexable } from "./types"
 import { applyProps } from "./util/applyProps"
 import { observeAttributeChange } from "./util/observeAttributeChange"
-import { CallbackKind, TickerFunction } from "./util/Ticker"
-
-const CALLBACKS: CallbackKind[] = ["onupdate", "onlateupdate", "onframe", "onrender"]
+import { CallbackKind, CALLBACKS, TickerFunction } from "./util/Ticker"
 
 export class ThreeElement<T> extends HTMLElement {
   /** The THREE.* object managed by this element. */
