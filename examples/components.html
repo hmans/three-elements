@@ -7,12 +7,14 @@
   <body>
     <!-- Here's a simple Three.js scene. -->
     <three-game id="game">
-      <three-ambient-light intensity="0.2"></three-ambient-light>
-      <three-directional-light position="10, 10, 40" intensity="0.8"></three-directional-light>
+      <three-scene>
+        <three-ambient-light intensity="0.2"></three-ambient-light>
+        <three-directional-light position="10, 10, 40" intensity="0.8"></three-directional-light>
 
-      <rotating-thingy scale="4" speed="2"> </rotating-thingy>
+        <rotating-thingy scale="4" speed="2"> </rotating-thingy>
 
-      <three-orbit-controls></three-orbit-controls>
+        <three-orbit-controls></three-orbit-controls>
+      </three-scene>
     </three-game>
 
     <!-- Import dependencies via ESM. The future is now! -->
