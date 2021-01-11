@@ -1,0 +1,115 @@
+<html>
+  <head>
+    <title>Animations (using PopMotion)</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="https://jspm.dev/es-module-shims"></script>
+  </head>
+  <body>
+    <!-- Here's a simple Three.js scene. -->
+    <three-game>
+      <three-scene background-color="#222">
+        <!-- Lights on! -->
+        <three-ambient-light intensity="0.2"></three-ambient-light>
+        <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
+
+        <three-mesh scale="3" id="thingy">
+          <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+          <three-mesh-standard-material color="#666"></three-mesh-standard-material>
+        </three-mesh>
+
+        <three-orbit-controls></three-orbit-controls>
+      </three-scene>
+    </three-game>
+
+    <!-- Import dependencies via ESM. The future is now! -->
+    <script type="module">
+      import { animate } from "https://jspm.dev/popmotion"
+      importShim("/dist/index.esm.js").then(() => {
+        const thingy = document.getElementById("thingy")
+        const idleScale = parseFloat(thingy.getAttribute("scale"))
+
+        let rotateSpeed = 0
+        let scaleAnimation
+        let colorAnimation
+        let speedAnimation
+
+        thingy.onupdate = (dt) => {
+          if (rotateSpeed > 0) {
+            thingy.object.rotateX(rotateSpeed * 0.8 * dt)
+            thingy.object.rotateY(rotateSpeed * 0.4 * dt)
+            thingy.object.rotateZ(rotateSpeed * dt)
+            thingy.game.requestFrame()
+          }
+        }
+
+        thingy.addEventListener("pointerenter", () => {
+          scaleAnimation?.stop()
+          colorAnimation?.stop()
+          speedAnimation?.stop()
+
+          speedAnimation = animate({
+            from: rotateSpeed,
+            to: 2,
+            duration: 1000,
+            onUpdate: (v) => (rotateSpeed = v)
+          })
+
+          scaleAnimation = animate({
+            from: thingy.object.scale.x,
+            to: idleScale * 1.5,
+            onUpdate: (v) => {
+              thingy.object.scale.setScalar(v)
+            }
+          })
+
+          colorAnimation = animate({
+            from: thingy.object.material.color.getStyle(),
+            to: "#fff",
+            onUpdate: (v) => {
+              thingy.object.material.color.setStyle(v)
+            }
+          })
+        })
+
+        thingy.addEventListener("pointerleave", () => {
+          scaleAnimation?.stop()
+          colorAnimation?.stop()
+          speedAnimation?.stop()
+
+          speedAnimation = animate({
+            from: rotateSpeed,
+            to: 0,
+            duration: 500,
+            onUpdate: (v) => (rotateSpeed = v)
+          })
+
+          scaleAnimation = animate({
+            from: thingy.object.scale.x,
+            to: idleScale,
+            onUpdate: (v) => {
+              thingy.object.scale.setScalar(v)
+            }
+          })
+
+          colorAnimation = animate({
+            from: thingy.object.material.color.getStyle(),
+            to: "#666",
+            onUpdate: (v) => {
+              thingy.object.material.color.setStyle(v)
+            }
+          })
+        })
+      })
+    </script>
+
+    <script type="importmap-shim">
+      {
+        "imports": {
+          "eventemitter3": "https://jspm.dev/eventemitter3",
+          "three": "https://jspm.dev/three",
+          "three/": "https://jspm.dev/three/"
+        }
+      }
+    </script>
+  </body>
+</html>
