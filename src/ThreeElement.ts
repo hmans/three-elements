@@ -57,7 +57,10 @@ export class ThreeElement<T> extends HTMLElement {
    * Returns the instance of ThreeGame that this element is nested under.
    */
   get game(): ThreeGame {
-    if (!this._game) this._game = this.find((node) => node instanceof ThreeGame) as ThreeGame
+    if (!this._game) {
+      this._game = this.find((node) => node instanceof ThreeGame) as ThreeGame
+      if (!this._game) throw "No <three-game> tag found!"
+    }
     return this._game
   }
   private _game?: ThreeGame
@@ -66,7 +69,10 @@ export class ThreeElement<T> extends HTMLElement {
    * Returns the instance of ThreeScene that this element is nested under.
    */
   get scene(): ThreeScene {
-    if (!this._scene) this._scene = this.findElementWith(Scene) as ThreeScene
+    if (!this._scene) {
+      this._scene = this.findElementWith(Scene) as ThreeScene
+      if (!this._scene) throw "No <three-scene> tag found!"
+    }
     return this._scene
   }
   private _scene?: ThreeScene
@@ -204,9 +210,7 @@ export class ThreeElement<T> extends HTMLElement {
         this.debug("Parenting under:", parent)
         parent.object!.add(this.object)
       } else {
-        this.error(
-          `Found no suitable parent for ${this.htmlTagName}. Did you forget to add a <three-scene> tag? 😢`
-        )
+        throw `Found no suitable parent for ${this.htmlTagName}. Did you forget to add a <three-scene> tag? 😢`
       }
     }
   }

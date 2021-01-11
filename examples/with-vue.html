@@ -8,10 +8,12 @@
     <!-- The main game template. -->
     <div id="game">
       <three-game>
-        <three-ambient-light intensity="0.2"></three-ambient-light>
-        <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
+        <three-scene>
+          <three-ambient-light intensity="0.2"></three-ambient-light>
+          <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
 
-        <rotating-dodecahedron></rotating-dodecahedron>
+          <rotating-dodecahedron></rotating-dodecahedron>
+        </three-scene>
       </three-game>
     </div>
 
