@@ -1,4 +1,5 @@
 import { Camera, Color, PerspectiveCamera, Scene } from "three"
+import { PointerEvents } from "../PointerEvents"
 import { ThreeElement } from "../ThreeElement"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
@@ -20,8 +21,12 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
   set camera(camera) {
     this._camera = camera
+    this.pointer.camera = camera
     this.handleWindowResize()
   }
+
+  /** The pointer events system. */
+  pointer = new PointerEvents(this.game.renderer, this.object!, this.camera)
 
   constructor() {
     super()
@@ -29,6 +34,8 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     /* Set up camera */
     this.camera.position.z = 10
     this.camera.lookAt(0, 0, 0)
+
+    /* Set up event processor */
   }
 
   readyCallback() {
@@ -39,13 +46,16 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     /* Configure scene */
     const scene = this.object!
 
+    /* Set up rendering */
     this.game.events.on("render", (dt) => {
       const { renderer } = this.game
 
       renderer.clearDepth()
-      // renderer.clearColor()
       renderer.render(scene, this.camera)
     })
+
+    /* Start processing events */
+    this.pointer.start()
   }
 
   disconnectedCallback() {

@@ -32,8 +32,6 @@ export class ThreeGame extends HTMLElement {
   }
 
   connectedCallback() {
-    this.attachShadow({ mode: "open" })
-
     /* Set up renderer */
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.renderer.autoClear = false
@@ -45,6 +43,8 @@ export class ThreeGame extends HTMLElement {
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
+    /* We'll plug our canvas into the shadow root. */
+    this.attachShadow({ mode: "open" })
     this.shadowRoot!.appendChild(this.renderer.domElement)
 
     /* Handle window resizing */
