@@ -38,8 +38,10 @@
         customElements.define("gltf-asset", GLTFAsset)
 
         class AutoRotate extends ThreeElement.for(THREE.Group) {
-          onupdate(dt) {
-            this.object.rotation.y += this.getAttribute("speed") * dt
+          readyCallback() {
+            this.onupdate = (dt) => {
+              this.object.rotation.y += this.getAttribute("speed") * dt
+            }
           }
         }
 
@@ -50,6 +52,7 @@
     <script type="importmap-shim">
       {
         "imports": {
+          "eventemitter3": "https://jspm.dev/eventemitter3",
           "three": "https://jspm.dev/three",
           "three/": "https://jspm.dev/three/"
         }
