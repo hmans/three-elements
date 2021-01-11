@@ -5,8 +5,9 @@
     <script type="module" src="https://jspm.dev/es-module-shims"></script>
   </head>
   <body>
-    <!-- Here's a simple Three.js scene. -->
-    <three-game>
+    <!-- Here's a simple Three.js scene. Note that we're setting the "autorender" attribute
+    to make sure that a frame is rendered every tick. -->
+    <three-game autorender>
       <three-scene>
         <!-- Lights -->
         <three-ambient-light intensity="0.2"></three-ambient-light>

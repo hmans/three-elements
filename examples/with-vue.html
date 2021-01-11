@@ -38,11 +38,12 @@
         template: "#rotating-dodecahedron-template",
 
         mounted() {
-          const { object } = this.$el
+          const { object, game } = this.$el
 
           this.$el.onupdate = (dt) => {
             object.rotation.z = object.rotation.x += 0.03
             object.scale.setScalar(4 + Math.cos(Date.now() / 200) * 0.8)
+            game.requestFrame()
           }
         }
       })

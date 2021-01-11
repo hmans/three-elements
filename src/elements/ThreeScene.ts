@@ -39,7 +39,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     const scene = this.object!
     scene.background = new Color("#c93")
 
-    this.game.events.on("update", (dt) => {
+    this.game.events.on("render", (dt) => {
       this.game?.renderer.render(scene, this.camera)
     })
   }

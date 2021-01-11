@@ -10,7 +10,20 @@ export class ThreeGame extends HTMLElement {
   renderer = new THREE.WebGLRenderer({ antialias: true })
   events = new EventEmitter()
 
+  /** Is the ticker running? */
   private ticking = false
+
+  /** Has a frame been requested to be rendered in the next tick? */
+  private frameRequested = true
+
+  get autorender() {
+    return this.hasAttribute("autorender")
+  }
+
+  set autorender(v) {
+    if (v) this.setAttribute("autorender", "")
+    else this.removeAttribute("autorender")
+  }
 
   connectedCallback() {
     this.attachShadow({ mode: "open" })
@@ -38,12 +51,16 @@ export class ThreeGame extends HTMLElement {
     this.shadowRoot!.removeChild(this.renderer.domElement)
   }
 
-  handleWindowResize() {
+  private handleWindowResize() {
     /* Update canvas */
     this.renderer.setSize(window.innerWidth, window.innerHeight)
 
     /* Emit event */
     this.events.emit("resize")
+  }
+
+  requestFrame() {
+    this.frameRequested = true
   }
 
   startTicking() {
@@ -62,11 +79,16 @@ export class ThreeGame extends HTMLElement {
       this.events.emit("update", dt)
       this.events.emit("lateupdate", dt)
 
-      /* If we know that we're rendering a frame, execute frame callbacks. */
-      this.events.emit("frame", dt)
+      /* Has a frame been requested? */
+      if (this.frameRequested || this.autorender) {
+        this.frameRequested = false
 
-      /* Finally, emit render event. This will trigger scenes to render. */
-      this.events.emit("render", dt)
+        /* If we know that we're rendering a frame, execute frame callbacks. */
+        this.events.emit("frame", dt)
+
+        /* Finally, emit render event. This will trigger scenes to render. */
+        this.events.emit("render", dt)
+      }
 
       /* Loop as long as this ticker is active. */
       if (this.ticking) requestAnimationFrame(tick)

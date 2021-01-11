@@ -8,10 +8,19 @@ export class ThreeOrbitControls extends ThreeElement<OrbitControls> {
     const { renderer } = this.game
     const { camera } = this.scene
     this.controls = new OrbitControls(camera, renderer.domElement)
+
+    this.onupdate = () => {
+      this.controls?.update()
+    }
+
+    this.controls.addEventListener("change", () => {
+      this.game.requestFrame()
+    })
   }
 
   disconnectedCallback() {
     this.controls?.dispose()
+    super.disconnectedCallback()
   }
 }
 

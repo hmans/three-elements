@@ -85,7 +85,7 @@ export class ThreeElement<T> extends HTMLElement {
     this.debug("connectedCallback")
 
     /* Apply props */
-    this.handleAttributes(this.getAllAttributes())
+    this.handleAttributeChange(this.getAllAttributes())
 
     /*
     When one of this element's attributes changes, apply it to the object. Custom Elements have a built-in
@@ -94,7 +94,7 @@ export class ThreeElement<T> extends HTMLElement {
     we're hacking our way around it using a mutation observer. Fun times!)
     */
     observeAttributeChange(this, (prop, value) => {
-      this.handleAttributes({ [prop]: value })
+      this.handleAttributeChange({ [prop]: value })
     })
 
     /*
@@ -118,6 +118,9 @@ export class ThreeElement<T> extends HTMLElement {
 
       /* Add object to scene */
       this.addObjectToScene()
+
+      /* Make sure a frame is queued */
+      this.game.requestFrame()
 
       /* Invoke mount method */
       this.readyCallback()
@@ -220,23 +223,27 @@ export class ThreeElement<T> extends HTMLElement {
     }
   }
 
-  private handleAttributes(attributes: IStringIndexable) {
+  private handleAttributeChange(attributes: IStringIndexable) {
     const {
       attach,
       args,
       onupdate,
+      onframe,
       onlateupdate,
       onrender,
       ...wrappedObjectAttributes
     } = attributes
 
     /* Assign some attributes to the element itself */
-    applyProps(this, { onupdate, onlateupdate, onrender })
+    applyProps(this, { onupdate, onlateupdate, onframe, onrender })
 
     /* Assign everything else to the wrapped Three.js object */
     if (this.object) {
       applyProps(this.object, wrappedObjectAttributes)
     }
+
+    /* Make sure a frame is queued */
+    this.game.requestFrame()
   }
 
   private setCallback(propName: string, fn?: TickerFunction | string) {
