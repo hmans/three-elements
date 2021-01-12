@@ -27,7 +27,8 @@
   "unpkg": "dist/index.umd.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.modern.js"
+    ".": "./dist/index.modern.js",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"
