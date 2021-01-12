@@ -114,7 +114,7 @@ Now you can add anything to the scene that you would typically add to a plain Th
 </three-game>
 ```
 
-Now for a little fun experiment, open your browser's devtools, inspect your DOM, and change the value of the `scale` attribute -- you will see the change immediately reflected in your 3D scene!
+Now for a little fun experiment: open your browser's devtools, inspect your DOM, and change the value of the `scale` attribute -- you will see the change immediately reflected in your 3D scene. Reactivity at work!
 
 ### Ticker events
 
@@ -161,7 +161,7 @@ The argument passed into the callback function -- `dt` -- is a delta time value 
 </three-game>
 ```
 
-We're modifying the Mesh object directly here. Note that `<three-game>` will only _automatically_ render new frames when something in the DOM changed, and since we're no longer modifying the DOM here, we need to request new frames explicitly. Because we don't want to deal with this complexity here, we instead set the `autorender` attribute on `<three-game>`, which allows you to completely opt-out of the optimized rendering logic.
+We're modifying the Mesh object directly here. Note that `<three-game>` will only _automatically_ render new frames when something in the DOM changed, and since we're no longer modifying the DOM here, we need to request new frames explicitly. Because we don't want to deal with this complexity quite yet, we instead set the `autorender` attribute on `<three-game>`, which allows you to completely opt-out of the optimized rendering logic. (But please consider this a last resort. It's a cool feature!)
 
 ### Pointer events
 
