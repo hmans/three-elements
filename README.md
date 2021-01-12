@@ -159,30 +159,15 @@ We're modifying the Mesh object directly here. Note that `<three-game>` will onl
 
 ### Pointer events
 
+_TODO_
+
+### Templates
+
+_TODO_
+
 ## ADVANCED USAGE
 
-## TODO
-
-It's early days for three-elements, but development is moving fast. Here's a list of some stuff that I am and will be working on:
-
-- [x] Basic functionality (registration of `<three-*>` elements)
-- [x] Compatibility with browser modules
-- [x] Templating (`<three-template>`)
-- [x] A charming API for creating logic components without the need for any extra frameworks.
-- [ ] Documentation! Specifically:
-  - [ ] A better README! :-)
-  - [ ] A separate step-by-step guide
-  - [ ] Some notes on how three-elements compares to [A-Frame], [react-three-fiber], and others
-- [x] Implement some more of the game-specific primitives from [trinity], this library's precursor. Some of these may end up in a separate library, since people may want to solve these in a different fashion from how I do it. These include:
-  - [x] Optimized rendering (only render new frames when something has changed)
-  - [x] Primitives for easier handling of OrbitControls & friends, and registering the default camera for the current scene
-  - [x] Pointer events
-  - [x] Stacked scenes
-  - [x] Resource loading (GLTF, FBX et al)
-- [ ] Figure out automated testing. Hooooboi, this one's going to be interesting! (#8)
-- [ ] Figure out if it's in any way possible to provide typings for `<three-*>` tags for popular editors
-- [ ] Figure out a cool way to bring low-friction animation into the mix
-- [ ] Experiment with variable bindings (but maybe we should leave that to the frameworks?)
+_EXTREMELY TODO_
 
 ## CONTRIBUTING
 
