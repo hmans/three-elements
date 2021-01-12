@@ -1,6 +1,7 @@
 import { Group } from "three"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { ThreeElement } from "../ThreeElement"
+import { registerElement } from "../util/registerElement"
 
 export class ThreeGLTFAsset extends ThreeElement.for(Group) {
   static get observedAttributes() {
@@ -33,4 +34,4 @@ export class ThreeGLTFAsset extends ThreeElement.for(Group) {
   }
 }
 
-customElements.define("three-gltf-asset", ThreeGLTFAsset)
+registerElement("three-gltf-asset", ThreeGLTFAsset)

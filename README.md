@@ -20,10 +20,12 @@
 
 ### **three-elements is a set of Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences.**
 
-- Directly exposes all [Three.js] classes as **HTML elements**.
-  **Elements are fully reactive**; if their attributes change, this is immediately reflected in the Three.js scene.
+- Directly exposes all [Three.js] classes as **HTML elements** (eg. `<three-mesh>` for `THREE.Mesh`!)
+- **Elements are fully reactive**; if their attributes change, this is immediately reflected in the Three.js scene.
+- **Optimized rendering:** Frames are only rendered when something has changed in the scene, or if your code explicitly requests it.
+- **Input event handling:** Your 3D scene automatically handles pointer events (clicks, hover, etc). Just hook into the same HTML DOM events you would use in any other web application (`onclick` et al.)
+- Use it with **any framework** that emits or modifies HTML DOM, or **no framework** at all!
 - Works with **any version of Three.js**, including your own fork if you have one.
-- Use it with **any framework** that emits HTML, or **no framework** at all!
 - Built-in templating support lets you reuse objects or entire scenes across your project without the need for any JavaScript component framework.
 
 ```html
