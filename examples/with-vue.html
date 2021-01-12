@@ -7,6 +7,11 @@
   <body>
     <!-- The main game template. -->
     <div id="game">
+      <game></game>
+    </div>
+
+    <!-- Vue template for our game. -->
+    <script type="text/x-template" id="game-template">
       <three-game>
         <three-scene background-color="pink">
           <three-ambient-light intensity="0.2"></three-ambient-light>
@@ -15,7 +20,7 @@
           <rotating-dodecahedron></rotating-dodecahedron>
         </three-scene>
       </three-game>
-    </div>
+    </script>
 
     <!-- A Vue template for our rotating-dodecahedron component. -->
     <script type="text/x-template" id="rotating-dodecahedron-template">
@@ -29,30 +34,36 @@
     <script type="module">
       import Vue from "https://jspm.dev/vue@3"
 
-      const app = Vue.createApp({})
-
-      /* Stop Vue from complaining about our beautiful custom elements. */
-      app.config.isCustomElement = (tag) => tag.startsWith("three-")
-
-      app.component("rotating-dodecahedron", {
-        template: "#rotating-dodecahedron-template",
-
-        mounted() {
-          const { object, game } = this.$el
-
-          this.$el.onupdate = (dt) => {
-            object.rotation.z = object.rotation.x += 0.03
-            object.scale.setScalar(4 + Math.cos(Date.now() / 200) * 0.8)
-            game.requestFrame()
-          }
-        }
-      })
-
       /*
       We need to ensure that three-elements is fully loaded before we start the app.
       And we only need to do it here because we're loading it through importShim.
       */
-      importShim("/dist/index.esm.js").then(() => app.mount("#game"))
+      importShim("/dist/index.esm.js").then(() => {
+        const app = Vue.createApp({})
+
+        /* Stop Vue from complaining about our beautiful custom elements. */
+        app.config.isCustomElement = (tag) => tag.startsWith("three-")
+
+        app.component("game", {
+          template: "#game-template"
+        })
+
+        app.component("rotating-dodecahedron", {
+          template: "#rotating-dodecahedron-template",
+
+          mounted() {
+            const { object, game } = this.$el
+
+            this.$el.onupdate = (dt) => {
+              object.rotation.z = object.rotation.x += 0.03
+              object.scale.setScalar(4 + Math.cos(Date.now() / 200) * 0.8)
+              game.requestFrame()
+            }
+          }
+        })
+
+        app.mount("#game")
+      })
     </script>
 
     <script type="importmap-shim">
