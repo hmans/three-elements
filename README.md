@@ -14,7 +14,7 @@
     |_____||__||_____|__|__|__|_____|__|__||____|_____|   🌳🌲 🏡 🌲   🌲🌳  🐄   🌲 🌲🌳     🌳
 ```
 
-### **three-elements is a set of Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences.**
+### **three-elements is a set of Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences.** 🎉
 
 > **WARNING:** It is early days for this library, so pleace proceed with caution!
 
@@ -62,7 +62,9 @@ three-elements can be used on its own, but it's best when coupled with some sort
 
 ### First things first
 
-**three-elements** provides a declarative layer over [Three.js] based on [custom elements], allowing you to build Three.js-powered 3D scenes and applications just using HTML tags. It provides direct access to Three.js' entire API, and doesn't need a build pipeline or JavaScript framework (but can easily be integrated with them when needed.) Classes provided by Three.js are (automatically) exposed as HTML tags of the same name; for example, `THREE.MeshStandardMaterial` becomes available as `<three-mesh-standard-material>`, and so on. Attributes that you set on the element will be applied to the wrapped Three.js object, with the special argument `args` being passed to its constructor. Elements are reactive, so if any of the attributes change, they will be immediately applied to the wrapped object, with only a handful of exceptions.
+**three-elements** provides a declarative layer over [Three.js] based on [custom elements], allowing you to build Three.js-powered 3D scenes and applications just using HTML tags. It provides direct access to Three.js' entire API, and doesn't need a build pipeline or JavaScript framework (but can easily be integrated with them when needed.) Classes provided by Three.js are automatically made available as HTML tags of the same name; for example, `THREE.MeshStandardMaterial` becomes available as `<three-mesh-standard-material>`, and so on. If a new release of Three.js has a new feature, you can automatically use it via three-elements.
+
+Attributes that you set on the element will be applied to the wrapped Three.js object, with the special argument `args` being passed to its constructor. Elements are reactive, so if any of the attributes change, they will be immediately applied to the wrapped object, with only a handful of exceptions.
 
 You can use three-elements to build animated scenes on static, standalone HTML pages, build full 3D applications or games by combining it with whatever JavaScript framework you prefer, as long as it ends up modifying the HTML DOM, or apply a JavaScript veneer of any thickness warranted by your project. But let's start at the beginning.
 
