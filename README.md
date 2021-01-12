@@ -73,8 +73,8 @@ You can use three-elements to build animated scenes on static, standalone HTML p
 If your project has a build pipeline, just add the NPM package to your package.json like you're used to:
 
 ```
-npm add -D three-elements
-yarn add -D three-elements
+npm add -D three-elements three
+yarn add -D three-elements three
 ```
 
 If you'd rather work without a build pipeline, just add the following tag to your HTML:
