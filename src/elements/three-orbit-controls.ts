@@ -1,4 +1,4 @@
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { ThreeElement } from "../ThreeElement"
 
 export class ThreeOrbitControls extends ThreeElement<OrbitControls> {
