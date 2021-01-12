@@ -42,10 +42,14 @@
           }
         }
 
+        const stopAnimations = () => {
+          scaleAnimation && scaleAnimation.stop()
+          colorAnimation && colorAnimation.stop()
+          speedAnimation && speedAnimation.stop()
+        }
+
         thingy.addEventListener("pointerenter", () => {
-          scaleAnimation?.stop()
-          colorAnimation?.stop()
-          speedAnimation?.stop()
+          stopAnimations()
 
           speedAnimation = animate({
             from: rotateSpeed,
@@ -72,9 +76,7 @@
         })
 
         thingy.addEventListener("pointerleave", () => {
-          scaleAnimation?.stop()
-          colorAnimation?.stop()
-          speedAnimation?.stop()
+          stopAnimations()
 
           speedAnimation = animate({
             from: rotateSpeed,
