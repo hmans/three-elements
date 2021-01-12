@@ -14,7 +14,7 @@
     |_____||__||_____|__|__|__|_____|__|__||____|_____|   🌳🌲 🏡 🌲   🌲🌳  🐄   🌲 🌲🌳     🌳
 ```
 
-# **three-elements is a set of Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences.**
+### **three-elements is a set of Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences.**
 
 > **WARNING:** It is early days for this library, so pleace proceed with caution!
 
@@ -59,6 +59,12 @@ three-elements can be used on its own, but it's best when coupled with some sort
   - **Caveat:** apparently you can't currently assign `onupdate` attributes as they get swallowed by the framework for some reason. I'm not very familiar with HyperApp and will investigate and hopefully fix this eventually.
 
 ## BASIC USAGE
+
+### First things first
+
+**three-elements** provides a declarative layer over [Three.js] based on [custom elements], allowing you to build Three.js-powered 3D scenes and applications just using HTML tags. It provides direct access to Three.js' entire API, and doesn't need a build pipeline or JavaScript framework (but can easily be integrated with them when needed.) Classes provided by Three.js are (automatically) exposed as HTML tags of the same name; for example, `THREE.MeshStandardMaterial` becomes available as `<three-mesh-standard-material>`, and so on. Attributes that you set on the element will be applied to the wrapped Three.js object, with the special argument `args` being passed to its constructor. Elements are reactive, so if any of the attributes change, they will be immediately applied to the wrapped object, with only a handful of exceptions.
+
+You can use three-elements to build animated scenes on static, standalone HTML pages, build full 3D applications or games by combining it with whatever JavaScript framework you prefer, as long as it ends up modifying the HTML DOM, or apply a JavaScript veneer of any thickness warranted by your project. But let's start at the beginning.
 
 ### Adding three-elements in your project
 
@@ -167,6 +173,8 @@ _TODO_
 
 _EXTREMELY TODO_
 
+No, seriously! I'm working on a separate tutorial site that will have live examples and go into the more advanced topics. Stay tuned. In the meantime, if you're stuck, please drop by [on our Discord](https://discord.gg/ybuUjFM).
+
 ## CONTRIBUTING
 
 **Please get in touch _before_ submitting Pull Requests** (ideally, _before_ even implementing them.) At this stage in its development, three-elements still is heavily in flux. If there is something you would like to contribute, please open an issue and describe your suggestion.
@@ -183,3 +191,4 @@ If you want to do some hacking, just run `yarn dev`, which will compile the pack
 [trinity]: https://github.com/hmans/trinity
 [a-frame]: https://aframe.io/
 [three.js]: https://threejs.org/
+[custom elements]: https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements
