@@ -66,7 +66,7 @@ three-elements can be used on its own, but it's best when coupled with some sort
 
 Attributes that you set on the element will be applied to the wrapped Three.js object, with the special argument `args` being passed to its constructor. Elements are reactive, so if any of the attributes change, they will be immediately applied to the wrapped object, with only a handful of exceptions.
 
-You can use three-elements to build animated scenes on static, standalone HTML pages, build full 3D applications or games by combining it with whatever JavaScript framework you prefer, as long as it ends up modifying the HTML DOM, or apply a JavaScript veneer of any thickness warranted by your project. But let's start at the beginning.
+You can use three-elements to build animated scenes on static, standalone HTML pages, build full 3D applications or games by combining it with whatever JavaScript framework you prefer, or just apply a thin veneer of hand-crafted, framework-less JavaScript. It's all up to you. But let's start at the beginning.
 
 ### Adding three-elements in your project
 
