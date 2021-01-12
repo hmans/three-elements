@@ -90,7 +90,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
   handleWindowResize() {
     /* Get width and height from our parent element */
-    const el = this.game.parentElement!
+    const el = this.game
     const width = el.clientWidth
     const height = el.clientHeight
 

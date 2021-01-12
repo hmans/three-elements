@@ -8,13 +8,14 @@
         background-color: #fee;
         color: #433;
       }
+
       main {
         max-width: 800px;
         margin-left: auto;
         margin-right: auto;
       }
 
-      .game-embed {
+      three-game {
         width: 600px;
         height: 400px;
         overflow: hidden;
@@ -26,30 +27,26 @@
       <h1>Multiple Instances of three-elements</h1>
 
       <h2>Instance #1</h2>
-      <div class="game-embed">
-        <three-game>
-          <three-scene>
-            <three-mesh scale="5">
-              <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-              <three-mesh-normal-material></three-mesh-standard-material>
-            </three-mesh>
-            <three-orbit-controls></three-orbit-controls>
-          </three-scene>
-        </three-game>
-      </div>
+      <three-game>
+        <three-scene>
+          <three-mesh scale="3">
+            <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+            <three-mesh-normal-material></three-mesh-normal-material>
+          </three-mesh>
+          <three-orbit-controls></three-orbit-controls>
+        </three-scene>
+      </three-game>
 
       <h2>Instance #2</h2>
-      <div class="game-embed">
-        <three-game>
-          <three-scene>
-            <three-mesh scale="5">
-              <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-              <three-mesh-normal-material></three-mesh-standard-material>
-            </three-mesh>
-            <three-orbit-controls></three-orbit-controls>
-          </three-scene>
-        </three-game>
-      </div>
+      <three-game>
+        <three-scene>
+          <three-mesh scale="6">
+            <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+            <three-mesh-normal-material></three-mesh-normal-material>
+          </three-mesh>
+          <three-orbit-controls></three-orbit-controls>
+        </three-scene>
+      </three-game>
     </main>
 
     <!-- Import dependencies via ESM. The future is now! -->
