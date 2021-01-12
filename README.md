@@ -60,6 +60,107 @@ three-elements can be used on its own, but it's best when coupled with some sort
 - [three-elements with HyperApp](https://codesandbox.io/s/three-elements-hyperapp-rxhei?file=/index.html)
   - **Caveat:** apparently you can't currently assign `onupdate` attributes as they get swallowed by the framework for some reason. I'm not very familiar with HyperApp and will investigate and hopefully fix this eventually.
 
+## BASIC USAGE
+
+### Adding three-elements in your project
+
+If your project has a build pipeline, just add the NPM package to your package.json like you're used to:
+
+```
+npm add -D three-elements
+yarn add -D three-elements
+```
+
+If you'd rather work without a build pipeline, just add the following tag to your HTML:
+
+```html
+<script type="module">
+  import "https://jspm.dev/three-elements"
+</script>
+```
+
+This will make use of the modern JavaScript module support that is now available in pretty much all relevant browsers.
+
+### Setting up game and scene
+
+The root element of any three-elements project is `<three-game>`. It must contain at least one `<three-scene>` element, which will then contain the actual scene objects.
+
+```html
+<three-game>
+  <three-scene>
+    <!-- scene contents here -->
+  </three-scene>
+</three-game>
+```
+
+### Adding stuff to scene
+
+Now you can add anything to the scene that you would typically add to a plain Three.js project's scene, except instead of adding things imperatively, you merely describe them using HTML tags. Let's have a simple mesh with a THREE.BoxGeometry and a THREE.MeshNormalMaterial:
+
+```html
+<three-game>
+  <three-scene>
+    <three-mesh scale="4">
+      <three-box-geometry></three-box-geometry>
+      <three-mesh-normal-material></three-mesh-normal-material>
+    </three-mesh>
+  </three-scene>
+</three-game>
+```
+
+Now for a little fun experiment, open your browser's devtools, inspect your DOM, and change the value of the `scale` attribute -- you will see the change immediately reflected in your 3D scene!
+
+### Ticker events
+
+`<three-game>` implements a frame-based ticker that emits a series of events. three-elements provides a convenient way to hook into these events via attributes:
+
+```html
+<three-game>
+  <three-scene>
+    <three-mesh onupdate="console.log">
+      <three-box-geometry></three-box-geometry>
+      <three-mesh-normal-material></three-mesh-normal-material>
+    </three-mesh>
+  </three-scene>
+</three-game>
+```
+
+`onupdate` is expected to return a function that takes a single argument -- more on that below. In this small example, we will simply log it to the browser console. Let's do something a little more involved:
+
+```html
+<three-game>
+  <three-scene>
+    <three-mesh
+      onupdate="dt => this.setAttribute('rotation-z', parseFloat(this.getAttribute('rotation-z')) + 3 * dt)"
+    >
+      <three-box-geometry></three-box-geometry>
+      <three-mesh-normal-material></three-mesh-normal-material>
+    </three-mesh>
+  </three-scene>
+</three-game>
+```
+
+The argument passed into the callback function -- `dt` -- is a delta time value that represents the fraction of a second that has passed since the last frame was rendered, which will help you make animations smooth and frame-independent. Also note that `this` is bound to the HTML element itself; it exposes an `object` property that references the actual Three.js scene object represented by it. We're using this here to update the element's `rotate-z` attribute on every tick.
+
+**NOTE:** While this provides a convenient way to mutate your 3D scene, you will, in most cases, not work with DOM attributes, but rather with the underlying Three.js objects directly. For example:
+
+```html
+<three-game autorender>
+  <three-scene>
+    <three-mesh onupdate="dt => this.object.rotation.z += 3 * dt">
+      <three-box-geometry></three-box-geometry>
+      <three-mesh-normal-material></three-mesh-normal-material>
+    </three-mesh>
+  </three-scene>
+</three-game>
+```
+
+We're modifying the Mesh object directly here. Note that `<three-game>` will only _automatically_ render new frames when something in the DOM changed, and since we're no longer modifying the DOM here, we need to request new frames explicitly. Because we don't want to deal with this complexity here, we instead set the `autorender` attribute on `<three-game>`, which allows you to completely opt-out of the optimized rendering logic.
+
+### Pointer events
+
+## ADVANCED USAGE
+
 ## TODO
 
 It's early days for three-elements, but development is moving fast. Here's a list of some stuff that I am and will be working on:
