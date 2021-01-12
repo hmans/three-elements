@@ -237,15 +237,7 @@ export class ThreeElement<T> extends HTMLElement {
   }
 
   private handleAttributeChange(attributes: IStringIndexable) {
-    const {
-      attach,
-      args,
-      onupdate,
-      onframe,
-      onlateupdate,
-      onrender,
-      ...wrappedObjectAttributes
-    } = attributes
+    const { attach, args, ...remainingAttributes } = attributes
 
     /*
     When pointer event handlers are set as attributes, we'll construct new function from them. Typically,
@@ -263,20 +255,27 @@ export class ThreeElement<T> extends HTMLElement {
       "dblclick"
     ]) {
       const prop = `on${event}`
-      const value = wrappedObjectAttributes[prop]
+      const value = remainingAttributes[prop]
       if (value) {
-        delete wrappedObjectAttributes[prop]
+        delete remainingAttributes[prop]
         const fun = new Function(`${value}; this.game.requestFrame()`).bind(this)
         Object.assign(this, { [prop]: () => fun(this, this.object) })
       }
     }
 
-    /* Assign some attributes to the element itself */
-    applyProps(this, { onupdate, onlateupdate, onframe, onrender })
+    /* Assign ticker callbacks. */
+    for (const event of ["onupdate", "onlateupdate", "onframe", "onrender"]) {
+      const value = remainingAttributes[event]
+
+      if (value) {
+        delete remainingAttributes[event]
+        applyProps(this, { [event]: value })
+      }
+    }
 
     /* Assign everything else to the wrapped Three.js object */
     if (this.object) {
-      applyProps(this.object, wrappedObjectAttributes)
+      applyProps(this.object, remainingAttributes)
     }
 
     /* Make sure a frame is queued */
@@ -294,7 +293,7 @@ export class ThreeElement<T> extends HTMLElement {
     /* Store new value, constructing a function from a string if necessary */
     this.callbacks[eventName] =
       typeof fn === "string"
-        ? new Function("delta", `fun = ${fn}`, "fun(delta, this)").bind(this.object)
+        ? new Function("delta", `fun = ${fn}`, "fun(delta, this)").bind(this)
         : fn
 
     /* Register new callback */
