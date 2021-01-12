@@ -266,7 +266,7 @@ export class ThreeElement<T> extends HTMLElement {
       const value = wrappedObjectAttributes[prop]
       if (value) {
         delete wrappedObjectAttributes[prop]
-        const fun = new Function("$", "$$", `${value}; this.game.requestFrame()`).bind(this)
+        const fun = new Function(`${value}; this.game.requestFrame()`).bind(this)
         Object.assign(this, { [prop]: () => fun(this, this.object) })
       }
     }
