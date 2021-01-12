@@ -51,6 +51,9 @@ export class ThreeGame extends HTMLElement {
     this.handleWindowResize = this.handleWindowResize.bind(this)
     window.addEventListener("resize", this.handleWindowResize, false)
 
+    /* Initialize window size */
+    this.handleWindowResize()
+
     /* Start ticker */
     this.startTicking()
   }
@@ -67,8 +70,13 @@ export class ThreeGame extends HTMLElement {
   }
 
   private handleWindowResize() {
+    /* Get width and height from our parent element */
+    const el = this.parentElement!
+    const width = el.clientWidth
+    const height = el.clientHeight
+
     /* Update canvas */
-    this.renderer.setSize(window.innerWidth, window.innerHeight)
+    this.renderer.setSize(width, height)
 
     /* Emit event */
     this.events.emit("resize")

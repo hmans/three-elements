@@ -43,6 +43,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     /* Handle window resizing */
     this.handleWindowResize = this.handleWindowResize.bind(this)
     this.game.events.on("resize", this.handleWindowResize)
+    this.handleWindowResize()
 
     /* Configure scene */
     const scene = this.object!
@@ -88,14 +89,19 @@ export class ThreeScene extends ThreeElement.for(Scene) {
   }
 
   handleWindowResize() {
-    /* No matter what, we want to request a frame to be rendered. */
-    this.game.requestFrame()
+    /* Get width and height from our parent element */
+    const el = this.game.parentElement!
+    const width = el.clientWidth
+    const height = el.clientHeight
 
     /* Update camera */
     if (this._camera instanceof PerspectiveCamera) {
-      this._camera.aspect = window.innerWidth / window.innerHeight
+      this._camera.aspect = width / height
       this._camera.updateProjectionMatrix()
     }
+
+    /* No matter what, we want to request a frame to be rendered. */
+    this.game.requestFrame()
   }
 }
 
