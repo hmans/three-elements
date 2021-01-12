@@ -21,12 +21,12 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
   set camera(camera) {
     this._camera = camera
-    this.pointer.camera = camera
+    this.pointer!.camera = camera
     this.handleWindowResize()
   }
 
   /** The pointer events system. */
-  pointer = new PointerEvents(this.game.renderer, this.object!, this.camera)
+  pointer?: PointerEvents
 
   constructor() {
     super()
@@ -34,11 +34,12 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     /* Set up camera */
     this.camera.position.z = 10
     this.camera.lookAt(0, 0, 0)
-
-    /* Set up event processor */
   }
 
   readyCallback() {
+    /* Set up event processor */
+    this.pointer = new PointerEvents(this.game.renderer, this.object!, this.camera)
+
     /* Handle window resizing */
     this.handleWindowResize = this.handleWindowResize.bind(this)
     this.game.events.on("resize", this.handleWindowResize)
@@ -55,7 +56,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     })
 
     /* Start processing events */
-    this.pointer.start()
+    this.pointer!.start()
   }
 
   disconnectedCallback() {
