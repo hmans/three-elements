@@ -1,4 +1,5 @@
 import { observeAttributeChange } from "../util/observeAttributeChange"
+import { registerElement } from "../util/registerElement"
 
 /*
 It would be easier to just customize HTMLTemplateElement here, but that would
@@ -55,4 +56,4 @@ export class ThreeTemplate extends HTMLElement {
   }
 }
 
-customElements.define("three-template", ThreeTemplate)
+registerElement("three-template", ThreeTemplate)

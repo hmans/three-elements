@@ -1,5 +1,6 @@
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { ThreeElement } from "../ThreeElement"
+import { registerElement } from "../util/registerElement"
 
 export class ThreeOrbitControls extends ThreeElement<OrbitControls> {
   controls?: OrbitControls
@@ -36,4 +37,4 @@ export class ThreeOrbitControls extends ThreeElement<OrbitControls> {
   }
 }
 
-customElements.define("three-orbit-controls", ThreeOrbitControls)
+registerElement("three-orbit-controls", ThreeOrbitControls)

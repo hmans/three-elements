@@ -1,6 +1,7 @@
 import { Camera, Color, PerspectiveCamera, Scene } from "three"
 import { PointerEvents } from "../PointerEvents"
 import { ThreeElement } from "../ThreeElement"
+import { registerElement } from "../util/registerElement"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
   static get observedAttributes() {
@@ -105,4 +106,4 @@ export class ThreeScene extends ThreeElement.for(Scene) {
   }
 }
 
-customElements.define("three-scene", ThreeScene)
+registerElement("three-scene", ThreeScene)
