@@ -136,13 +136,17 @@ export class ThreeElement<T> extends HTMLElement {
   readyCallback() {}
 
   disconnectedCallback() {
+    this.debug("disconnectedCallback")
+
     /* If the wrapped object is parented, remove it from its parent */
     if (this.object instanceof THREE.Object3D && this.object.parent) {
+      this.debug("Removing from scene:", this.object)
       this.object.parent.remove(this.object)
     }
 
     /* If the object can be disposed, dispose of it! */
     if (isDisposable(this.object)) {
+      this.debug("Disposing:", this.object)
       this.object.dispose()
     }
   }
