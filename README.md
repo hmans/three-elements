@@ -50,7 +50,7 @@ three-elements can be used on its own, but it can also be used together with a f
 - [three-elements with static HTML](https://codesandbox.io/s/three-elements-static-7orc4)
   - **It Just Works.** It's just HTML! HTML is awesome!
 - [three-elements with Svelte](https://codesandbox.io/s/three-elements-svelte-dx1gv?file=/App.svelte)
-  - **It Just Works.** Svelte works extremely close to the DOM, so there are no surprises here.
+  - **It Just Works.** Svelte works extremely close to the DOM, so there are no surprises here. You can set `onupdate` and related as strings or functions.
 - [three-elements with Vue](https://codesandbox.io/s/three-elements-vue-1swry?file=/src/App.vue)
   - **Caveat:** Vue requires [some minor configuration](https://v3.vuejs.org/guide/migration/custom-elements-interop.html#autonomous-custom-elements) to stop it from spitting out warnings about `<three-*>` tags.
 - [three-elements with React](https://codesandbox.io/s/three-elements-react-9nqh4?file=/src/App.js)
