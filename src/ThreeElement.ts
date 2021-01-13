@@ -290,15 +290,31 @@ export class ThreeElement<T> extends HTMLElement {
       this.game.events.removeListener(eventName, this.callbacks[eventName])
     }
 
+    const createCallbackFunction = (fn?: TickerFunction | string) => {
+      switch (typeof fn) {
+        /*
+        If the value is a string, we'll create a function from it. Magic!
+        */
+        case "string":
+          return new Function("delta", `fun = ${fn}`, "fun(delta, this)").bind(this)
+
+        /*
+        If it's already a function, we'll do a bit of wrapping to make sure that both
+        normal and arrow functions are supported. Normal functions can be bound to `this`,
+        but arrow functions can't. In order to allow the use of arrow functions, we will
+        pass `this` as a second argument after the deltatime.
+        */
+        case "function":
+          return (dt: number) => fn.bind(this)(dt, this)
+      }
+    }
+
     /* Store new value, constructing a function from a string if necessary */
-    this.callbacks[eventName] =
-      typeof fn === "string"
-        ? new Function("delta", `fun = ${fn}`, "fun(delta, this)").bind(this)
-        : fn
+    this.callbacks[eventName] = createCallbackFunction(fn)
 
     /* Register new callback */
     if (this.callbacks[eventName]) {
-      this.game.events.on(eventName, this.callbacks[eventName]!)
+      setTimeout(() => this.game.events.on(eventName, this.callbacks[eventName]!))
     }
   }
 

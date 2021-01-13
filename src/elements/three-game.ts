@@ -1,8 +1,9 @@
-import * as THREE from "three"
-import { registerElement } from "../util/registerElement"
 import EventEmitter from "eventemitter3"
+import * as THREE from "three"
+import { ThreeElement } from "../ThreeElement"
+import { registerElement } from "../util/registerElement"
 
-export type TickerFunction = (dt: number) => any
+export type TickerFunction = (dt: number, element?: ThreeElement<any>) => any
 
 export const CALLBACKS = new Set<string>(["onupdate", "onlateupdate", "onframe", "onrender"])
 

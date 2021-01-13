@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2021-01-13
+
+- **Fixed:** compatibility with frameworks that set `onupdate` & friends directly as properties (eg. Svelte)
+
 ## [0.1.2] - 2021-01-13
 
 - **Fixed:** All of the built-in elements now check if they're already defined before attempting to define themselves again. This is useful for development environments with hot reload or HMR, where they would otherwise raise an error about tags already having been defined.
