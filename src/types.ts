@@ -15,5 +15,5 @@ interface IDisposable {
  * @param object Object to check
  */
 export const isDisposable = (object: any): object is IDisposable => {
-  return "dispose" in object
+  return object && "dispose" in object
 }
