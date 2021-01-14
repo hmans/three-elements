@@ -4,7 +4,7 @@ import { registerElement } from "../util/registerElement"
 
 export type TickerFunction = (dt: number, element?: ThreeElement<any>) => any
 
-export const CALLBACKS = new Set<string>(["onupdate", "onlateupdate", "onframe", "onrender"])
+export const CALLBACKS = new Set<string>(["ontick", "onlatetick", "onframetick", "onrendertick"])
 
 export class ThreeGame extends HTMLElement {
   renderer = new THREE.WebGLRenderer({
@@ -106,19 +106,19 @@ export class ThreeGame extends HTMLElement {
       const dt = (now - lastNow) / 1000
       lastNow = now
 
-      /* Execute update and lateupdate events. */
-      dispatch("update", dt)
-      dispatch("lateupdate", dt)
+      /* Execute tick and latetick events. */
+      dispatch("tick", dt)
+      dispatch("latetick", dt)
 
       /* Has a frame been requested? */
       if (this.frameRequested || this.autorender) {
         this.frameRequested = false
 
         /* If we know that we're rendering a frame, execute frame callbacks. */
-        dispatch("frame", dt)
+        dispatch("frametick", dt)
 
         /* Finally, emit render event. This will trigger scenes to render. */
-        dispatch("render", dt)
+        dispatch("rendertick", dt)
       }
 
       /* Loop as long as this ticker is active. */

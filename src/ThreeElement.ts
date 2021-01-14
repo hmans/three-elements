@@ -17,7 +17,7 @@ export class ThreeElement<T> extends HTMLElement {
   /** The THREE.* object managed by this element. */
   object?: T
 
-  /** A dictionary of ticker callbacks (onupdate, etc.) */
+  /** A dictionary of ticker callbacks (ontick, etc.) */
   private callbacks = {} as Record<string, TickerFunction | undefined>
 
   /**
@@ -27,36 +27,36 @@ export class ThreeElement<T> extends HTMLElement {
     return `<${this.tagName.toLowerCase()}>`
   }
 
-  get onupdate() {
-    return this.callbacks["onupdate"]
+  get ontick() {
+    return this.callbacks["ontick"]
   }
 
-  set onupdate(fn: TickerFunction | string | undefined) {
-    this.setCallback("onupdate", fn)
+  set ontick(fn: TickerFunction | string | undefined) {
+    this.setCallback("ontick", fn)
   }
 
-  get onlateupdate() {
-    return this.callbacks["onlateupdate"]
+  get onlatetick() {
+    return this.callbacks["onlatetick"]
   }
 
-  set onlateupdate(fn: TickerFunction | string | undefined) {
-    this.setCallback("onlateupdate", fn)
+  set onlatetick(fn: TickerFunction | string | undefined) {
+    this.setCallback("onlatetick", fn)
   }
 
-  get onframe() {
-    return this.callbacks["onframe"]
+  get onframetick() {
+    return this.callbacks["onframetick"]
   }
 
-  set onframe(fn: TickerFunction | string | undefined) {
-    this.setCallback("onframe", fn)
+  set onframetick(fn: TickerFunction | string | undefined) {
+    this.setCallback("onframetick", fn)
   }
 
-  get onrender() {
-    return this.callbacks["onrender"]
+  get onrendertick() {
+    return this.callbacks["onrendertick"]
   }
 
-  set onrender(fn: TickerFunction | string | undefined) {
-    this.setCallback("onrender", fn)
+  set onrendertick(fn: TickerFunction | string | undefined) {
+    this.setCallback("onrendertick", fn)
   }
 
   /**
@@ -80,17 +80,17 @@ export class ThreeElement<T> extends HTMLElement {
     if (v) {
       this.debug("ticking is set; subscribing to game's ticker events")
 
-      this.game.addEventListener("update" as any, this._forwarder)
-      this.game.addEventListener("lateupdate" as any, this._forwarder)
-      this.game.addEventListener("frame" as any, this._forwarder)
-      this.game.addEventListener("render" as any, this._forwarder)
+      this.game.addEventListener("tick" as any, this._forwarder)
+      this.game.addEventListener("latetick" as any, this._forwarder)
+      this.game.addEventListener("frametick" as any, this._forwarder)
+      this.game.addEventListener("rendertick" as any, this._forwarder)
     } else {
       this.debug("Unregistering ticker listeners")
 
-      this.game.removeEventListener("update" as any, this._forwarder)
-      this.game.removeEventListener("lateupdate" as any, this._forwarder)
-      this.game.removeEventListener("frame" as any, this._forwarder)
-      this.game.removeEventListener("render" as any, this._forwarder)
+      this.game.removeEventListener("tick" as any, this._forwarder)
+      this.game.removeEventListener("latetick" as any, this._forwarder)
+      this.game.removeEventListener("frametick" as any, this._forwarder)
+      this.game.removeEventListener("rendertick" as any, this._forwarder)
     }
   }
   private _forwarder = eventForwarder(this)
@@ -297,10 +297,10 @@ export class ThreeElement<T> extends HTMLElement {
     switch (key) {
       /* A bunch of known properties that we will assign directly */
       case "ticking":
-      case "onupdate":
-      case "onlateupdate":
-      case "onframe":
-      case "onrender":
+      case "ontick":
+      case "onlatetick":
+      case "onframetick":
+      case "onrendertick":
         this[key] = newValue
         break
 

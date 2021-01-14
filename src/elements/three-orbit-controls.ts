@@ -10,7 +10,7 @@ export class ThreeOrbitControls extends ThreeElement<OrbitControls> {
     let { camera } = this.scene
     this.controls = new OrbitControls(camera, renderer.domElement)
 
-    this.onupdate = () => {
+    this.ontick = () => {
       if (!this.controls) return
 
       /*

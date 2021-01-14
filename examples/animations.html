@@ -33,7 +33,7 @@
         let colorAnimation
         let speedAnimation
 
-        thingy.onupdate = ({ detail: { dt } }) => {
+        thingy.ontick = ({ detail: { dt } }) => {
           if (rotateSpeed > 0) {
             thingy.object.rotateX(rotateSpeed * 0.8 * dt)
             thingy.object.rotateY(rotateSpeed * 0.4 * dt)

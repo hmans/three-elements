@@ -9,12 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - ticking
 - DOM event calbacks (e.detail.dt!)
-- onupdate etc. rename?
+- ontick etc. rename?
 - DOM lifecycle hooks
 
 ## [0.1.3] - 2021-01-13
 
-- **Fixed:** compatibility with frameworks that set `onupdate` & friends directly as properties (eg. Svelte)
+- **Fixed:** compatibility with frameworks that set `ontick` & friends directly as properties (eg. Svelte)
 
 ## [0.1.2] - 2021-01-13
 

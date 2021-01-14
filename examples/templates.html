@@ -30,10 +30,10 @@
         </script>
 
         <!-- A bunch of rotating cubes. They're really dodecahedrons, sorry! -->
-        <rotating-cube position="+2, +2, 0" onupdate="rotate(1, this.object)"></rotating-cube>
-        <rotating-cube position="+2, -2, 0" onupdate="rotate(2, this.object)"></rotating-cube>
-        <rotating-cube position="-2, -2, 0" onupdate="rotate(-2, this.object)"></rotating-cube>
-        <rotating-cube position="-2, +2, 0" onupdate="rotate(-1, this.object)"></rotating-cube>
+        <rotating-cube position="+2, +2, 0" ontick="rotate(1, this.object)"></rotating-cube>
+        <rotating-cube position="+2, -2, 0" ontick="rotate(2, this.object)"></rotating-cube>
+        <rotating-cube position="-2, -2, 0" ontick="rotate(-2, this.object)"></rotating-cube>
+        <rotating-cube position="-2, +2, 0" ontick="rotate(-1, this.object)"></rotating-cube>
 
         <three-orbit-controls></three-orbit-controls>
       </three-scene>

@@ -26,7 +26,7 @@
 </script>
 
 <!-- Mesh -->
-<three-mesh onupdate={rotateDeconstruct} {...$$restProps}>
+<three-mesh ontick={rotateDeconstruct} {...$$restProps}>
   <three-dodecahedron-buffer-geometry />
   <three-mesh-standard-material color="hotpink" />
 </three-mesh>
