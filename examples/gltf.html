@@ -24,7 +24,7 @@
 
         <!-- Let's have a mesh that only rotates when a frame is being rendered. -->
         <three-mesh
-          position-y="6"
+          position:y="6"
           onframetick="({target}) => target.object.rotation.z += 10 * target.game.deltaTime"
         >
           <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
