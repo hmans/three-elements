@@ -118,9 +118,6 @@ export class ThreeElement<T> extends HTMLElement {
     Also see: https://javascript.info/custom-elements#rendering-order
     */
     setTimeout(() => {
-      /* Subscribe to ticker events and mirror them */
-      this.game.addEventListener("update" as any, (e) => forwardEvent(this, e))
-
       /* Handle attach attribute */
       this.handleAttach()
 
@@ -248,7 +245,18 @@ export class ThreeElement<T> extends HTMLElement {
   }
 
   private handleAttributeChange(attributes: IStringIndexable) {
-    const { attach, args, ...remainingAttributes } = attributes
+    const { attach, args, ticking, ...remainingAttributes } = attributes
+
+    /*
+    "ticking" will make the element subscribe to the game's ticker events.
+    */
+    if (ticking !== undefined) {
+      this.debug("ticking is set; subscribing to game's ticker events")
+      this.game.addEventListener("update" as any, (e) => forwardEvent(this, e))
+      this.game.addEventListener("lateupdate" as any, (e) => forwardEvent(this, e))
+      this.game.addEventListener("frame" as any, (e) => forwardEvent(this, e))
+      this.game.addEventListener("render" as any, (e) => forwardEvent(this, e))
+    }
 
     /*
     When pointer event handlers are set as attributes, we'll construct new function from them. Typically,

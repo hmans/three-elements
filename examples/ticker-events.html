@@ -16,6 +16,7 @@
         <three-mesh
           scale="2.5"
           id="mesh"
+          ticking
           onupdate="({ detail: { dt }}, { object }) => { object.rotateZ(3 * dt); game.requestFrame() }"
         >
           <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
