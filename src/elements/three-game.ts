@@ -4,7 +4,7 @@ import { registerElement } from "../util/registerElement"
 
 export type TickerFunction = (dt: number, element?: ThreeElement<any>) => any
 
-export const CALLBACKS = new Set<string>(["ontick", "onlatetick", "onframetick", "onrendertick"])
+export class TickerEvent extends CustomEvent<{ dt: number }> {}
 
 export class ThreeGame extends HTMLElement {
   renderer = new THREE.WebGLRenderer({
@@ -16,6 +16,9 @@ export class ThreeGame extends HTMLElement {
 
   /** Is the ticker running? */
   private ticking = false
+
+  /** The time delta since the last frame, in fractions of a second. */
+  deltaTime = 0
 
   /** Has a frame been requested to be rendered in the next tick? */
   private frameRequested = true
@@ -94,7 +97,7 @@ export class ThreeGame extends HTMLElement {
 
     const dispatch = (name: string, dt: number) =>
       this.dispatchEvent(
-        new CustomEvent(name, { bubbles: false, cancelable: false, detail: { dt } })
+        new TickerEvent(name, { bubbles: false, cancelable: false, detail: { dt } })
       )
 
     const tick = () => {
@@ -105,6 +108,9 @@ export class ThreeGame extends HTMLElement {
       const now = performance.now()
       const dt = (now - lastNow) / 1000
       lastNow = now
+
+      /* Store deltaTime on instance for easy access */
+      this.deltaTime = dt
 
       /* Execute tick and latetick events. */
       dispatch("tick", dt)

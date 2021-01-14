@@ -80,17 +80,17 @@ export class ThreeElement<T> extends HTMLElement {
     if (v) {
       this.debug("ticking is set; subscribing to game's ticker events")
 
-      this.game.addEventListener("tick" as any, this._forwarder)
-      this.game.addEventListener("latetick" as any, this._forwarder)
-      this.game.addEventListener("frametick" as any, this._forwarder)
-      this.game.addEventListener("rendertick" as any, this._forwarder)
+      this.game.addEventListener("tick", this._forwarder)
+      this.game.addEventListener("latetick", this._forwarder)
+      this.game.addEventListener("frametick", this._forwarder)
+      this.game.addEventListener("rendertick", this._forwarder)
     } else {
       this.debug("Unregistering ticker listeners")
 
-      this.game.removeEventListener("tick" as any, this._forwarder)
-      this.game.removeEventListener("latetick" as any, this._forwarder)
-      this.game.removeEventListener("frametick" as any, this._forwarder)
-      this.game.removeEventListener("rendertick" as any, this._forwarder)
+      this.game.removeEventListener("tick", this._forwarder)
+      this.game.removeEventListener("latetick", this._forwarder)
+      this.game.removeEventListener("frametick", this._forwarder)
+      this.game.removeEventListener("rendertick", this._forwarder)
     }
   }
   private _forwarder = eventForwarder(this)

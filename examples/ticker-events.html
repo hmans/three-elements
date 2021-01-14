@@ -16,8 +16,7 @@
         <three-mesh
           scale="2.5"
           id="mesh"
-          ticking
-          ontick="({ detail: { dt }}, { object }) => { object.rotateZ(3 * dt); game.requestFrame() }"
+          ontick="({target}) => { target.object.rotateZ(3 * game.deltaTime); game.requestFrame() }"
         >
           <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
           <three-mesh-standard-material color="#a63"></three-mesh-standard-material>
@@ -27,18 +26,7 @@
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
-      document.addEventListener("connected", (e) => console.log(e))
-
-      importShim("/dist/index.esm.js").then(() => {
-        const game = document.getElementById("game")
-        const mesh = document.getElementById("mesh")
-        // game.addEventListener("update", (e) => {
-        //   const { dt } = e.detail
-        //   console.log("update!")
-        //   mesh.object.rotation.x = mesh.object.rotation.y += 3 * dt
-        //   game.requestFrame()
-        // })
-      })
+      importShim("/dist/index.esm.js")
     </script>
     <script type="importmap-shim">
       {
