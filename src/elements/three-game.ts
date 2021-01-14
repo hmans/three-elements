@@ -1,4 +1,3 @@
-import EventEmitter from "eventemitter3"
 import * as THREE from "three"
 import { ThreeElement } from "../ThreeElement"
 import { registerElement } from "../util/registerElement"
@@ -14,8 +13,6 @@ export class ThreeGame extends HTMLElement {
     stencil: true,
     depth: true
   })
-
-  events = new EventEmitter()
 
   /** Is the ticker running? */
   private ticking = false
@@ -86,9 +83,6 @@ export class ThreeGame extends HTMLElement {
 
     /* Update canvas */
     this.renderer.setSize(width, height)
-
-    /* Emit event */
-    this.events.emit("resize")
   }
 
   requestFrame() {
@@ -112,13 +106,9 @@ export class ThreeGame extends HTMLElement {
       const dt = (now - lastNow) / 1000
       lastNow = now
 
-      /* EXPERIMENTAL new DOM Event-based ticking */
+      /* Execute update and lateupdate events. */
       dispatch("update", dt)
       dispatch("lateupdate", dt)
-
-      /* Execute update and lateupdate callbacls. */
-      this.events.emit("update", dt)
-      this.events.emit("lateupdate", dt)
 
       /* Has a frame been requested? */
       if (this.frameRequested || this.autorender) {
@@ -126,11 +116,9 @@ export class ThreeGame extends HTMLElement {
 
         /* If we know that we're rendering a frame, execute frame callbacks. */
         dispatch("frame", dt)
-        this.events.emit("frame", dt)
 
         /* Finally, emit render event. This will trigger scenes to render. */
         dispatch("render", dt)
-        this.events.emit("render", dt)
       }
 
       /* Loop as long as this ticker is active. */
