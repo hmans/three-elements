@@ -49,9 +49,6 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     window.addEventListener("resize", this.handleWindowResize)
     this.handleWindowResize()
 
-    /* Configure scene */
-    const scene = this.object!
-
     /* Set up rendering */
     this.render = this.render.bind(this)
     this.game.addEventListener("rendertick", this.render)
@@ -77,7 +74,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     switch (name) {
       case "background-color":
         this.object!.background = new Color(newValue)
-        break
+        return
 
       case "camera":
         setTimeout(() => {
@@ -92,8 +89,10 @@ export class ThreeScene extends ThreeElement.for(Scene) {
             this.camera.lookAt(0, 0, 0)
           }
         })
-        break
+        return
     }
+
+    super.attributeChangedCallback(name, oldValue, newValue)
   }
 
   handleWindowResize() {
