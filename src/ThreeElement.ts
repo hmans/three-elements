@@ -174,7 +174,7 @@ export class ThreeElement<T> extends HTMLElement {
 
       this.isReady = true
 
-      this.debug("Object is ready:", this.object)
+      this.debug("isReady:", this.object)
     })
   }
 
