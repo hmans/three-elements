@@ -3,7 +3,7 @@ import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { IConstructable, isDisposable, IStringIndexable } from "./types"
 import { applyProps } from "./util/applyProps"
-import { forwardEvent } from "./util/forwardEvent"
+import { eventForwarder } from "./util/eventForwarder"
 import { observeAttributeChange } from "./util/observeAttributeChange"
 
 export class ThreeElementLifecycleEvent extends CustomEvent<{}> {}
@@ -269,10 +269,26 @@ export class ThreeElement<T> extends HTMLElement {
     */
     if (ticking !== undefined) {
       this.debug("ticking is set; subscribing to game's ticker events")
-      this.game.addEventListener("update" as any, (e) => forwardEvent(this, e))
-      this.game.addEventListener("lateupdate" as any, (e) => forwardEvent(this, e))
-      this.game.addEventListener("frame" as any, (e) => forwardEvent(this, e))
-      this.game.addEventListener("render" as any, (e) => forwardEvent(this, e))
+
+      const forwarder = eventForwarder(this)
+
+      this.game.addEventListener("update" as any, forwarder)
+      this.game.addEventListener("lateupdate" as any, forwarder)
+      this.game.addEventListener("frame" as any, forwarder)
+      this.game.addEventListener("render" as any, forwarder)
+
+      /* Register removal of listeners */
+      this.addEventListener(
+        "disconnected",
+        () => {
+          this.debug("Unregistering ticker listeners")
+          this.game.removeEventListener("update" as any, forwarder)
+          this.game.removeEventListener("lateupdate" as any, forwarder)
+          this.game.removeEventListener("frame" as any, forwarder)
+          this.game.removeEventListener("render" as any, forwarder)
+        },
+        { once: true }
+      )
     }
 
     /*
