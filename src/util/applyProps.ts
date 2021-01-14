@@ -6,9 +6,9 @@ const IGNORED_KEYS = ["id"]
 export const applyProps = (object: IStringIndexable, props: IStringIndexable) => {
   for (const incoming in props) {
     const value = props[incoming]
-    let [key, ...rest] = incoming.split(":")
+    let [firstKey, ...rest] = incoming.split(":")
 
-    key = camelize(key)
+    const key = camelize(firstKey)
 
     /* Attempt to parse the value */
     let parsed = undefined
@@ -22,7 +22,7 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
         break
 
       /* Ignore all data- keys */
-      case key.startsWith("data-"):
+      case firstKey.startsWith("data-"):
         break
 
       /* Handle nested keys, ie. position-x */
