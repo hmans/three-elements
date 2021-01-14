@@ -1,2 +1,8 @@
-export const eventForwarder = (element: HTMLElement) => (event: Event) =>
-  element.dispatchEvent(new CustomEvent(event.type, event))
+export const eventForwarder = (element: HTMLElement) => (originalEvent: Event) => {
+  element.dispatchEvent(cloneEvent(originalEvent))
+}
+
+export const cloneEvent = (originalEvent: Event) => {
+  const eventClass = originalEvent.constructor as typeof Event
+  return new eventClass(originalEvent.type, originalEvent)
+}
