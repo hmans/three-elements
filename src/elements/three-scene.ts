@@ -22,10 +22,10 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
   set camera(camera) {
     this._camera = camera
-
-    if (this.isReady) {
-      this.pointer!.camera = camera
       this.handleWindowResize()
+
+    if (this.pointer) {
+      this.pointer.camera = camera
     }
   }
 
