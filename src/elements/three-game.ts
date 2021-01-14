@@ -98,6 +98,11 @@ export class ThreeGame extends HTMLElement {
   startTicking() {
     let lastNow = performance.now()
 
+    const dispatch = (name: string, dt: number) =>
+      this.dispatchEvent(
+        new CustomEvent(name, { bubbles: false, cancelable: false, detail: { dt } })
+      )
+
     const tick = () => {
       /*
       Figure out deltatime. This is a very naive way of doing this, we'll eventually
@@ -108,7 +113,8 @@ export class ThreeGame extends HTMLElement {
       lastNow = now
 
       /* EXPERIMENTAL new DOM Event-based ticking */
-      this.dispatchEvent(new CustomEvent("tick", { bubbles: false, cancelable: false }))
+      dispatch("update", dt)
+      dispatch("lateupdate", dt)
 
       /* Execute update and lateupdate callbacls. */
       this.events.emit("update", dt)
@@ -119,9 +125,11 @@ export class ThreeGame extends HTMLElement {
         this.frameRequested = false
 
         /* If we know that we're rendering a frame, execute frame callbacks. */
+        dispatch("frame", dt)
         this.events.emit("frame", dt)
 
         /* Finally, emit render event. This will trigger scenes to render. */
+        dispatch("render", dt)
         this.events.emit("render", dt)
       }
 
