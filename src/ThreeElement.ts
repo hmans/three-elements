@@ -9,6 +9,11 @@ import { observeAttributeChange } from "./util/observeAttributeChange"
 export class ThreeElementLifecycleEvent extends CustomEvent<{}> {}
 
 export class ThreeElement<T> extends HTMLElement {
+  static observedAttributes = ["url"]
+
+  /** Has the element been fully initialized? */
+  isReady = false
+
   /** The THREE.* object managed by this element. */
   object?: T
 
@@ -167,6 +172,8 @@ export class ThreeElement<T> extends HTMLElement {
         new ThreeElementLifecycleEvent("ready", { bubbles: true, cancelable: false })
       )
 
+      this.isReady = true
+
       this.debug("Object is ready:", this.object)
     })
   }
@@ -311,12 +318,22 @@ export class ThreeElement<T> extends HTMLElement {
         break
 
       /*
-      If we've reached this point, we're dealing with an attribute that we don't know, so
-      we will forward it to the wrapped object.
+      If we've reached this point, we're dealing with an attribute that we don't know.
       */
       default:
-        /* If we don't have a wrapped object for some reason, fail silently. */
-        if (this.object) applyProps(this.object, { [key]: newValue })
+        /*
+        First of all, let's see if we're observing the attribute (as a child class may do.)
+        This is just a cheap way to find out if the class is actually interested in having this
+        property set as an attribute, so we don't randomly just overwrite _any_ property.
+        */
+        if (ThreeElement.observedAttributes.includes(key)) {
+          this[key as keyof this] = newValue
+        } else {
+          /*
+          Okay, at this point, we'll just assume that the property lives on the wrapped object.
+          Good times! Let's assign it directly. */
+          if (this.object) applyProps(this.object, { [key]: newValue })
+        }
     }
   }
 
