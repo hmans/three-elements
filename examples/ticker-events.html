@@ -27,9 +27,11 @@
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
+      document.addEventListener("connected", (e) => console.log(e))
+
       importShim("/dist/index.esm.js").then(() => {
-        // const game = document.getElementById("game")
-        // const mesh = document.getElementById("mesh")
+        const game = document.getElementById("game")
+        const mesh = document.getElementById("mesh")
         // game.addEventListener("update", (e) => {
         //   const { dt } = e.detail
         //   console.log("update!")

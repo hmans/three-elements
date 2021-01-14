@@ -6,6 +6,8 @@ import { applyProps } from "./util/applyProps"
 import { forwardEvent } from "./util/forwardEvent"
 import { observeAttributeChange } from "./util/observeAttributeChange"
 
+export class ThreeElementLifecycleEvent extends CustomEvent<{}> {}
+
 export class ThreeElement<T> extends HTMLElement {
   /** The THREE.* object managed by this element. */
   object?: T
@@ -103,7 +105,9 @@ export class ThreeElement<T> extends HTMLElement {
     })
 
     /* Emit connected event */
-    this.dispatchEvent(new CustomEvent("connected", { bubbles: true, cancelable: false }))
+    this.dispatchEvent(
+      new ThreeElementLifecycleEvent("connected", { bubbles: true, cancelable: false })
+    )
 
     /*
     Some stuff relies on all custom elements being fully defined and connected. However:
@@ -134,7 +138,9 @@ export class ThreeElement<T> extends HTMLElement {
       this.readyCallback()
 
       /* Emit ready event */
-      this.dispatchEvent(new CustomEvent("ready", { bubbles: true, cancelable: false }))
+      this.dispatchEvent(
+        new ThreeElementLifecycleEvent("ready", { bubbles: true, cancelable: false })
+      )
 
       this.debug("Object is ready:", this.object)
     })
@@ -146,7 +152,9 @@ export class ThreeElement<T> extends HTMLElement {
     this.debug("disconnectedCallback")
 
     /* Emit disconnected event */
-    this.dispatchEvent(new CustomEvent("disconnected", { bubbles: true, cancelable: false }))
+    this.dispatchEvent(
+      new ThreeElementLifecycleEvent("disconnected", { bubbles: true, cancelable: false })
+    )
 
     /* TODO: Stop listening to the game's ticker events */
     // this.game.removeEventListener("update" as any, this.dispatchTickerEvent)
