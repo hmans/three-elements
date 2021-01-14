@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - unreleased
 
 - **New:** Elements now emit `connected`, `ready` and `disconnected` lifecycle events that bubble up the DOM tree.
+
 - **Breaking Change:** 💥 Completely revamped the ticker system to make it easier to use, and make three-elements more straight-forward to integrate with web application frameworks:
   - Ticker callbacks have been renamed from `onupdate`, `onlateupdate`, `onframe` and `onrender` to `ontick`, `onlatetick`, `onframetick` and `onrendertick`.
   - Ticker events now are normal CustomEvents, meaning that you would implement callbacks like any other DOM event callback, eg. `ontick="(e) => console.log(e)"`.
@@ -16,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - The `<three-game>` element now also exposes a property named `deltaTime` that contains the current frame's delta time.
 - **Breaking Change:** Nested properties can now be set using a colon syntax. Example: the `position:x` attribute will now map to `position.x`.
 - **Changed:** You can now set a Three object's mixed-case properties through attributes of the same name, but dasherized. Example: The `cast-shadow` attribute will set the `castShadow` property.
+
+- **Fixed:** `<three-gltf-asset>` no longer loads the same GLTF twice.
+- **Fixed:** `<three-gltf-asset>` now creates local clones of the loaded GLTF scene (so you can place multiple copies of the same GLTF into your scene.)
+- **Fixed:** `<three-gltf-asset>` now properly forwards `create-shadow` and `receive-shadow` attributes to the GLTF scene.
 
 ## [0.1.3] - 2021-01-13
 
