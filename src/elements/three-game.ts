@@ -1,11 +1,10 @@
-import EventEmitter from "eventemitter3"
 import * as THREE from "three"
 import { ThreeElement } from "../ThreeElement"
 import { registerElement } from "../util/registerElement"
 
 export type TickerFunction = (dt: number, element?: ThreeElement<any>) => any
 
-export const CALLBACKS = new Set<string>(["onupdate", "onlateupdate", "onframe", "onrender"])
+export class TickerEvent extends CustomEvent<{ deltaTime: number }> {}
 
 export class ThreeGame extends HTMLElement {
   renderer = new THREE.WebGLRenderer({
@@ -15,10 +14,11 @@ export class ThreeGame extends HTMLElement {
     depth: true
   })
 
-  events = new EventEmitter()
-
   /** Is the ticker running? */
   private ticking = false
+
+  /** The time delta since the last frame, in fractions of a second. */
+  deltaTime = 0
 
   /** Has a frame been requested to be rendered in the next tick? */
   private frameRequested = true
@@ -86,9 +86,6 @@ export class ThreeGame extends HTMLElement {
 
     /* Update canvas */
     this.renderer.setSize(width, height)
-
-    /* Emit event */
-    this.events.emit("resize")
   }
 
   requestFrame() {
@@ -97,6 +94,11 @@ export class ThreeGame extends HTMLElement {
 
   startTicking() {
     let lastNow = performance.now()
+
+    const dispatch = (name: string, deltaTime: number) =>
+      this.dispatchEvent(
+        new TickerEvent(name, { bubbles: false, cancelable: false, detail: { deltaTime } })
+      )
 
     const tick = () => {
       /*
@@ -107,19 +109,22 @@ export class ThreeGame extends HTMLElement {
       const dt = (now - lastNow) / 1000
       lastNow = now
 
-      /* Execute update and lateupdate callbacls. */
-      this.events.emit("update", dt)
-      this.events.emit("lateupdate", dt)
+      /* Store deltaTime on instance for easy access */
+      this.deltaTime = dt
+
+      /* Execute tick and latetick events. */
+      dispatch("tick", dt)
+      dispatch("latetick", dt)
 
       /* Has a frame been requested? */
       if (this.frameRequested || this.autorender) {
         this.frameRequested = false
 
         /* If we know that we're rendering a frame, execute frame callbacks. */
-        this.events.emit("frame", dt)
+        dispatch("frametick", dt)
 
         /* Finally, emit render event. This will trigger scenes to render. */
-        this.events.emit("render", dt)
+        dispatch("rendertick", dt)
       }
 
       /* Loop as long as this ticker is active. */

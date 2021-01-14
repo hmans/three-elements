@@ -35,7 +35,7 @@
     <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
 
     <!-- Spinning dodecahedron! -->
-    <three-mesh onupdate="dt => this.rotation.z += dt">
+    <three-mesh ontick="dt => this.rotation.z += dt">
       <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
       <three-mesh-standard-material color="red"></three-mesh-standard-material>
     </three-mesh>
@@ -119,7 +119,7 @@ Now for a little fun experiment: open your browser's devtools, inspect your DOM,
 ```html
 <three-game>
   <three-scene>
-    <three-mesh onupdate="console.log">
+    <three-mesh ontick="console.log">
       <three-box-geometry></three-box-geometry>
       <three-mesh-normal-material></three-mesh-normal-material>
     </three-mesh>
@@ -127,13 +127,13 @@ Now for a little fun experiment: open your browser's devtools, inspect your DOM,
 </three-game>
 ```
 
-`onupdate` is expected to return a function that takes a single argument -- more on that below. In this small example, we will simply log it to the browser console. Let's do something a little more involved:
+`ontick` is expected to return a function that takes a single argument -- more on that below. In this small example, we will simply log it to the browser console. Let's do something a little more involved:
 
 ```html
 <three-game>
   <three-scene>
     <three-mesh
-      onupdate="dt => this.setAttribute('rotation-z', parseFloat(this.getAttribute('rotation-z')) + 3 * dt)"
+      ontick="dt => this.setAttribute('rotation-z', parseFloat(this.getAttribute('rotation-z')) + 3 * dt)"
     >
       <three-box-geometry></three-box-geometry>
       <three-mesh-normal-material></three-mesh-normal-material>
@@ -149,7 +149,7 @@ The argument passed into the callback function -- `dt` -- is a delta time value 
 ```html
 <three-game autorender>
   <three-scene>
-    <three-mesh onupdate="dt => this.object.rotation.z += 3 * dt">
+    <three-mesh ontick="dt => this.object.rotation.z += 3 * dt">
       <three-box-geometry></three-box-geometry>
       <three-mesh-normal-material></three-mesh-normal-material>
     </three-mesh>

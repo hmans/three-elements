@@ -1,34 +1,25 @@
 <html>
   <head>
-    <title>GLTF Loading</title>
+    <title>Ticker Events</title>
     <link rel="stylesheet" href="/styles.css" />
     <script type="module" src="https://jspm.dev/es-module-shims"></script>
   </head>
   <body>
-    <!-- Here's a simple Three.js scene. -->
     <three-game id="game">
-      <three-scene background-color="#111">
-        <three-fog near="0" far="32" color="#111"></three-fog>
-        <three-ambient-light intensity="0.2"></three-ambient-light>
-        <three-directional-light position="10, 10, 40" intensity="0.8"></three-directional-light>
-
-        <three-gltf-asset url="/models/spaceship/spaceship05.gltf" scale="0.5"></three-gltf-asset>
-
-        <three-orbit-controls></three-orbit-controls>
-      </three-scene>
-
-      <!-- A "HUD" that will be rendered on top of the other scene -->
-      <three-scene>
+      <three-scene background-color="#433">
+        <!-- Lights -->
         <three-ambient-light intensity="0.2"></three-ambient-light>
         <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
+        <three-orbit-controls></three-orbit-controls>
 
-        <!-- Let's have a mesh that only rotates when a frame is being rendered. -->
+        <!-- Scene Contents -->
         <three-mesh
-          position-y="6"
-          onframetick="({target}) => target.object.rotation.z += 10 * target.game.deltaTime"
+          scale="2.5"
+          id="mesh"
+          ontick="({target}) => { target.object.rotateZ(3 * game.deltaTime); game.requestFrame() }"
         >
           <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-          <three-mesh-standard-material color="red"></three-mesh-standard-material>
+          <three-mesh-standard-material color="#a63"></three-mesh-standard-material>
         </three-mesh>
       </three-scene>
     </three-game>
@@ -37,7 +28,6 @@
     <script type="module">
       importShim("/dist/index.esm.js")
     </script>
-
     <script type="importmap-shim">
       {
         "imports": {

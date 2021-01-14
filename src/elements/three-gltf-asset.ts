@@ -4,9 +4,7 @@ import { ThreeElement } from "../ThreeElement"
 import { registerElement } from "../util/registerElement"
 
 export class ThreeGLTFAsset extends ThreeElement.for(Group) {
-  static get observedAttributes() {
-    return ["url"]
-  }
+  static observedAttributes = ["url"]
 
   public get url() {
     return this.getAttribute("url")
@@ -24,12 +22,6 @@ export class ThreeGLTFAsset extends ThreeElement.for(Group) {
         this.object!.add(gltf.scene)
         this.game.requestFrame()
       })
-    }
-  }
-
-  attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
-    if (name === "url") {
-      this.url = newValue
     }
   }
 }

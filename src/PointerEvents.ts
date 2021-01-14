@@ -1,5 +1,6 @@
 import { Camera, Intersection, Object3D, Raycaster, Renderer, Scene, Vector2 } from "three"
 import { ThreeElement } from "./ThreeElement"
+import { cloneEvent, eventForwarder } from "./util/eventForwarder"
 import { normalizePointerPosition } from "./util/normalizePointerPosition"
 
 export class PointerEvents {
@@ -36,7 +37,7 @@ export class PointerEvents {
 
       /* pointermove and pointerover */
       if (this.intersection) {
-        this.forwardEventToIntersection(e, this.intersection)
+        this.dispatchEventToIntersection(cloneEvent(e), this.intersection)
         this.dispatchEventToIntersection(new PointerEvent("pointerover", e), this.intersection)
       }
 
@@ -59,18 +60,9 @@ export class PointerEvents {
     /* Now just forward a bunch of DOM events to the current intersect. */
     for (const type of ["pointerdown", "pointerup", "click", "dblclick"]) {
       renderer.domElement.addEventListener(type, (e) => {
-        if (this.intersection) this.forwardEventToIntersection(e, this.intersection)
+        if (this.intersection) this.dispatchEventToIntersection(cloneEvent(e), this.intersection)
       })
     }
-  }
-
-  private forwardEventToIntersection(originalEvent: Event, intersection: Intersection) {
-    /* Clone the original event... */
-    const eventClass = originalEvent.constructor as typeof Event
-    const event = new eventClass(originalEvent.type, originalEvent)
-
-    /* ...and dispatch it! */
-    this.dispatchEventToIntersection(event, intersection)
   }
 
   private dispatchEventToIntersection(event: Event, intersection: Intersection) {
@@ -83,7 +75,7 @@ export class PointerEvents {
         const element = object.userData.threeElement as ThreeElement<any>
 
         /* ...and dispatch it! */
-        element.dispatchEvent(event)
+        eventForwarder(element)(event)
 
         return
       }

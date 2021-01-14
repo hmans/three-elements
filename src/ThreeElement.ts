@@ -3,13 +3,21 @@ import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { IConstructable, isDisposable, IStringIndexable } from "./types"
 import { applyProps } from "./util/applyProps"
+import { eventForwarder } from "./util/eventForwarder"
 import { observeAttributeChange } from "./util/observeAttributeChange"
 
+export class ThreeElementLifecycleEvent extends CustomEvent<{}> {}
+
 export class ThreeElement<T> extends HTMLElement {
+  static observedAttributes = ["url"]
+
+  /** Has the element been fully initialized? */
+  isReady = false
+
   /** The THREE.* object managed by this element. */
   object?: T
 
-  /** A dictionary of ticker callbacks (onupdate, etc.) */
+  /** A dictionary of ticker callbacks (ontick, etc.) */
   private callbacks = {} as Record<string, TickerFunction | undefined>
 
   /**
@@ -19,36 +27,36 @@ export class ThreeElement<T> extends HTMLElement {
     return `<${this.tagName.toLowerCase()}>`
   }
 
-  get onupdate() {
-    return this.callbacks["onupdate"]
+  get ontick() {
+    return this.callbacks["ontick"]
   }
 
-  set onupdate(fn: TickerFunction | string | undefined) {
-    this.setCallback("onupdate", fn)
+  set ontick(fn: TickerFunction | string | undefined) {
+    this.setCallback("ontick", fn)
   }
 
-  get onlateupdate() {
-    return this.callbacks["onlateupdate"]
+  get onlatetick() {
+    return this.callbacks["onlatetick"]
   }
 
-  set onlateupdate(fn: TickerFunction | string | undefined) {
-    this.setCallback("onlateupdate", fn)
+  set onlatetick(fn: TickerFunction | string | undefined) {
+    this.setCallback("onlatetick", fn)
   }
 
-  get onframe() {
-    return this.callbacks["onframe"]
+  get onframetick() {
+    return this.callbacks["onframetick"]
   }
 
-  set onframe(fn: TickerFunction | string | undefined) {
-    this.setCallback("onframe", fn)
+  set onframetick(fn: TickerFunction | string | undefined) {
+    this.setCallback("onframetick", fn)
   }
 
-  get onrender() {
-    return this.callbacks["onrender"]
+  get onrendertick() {
+    return this.callbacks["onrendertick"]
   }
 
-  set onrender(fn: TickerFunction | string | undefined) {
-    this.setCallback("onrender", fn)
+  set onrendertick(fn: TickerFunction | string | undefined) {
+    this.setCallback("onrendertick", fn)
   }
 
   /**
@@ -62,6 +70,31 @@ export class ThreeElement<T> extends HTMLElement {
     return this._game
   }
   private _game?: ThreeGame
+
+  get ticking() {
+    return this._ticking
+  }
+  set ticking(v) {
+    this._ticking = v
+
+    if (v) {
+      this.debug("ticking is set; subscribing to game's ticker events")
+
+      this.game.addEventListener("tick", this._forwarder)
+      this.game.addEventListener("latetick", this._forwarder)
+      this.game.addEventListener("frametick", this._forwarder)
+      this.game.addEventListener("rendertick", this._forwarder)
+    } else {
+      this.debug("Unregistering ticker listeners")
+
+      this.game.removeEventListener("tick", this._forwarder)
+      this.game.removeEventListener("latetick", this._forwarder)
+      this.game.removeEventListener("frametick", this._forwarder)
+      this.game.removeEventListener("rendertick", this._forwarder)
+    }
+  }
+  private _forwarder = eventForwarder(this)
+  private _ticking = false
 
   /**
    * Returns the instance of ThreeScene that this element is nested under.
@@ -101,6 +134,11 @@ export class ThreeElement<T> extends HTMLElement {
       this.handleAttributeChange({ [prop]: value })
     })
 
+    /* Emit connected event */
+    this.dispatchEvent(
+      new ThreeElementLifecycleEvent("connected", { bubbles: true, cancelable: false })
+    )
+
     /*
     Some stuff relies on all custom elements being fully defined and connected. However:
 
@@ -129,6 +167,13 @@ export class ThreeElement<T> extends HTMLElement {
       /* Invoke mount method */
       this.readyCallback()
 
+      /* Emit ready event */
+      this.dispatchEvent(
+        new ThreeElementLifecycleEvent("ready", { bubbles: true, cancelable: false })
+      )
+
+      this.isReady = true
+
       this.debug("Object is ready:", this.object)
     })
   }
@@ -137,6 +182,14 @@ export class ThreeElement<T> extends HTMLElement {
 
   disconnectedCallback() {
     this.debug("disconnectedCallback")
+
+    /* Emit disconnected event */
+    this.dispatchEvent(
+      new ThreeElementLifecycleEvent("disconnected", { bubbles: true, cancelable: false })
+    )
+
+    /* Stop listening to the game's ticker events */
+    this.ticking = false
 
     /* If the wrapped object is parented, remove it from its parent */
     if (this.object instanceof THREE.Object3D && this.object.parent) {
@@ -240,46 +293,53 @@ export class ThreeElement<T> extends HTMLElement {
     }
   }
 
+  attributeChangedCallback(key: string, oldValue: any, newValue: any) {
+    switch (key) {
+      /* A bunch of known properties that we will assign directly */
+      case "ticking":
+      case "ontick":
+      case "onlatetick":
+      case "onframetick":
+      case "onrendertick":
+        this[key] = newValue
+        break
+
+      /* Event handlers that we will want to convert into a function first */
+      case "onpointerdown":
+      case "onpointerup":
+      case "onpointerenter":
+      case "onpointerleave":
+      case "onpointerover":
+      case "onpointerout":
+      case "onclick":
+      case "ondblclick":
+        const fun = new Function(`${newValue}; this.game.requestFrame()`).bind(this)
+        this[key] = () => fun(this, this.object)
+        break
+
+      /*
+      If we've reached this point, we're dealing with an attribute that we don't know.
+      */
+      default:
+        /*
+        First of all, let's see if we're observing the attribute (as a child class may do.)
+        This is just a cheap way to find out if the class is actually interested in having this
+        property set as an attribute, so we don't randomly just overwrite _any_ property.
+        */
+        if (ThreeElement.observedAttributes.includes(key)) {
+          this[key as keyof this] = newValue
+        } else {
+          /*
+          Okay, at this point, we'll just assume that the property lives on the wrapped object.
+          Good times! Let's assign it directly. */
+          if (this.object) applyProps(this.object, { [key]: newValue })
+        }
+    }
+  }
+
   private handleAttributeChange(attributes: IStringIndexable) {
-    const { attach, args, ...remainingAttributes } = attributes
-
-    /*
-    When pointer event handlers are set as attributes, we'll construct new function from them. Typically,
-    HTMLElement would already do this for us, but we're going to hook a bit of functionality in there, including making
-    sure that a new frame is requested, and some convenient shortcuts.
-    */
-    for (const event of [
-      "pointerdown",
-      "pointerup",
-      "pointerenter",
-      "pointerleave",
-      "pointerover",
-      "pointerout",
-      "click",
-      "dblclick"
-    ]) {
-      const prop = `on${event}`
-      const value = remainingAttributes[prop]
-      if (value) {
-        delete remainingAttributes[prop]
-        const fun = new Function(`${value}; this.game.requestFrame()`).bind(this)
-        Object.assign(this, { [prop]: () => fun(this, this.object) })
-      }
-    }
-
-    /* Assign ticker callbacks. */
-    for (const event of ["onupdate", "onlateupdate", "onframe", "onrender"]) {
-      const value = remainingAttributes[event]
-
-      if (value) {
-        delete remainingAttributes[event]
-        applyProps(this, { [event]: value })
-      }
-    }
-
-    /* Assign everything else to the wrapped Three.js object */
-    if (this.object) {
-      applyProps(this.object, remainingAttributes)
+    for (const key in attributes) {
+      this.attributeChangedCallback(key, null, attributes[key])
     }
 
     /* Make sure a frame is queued */
@@ -287,11 +347,12 @@ export class ThreeElement<T> extends HTMLElement {
   }
 
   private setCallback(propName: string, fn?: TickerFunction | string) {
-    const eventName = propName.replace(/^on/, "")
+    const eventName = propName.replace(/^on/, "") as any
 
     /* Unregister previous callback */
-    if (this.callbacks[eventName]) {
-      this.game.events.removeListener(eventName, this.callbacks[eventName])
+    const previousCallback = this.callbacks[eventName]
+    if (previousCallback) {
+      this.removeEventListener(eventName, previousCallback)
     }
 
     const createCallbackFunction = (fn?: TickerFunction | string) => {
@@ -317,8 +378,12 @@ export class ThreeElement<T> extends HTMLElement {
     this.callbacks[eventName] = createCallbackFunction(fn)
 
     /* Register new callback */
-    if (this.callbacks[eventName]) {
-      setTimeout(() => this.game.events.on(eventName, this.callbacks[eventName]!))
+    const newCallback = this.callbacks[eventName]
+    if (newCallback) {
+      setTimeout(() => {
+        this.ticking = true
+        this.addEventListener(eventName, newCallback)
+      })
     }
   }
 
