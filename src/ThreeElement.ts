@@ -202,6 +202,9 @@ export class ThreeElement<T = any> extends HTMLElement {
       this.debug("Disposing:", this.object)
       this.object.dispose()
     }
+
+    /* Queue a frame, because very likely something just disappeared from the scene :) */
+    this.game.requestFrame()
   }
 
   /**
