@@ -3,13 +3,16 @@ import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { IConstructable, isDisposable, IStringIndexable } from "./types"
 import { applyProps } from "./util/applyProps"
+import { camelize } from "./util/camelize"
 import { eventForwarder } from "./util/eventForwarder"
 import { observeAttributeChange } from "./util/observeAttributeChange"
 
 export class ThreeElementLifecycleEvent extends CustomEvent<{}> {}
 
 export class ThreeElement<T = any> extends HTMLElement {
-  static observedAttributes = ["url"]
+  static get observedAttributes(): string[] {
+    return []
+  }
 
   /** Has the element been fully initialized? */
   isReady = false
@@ -334,8 +337,9 @@ export class ThreeElement<T = any> extends HTMLElement {
         This is just a cheap way to find out if the class is actually interested in having this
         property set as an attribute, so we don't randomly just overwrite _any_ property.
         */
-        if (ThreeElement.observedAttributes.includes(key)) {
-          this[key as keyof this] = newValue
+        if ((this.constructor as any).observedAttributes.includes(key)) {
+          const camelKey = camelize(key)
+          this[camelKey as keyof this] = newValue
         } else {
           /*
           Okay, at this point, we'll just assume that the property lives on the wrapped object.

@@ -4,7 +4,9 @@ import { ThreeElement } from "../ThreeElement"
 import { registerElement } from "../util/registerElement"
 
 export class ThreeGLTFAsset extends ThreeElement.for(Group) {
-  static observedAttributes = ["url"]
+  static get observedAttributes() {
+    return [...ThreeElement.observedAttributes, "url"]
+  }
 
   public get url() {
     return this.getAttribute("url")
