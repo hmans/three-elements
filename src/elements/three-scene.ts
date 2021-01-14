@@ -51,7 +51,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
     /* Set up rendering */
     this.render = this.render.bind(this)
-    this.game.addEventListener("update", this.render)
+    this.game.addEventListener("render", this.render)
 
     /* Start processing events */
     this.pointer!.start()
@@ -66,7 +66,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
   disconnectedCallback() {
     /* Unregister event handlers */
-    this.game.removeEventListener("update", this.render)
+    this.game.removeEventListener("render", this.render)
     window.removeEventListener("resize", this.handleWindowResize)
   }
 
