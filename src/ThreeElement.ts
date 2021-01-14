@@ -287,11 +287,12 @@ export class ThreeElement<T> extends HTMLElement {
   }
 
   private setCallback(propName: string, fn?: TickerFunction | string) {
-    const eventName = propName.replace(/^on/, "")
+    const eventName = propName.replace(/^on/, "") as any
 
     /* Unregister previous callback */
-    if (this.callbacks[eventName]) {
-      this.game.events.removeListener(eventName, this.callbacks[eventName])
+    const previousCallback = this.callbacks[eventName]
+    if (previousCallback) {
+      this.game.removeEventListener(eventName, previousCallback)
     }
 
     const createCallbackFunction = (fn?: TickerFunction | string) => {
@@ -317,8 +318,9 @@ export class ThreeElement<T> extends HTMLElement {
     this.callbacks[eventName] = createCallbackFunction(fn)
 
     /* Register new callback */
-    if (this.callbacks[eventName]) {
-      setTimeout(() => this.game.events.on(eventName, this.callbacks[eventName]!))
+    const newCallback = this.callbacks[eventName]
+    if (newCallback) {
+      setTimeout(() => this.game.addEventListener(eventName, newCallback))
     }
   }
 
