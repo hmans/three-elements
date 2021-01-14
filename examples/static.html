@@ -11,13 +11,24 @@
       <three-scene background-color="#ffe">
         <!-- Lights -->
         <three-ambient-light intensity="0.2"></three-ambient-light>
-        <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
+        <three-directional-light
+          intensity="0.8"
+          position="10, 40, 50"
+          castShadow="true"
+        ></three-directional-light>
+
+        <three-orbit-controls></three-orbit-controls>
 
         <!-- Scene Contents -->
+        <three-mesh rotation="[-1.5707, 0, 0]" position-y="-8" receiveShadow="true">
+          <three-plane-buffer-geometry args="[1000, 1000]"></three-plane-buffer-geometry>
+          <three-mesh-standard-material color="#ccc"></three-mesh-standard-material>
+        </three-mesh>
+
         <three-group
           ontick="() => this.object.rotation.x = this.object.rotation.y += 1 * game.deltaTime"
         >
-          <three-mesh scale="2.5">
+          <three-mesh scale="2.5" receiveShadow="true" castShadow="true">
             <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
             <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
           </three-mesh>
@@ -26,6 +37,8 @@
             ontick="() => this.object.rotation.x = this.object.rotation.y += 0.5 * game.deltaTime"
           >
             <three-mesh
+              receiveShadow="true"
+              castShadow="true"
               position="-4, 0, 0"
               ontick="() => this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
@@ -38,6 +51,8 @@
             ontick="() => this.object.rotation.x = this.object.rotation.z += 1.5 * game.deltaTime"
           >
             <three-mesh
+              receiveShadow="true"
+              castShadow="true"
               position="4, 0, 0"
               ontick="() => this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
@@ -50,6 +65,8 @@
             ontick="() => this.object.rotation.x = this.object.rotation.y += 2 * game.deltaTime"
           >
             <three-mesh
+              receiveShadow="true"
+              castShadow="true"
               position="0, 4, 0"
               ontick="() => this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
@@ -62,6 +79,8 @@
             ontick="() => this.object.rotation.x = this.object.rotation.z += 2.5 * game.deltaTime"
           >
             <three-mesh
+              receiveShadow="true"
+              castShadow="true"
               position="0, -4, 0"
               ontick="() => this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >

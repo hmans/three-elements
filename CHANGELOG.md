@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Ticker events now are normal CustomEvents, meaning that you would implement callbacks like any other DOM event callback, eg. `ontick="(e) => console.log(e)"`.
   - You can also directly subscribe to these events through `element.addEventListener`, but in this case you may need to explicitly set the element's `ticking` attribute/property to true in order for it to actually connect to the game's ticker.
   - Ticker events have an `event.detail.deltaTime` property that stores the delta time, but you can also get it directly from the game object via `element.game.deltaTime`.
+- **Fixed:** Custom Elements have 100% lower-case attributes, but Three.js properties are often mixed case (eg. `castShadows`.) Setting these through attributes now works.
 
 ## [0.1.3] - 2021-01-13
 

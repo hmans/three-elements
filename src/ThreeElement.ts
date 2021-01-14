@@ -298,6 +298,11 @@ export class ThreeElement<T = any> extends HTMLElement {
 
   attributeChangedCallback(key: string, oldValue: any, newValue: any) {
     switch (key) {
+      /* NOOPs */
+      case "args":
+      case "id":
+        break
+
       /* A bunch of known properties that we will assign directly */
       case "ticking":
       case "ontick":
