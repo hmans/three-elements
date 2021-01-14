@@ -102,6 +102,9 @@ export class ThreeElement<T> extends HTMLElement {
       this.handleAttributeChange({ [prop]: value })
     })
 
+    /* Emit connected event */
+    this.dispatchEvent(new CustomEvent("connected", { bubbles: true, cancelable: false }))
+
     /*
     Some stuff relies on all custom elements being fully defined and connected. However:
 
@@ -130,6 +133,9 @@ export class ThreeElement<T> extends HTMLElement {
       /* Invoke mount method */
       this.readyCallback()
 
+      /* Emit ready event */
+      this.dispatchEvent(new CustomEvent("ready", { bubbles: true, cancelable: false }))
+
       this.debug("Object is ready:", this.object)
     })
   }
@@ -138,6 +144,9 @@ export class ThreeElement<T> extends HTMLElement {
 
   disconnectedCallback() {
     this.debug("disconnectedCallback")
+
+    /* Emit disconnected event */
+    this.dispatchEvent(new CustomEvent("disconnected", { bubbles: true, cancelable: false }))
 
     /* TODO: Stop listening to the game's ticker events */
     // this.game.removeEventListener("update" as any, this.dispatchTickerEvent)
