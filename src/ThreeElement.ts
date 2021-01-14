@@ -66,6 +66,31 @@ export class ThreeElement<T> extends HTMLElement {
   }
   private _game?: ThreeGame
 
+  get ticking() {
+    return this._ticking
+  }
+  set ticking(v) {
+    this._ticking = v
+
+    if (v) {
+      this.debug("ticking is set; subscribing to game's ticker events")
+
+      this.game.addEventListener("update" as any, this._forwarder)
+      this.game.addEventListener("lateupdate" as any, this._forwarder)
+      this.game.addEventListener("frame" as any, this._forwarder)
+      this.game.addEventListener("render" as any, this._forwarder)
+    } else {
+      this.debug("Unregistering ticker listeners")
+
+      this.game.removeEventListener("update" as any, this._forwarder)
+      this.game.removeEventListener("lateupdate" as any, this._forwarder)
+      this.game.removeEventListener("frame" as any, this._forwarder)
+      this.game.removeEventListener("render" as any, this._forwarder)
+    }
+  }
+  private _forwarder = eventForwarder(this)
+  private _ticking = false
+
   /**
    * Returns the instance of ThreeScene that this element is nested under.
    */
@@ -156,8 +181,8 @@ export class ThreeElement<T> extends HTMLElement {
       new ThreeElementLifecycleEvent("disconnected", { bubbles: true, cancelable: false })
     )
 
-    /* TODO: Stop listening to the game's ticker events */
-    // this.game.removeEventListener("update" as any, this.dispatchTickerEvent)
+    /* Stop listening to the game's ticker events */
+    this.ticking = false
 
     /* If the wrapped object is parented, remove it from its parent */
     if (this.object instanceof THREE.Object3D && this.object.parent) {
@@ -268,27 +293,7 @@ export class ThreeElement<T> extends HTMLElement {
     "ticking" will make the element subscribe to the game's ticker events.
     */
     if (ticking !== undefined) {
-      this.debug("ticking is set; subscribing to game's ticker events")
-
-      const forwarder = eventForwarder(this)
-
-      this.game.addEventListener("update" as any, forwarder)
-      this.game.addEventListener("lateupdate" as any, forwarder)
-      this.game.addEventListener("frame" as any, forwarder)
-      this.game.addEventListener("render" as any, forwarder)
-
-      /* Register removal of listeners */
-      this.addEventListener(
-        "disconnected",
-        () => {
-          this.debug("Unregistering ticker listeners")
-          this.game.removeEventListener("update" as any, forwarder)
-          this.game.removeEventListener("lateupdate" as any, forwarder)
-          this.game.removeEventListener("frame" as any, forwarder)
-          this.game.removeEventListener("render" as any, forwarder)
-        },
-        { once: true }
-      )
+      this.ticking = ticking
     }
 
     /*
@@ -368,7 +373,10 @@ export class ThreeElement<T> extends HTMLElement {
     /* Register new callback */
     const newCallback = this.callbacks[eventName]
     if (newCallback) {
-      setTimeout(() => this.addEventListener(eventName, newCallback))
+      setTimeout(() => {
+        this.ticking = true
+        this.addEventListener(eventName, newCallback)
+      })
     }
   }
 
