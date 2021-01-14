@@ -8,7 +8,7 @@ import { observeAttributeChange } from "./util/observeAttributeChange"
 
 export class ThreeElementLifecycleEvent extends CustomEvent<{}> {}
 
-export class ThreeElement<T> extends HTMLElement {
+export class ThreeElement<T = any> extends HTMLElement {
   static observedAttributes = ["url"]
 
   /** Has the element been fully initialized? */
