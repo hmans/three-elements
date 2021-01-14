@@ -6,7 +6,7 @@
   </head>
   <body>
     <!-- Here's a simple Three.js scene. -->
-    <three-game>
+    <three-game id="game">
       <three-scene background-color="#222">
         <!-- Lights on! -->
         <three-ambient-light intensity="0.2"></three-ambient-light>
@@ -33,11 +33,11 @@
         let colorAnimation
         let speedAnimation
 
-        thingy.ontick = ({ detail: { dt } }) => {
+        thingy.ontick = () => {
           if (rotateSpeed > 0) {
-            thingy.object.rotateX(rotateSpeed * 0.8 * dt)
-            thingy.object.rotateY(rotateSpeed * 0.4 * dt)
-            thingy.object.rotateZ(rotateSpeed * dt)
+            thingy.object.rotateX(rotateSpeed * 0.8 * game.deltaTime)
+            thingy.object.rotateY(rotateSpeed * 0.4 * game.deltaTime)
+            thingy.object.rotateZ(rotateSpeed * game.deltaTime)
             thingy.game.requestFrame()
           }
         }

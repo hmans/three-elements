@@ -23,7 +23,10 @@
         <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
 
         <!-- Let's have a mesh that only rotates when a frame is being rendered. -->
-        <three-mesh position-y="6" onframetick="e => this.object.rotation.z += 10 * e.detail.dt">
+        <three-mesh
+          position-y="6"
+          onframetick="({target}) => target.object.rotation.z += 10 * target.game.deltaTime"
+        >
           <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
           <three-mesh-standard-material color="red"></three-mesh-standard-material>
         </three-mesh>

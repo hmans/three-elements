@@ -4,7 +4,7 @@ import { registerElement } from "../util/registerElement"
 
 export type TickerFunction = (dt: number, element?: ThreeElement<any>) => any
 
-export class TickerEvent extends CustomEvent<{ dt: number }> {}
+export class TickerEvent extends CustomEvent<{ deltaTime: number }> {}
 
 export class ThreeGame extends HTMLElement {
   renderer = new THREE.WebGLRenderer({
@@ -95,9 +95,9 @@ export class ThreeGame extends HTMLElement {
   startTicking() {
     let lastNow = performance.now()
 
-    const dispatch = (name: string, dt: number) =>
+    const dispatch = (name: string, deltaTime: number) =>
       this.dispatchEvent(
-        new TickerEvent(name, { bubbles: false, cancelable: false, detail: { dt } })
+        new TickerEvent(name, { bubbles: false, cancelable: false, detail: { deltaTime } })
       )
 
     const tick = () => {

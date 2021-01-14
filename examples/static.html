@@ -7,7 +7,7 @@
   <body>
     <!-- Here's a simple Three.js scene. Note that we're setting the "autorender" attribute
     to make sure that a frame is rendered every tick. -->
-    <three-game autorender>
+    <three-game autorender id="game">
       <three-scene background-color="#ffe">
         <!-- Lights -->
         <three-ambient-light intensity="0.2"></three-ambient-light>
@@ -15,7 +15,7 @@
 
         <!-- Scene Contents -->
         <three-group
-          ontick="({ detail: { dt }}) => this.object.rotation.x = this.object.rotation.y += 1 * dt"
+          ontick="() => this.object.rotation.x = this.object.rotation.y += 1 * game.deltaTime"
         >
           <three-mesh scale="2.5">
             <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
@@ -23,11 +23,11 @@
           </three-mesh>
 
           <three-group
-            ontick="({ detail: { dt }}) => this.object.rotation.x = this.object.rotation.y += 0.5 * dt"
+            ontick="() => this.object.rotation.x = this.object.rotation.y += 0.5 * game.deltaTime"
           >
             <three-mesh
               position="-4, 0, 0"
-              ontick="({ detail: { dt }}) => this.object.rotation.x = this.object.rotation.z += 1 * dt"
+              ontick="() => this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="red"></three-mesh-standard-material>
@@ -35,11 +35,11 @@
           </three-group>
 
           <three-group
-            ontick="({ detail: { dt }}) => this.object.rotation.x = this.object.rotation.z += 1.5 * dt"
+            ontick="() => this.object.rotation.x = this.object.rotation.z += 1.5 * game.deltaTime"
           >
             <three-mesh
               position="4, 0, 0"
-              ontick="({ detail: { dt }}) => this.object.rotation.x = this.object.rotation.z += 1 * dt"
+              ontick="() => this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="yellow"></three-mesh-standard-material>
@@ -47,11 +47,11 @@
           </three-group>
 
           <three-group
-            ontick="({ detail: { dt }}) => this.object.rotation.x = this.object.rotation.y += 2 * dt"
+            ontick="() => this.object.rotation.x = this.object.rotation.y += 2 * game.deltaTime"
           >
             <three-mesh
               position="0, 4, 0"
-              ontick="({ detail: { dt }}) => this.object.rotation.x = this.object.rotation.z += 1 * dt"
+              ontick="() => this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="green"></three-mesh-standard-material>
@@ -59,11 +59,11 @@
           </three-group>
 
           <three-group
-            ontick="({ detail: { dt }}) => this.object.rotation.x = this.object.rotation.z += 2.5 * dt"
+            ontick="() => this.object.rotation.x = this.object.rotation.z += 2.5 * game.deltaTime"
           >
             <three-mesh
               position="0, -4, 0"
-              ontick="({ detail: { dt }}) => this.object.rotation.x = this.object.rotation.z += 1 * dt"
+              ontick="() => this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="blue"></three-mesh-standard-material>

@@ -33,8 +33,8 @@
             this.appendChild(geometry)
             this.appendChild(material)
 
-            this.ontick = ({ detail: { dt } }) => {
-              this.object.rotation.x = 1.4 * (this.object.rotation.y += this.speed * dt)
+            this.ontick = () => {
+              this.object.rotation.x = 1.4 * (this.object.rotation.y += this.speed * game.deltaTime)
 
               /* Make sure a frame is queued the next tick */
               this.game.requestFrame()
