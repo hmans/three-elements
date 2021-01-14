@@ -107,6 +107,9 @@ export class ThreeGame extends HTMLElement {
       const dt = (now - lastNow) / 1000
       lastNow = now
 
+      /* EXPERIMENTAL new DOM Event-based ticking */
+      this.dispatchEvent(new CustomEvent("tick", { bubbles: false, cancelable: false }))
+
       /* Execute update and lateupdate callbacls. */
       this.events.emit("update", dt)
       this.events.emit("lateupdate", dt)
