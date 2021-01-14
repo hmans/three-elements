@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - ticking
 - DOM event calbacks (e.detail.dt!)
+- onupdate etc. rename?
 - DOM lifecycle hooks
 
 ## [0.1.3] - 2021-01-13

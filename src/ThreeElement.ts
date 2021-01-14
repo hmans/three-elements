@@ -286,53 +286,43 @@ export class ThreeElement<T> extends HTMLElement {
     }
   }
 
+  attributeChangedCallback(key: string, oldValue: any, newValue: any) {
+    switch (key) {
+      /* A bunch of known properties that we will assign directly */
+      case "ticking":
+      case "onupdate":
+      case "onlateupdate":
+      case "onframe":
+      case "onrender":
+        this[key] = newValue
+        break
+
+      /* Event handlers that we will want to convert into a function first */
+      case "onpointerdown":
+      case "onpointerup":
+      case "onpointerenter":
+      case "onpointerleave":
+      case "onpointerover":
+      case "onpointerout":
+      case "onclick":
+      case "ondblclick":
+        const fun = new Function(`${newValue}; this.game.requestFrame()`).bind(this)
+        this[key] = () => fun(this, this.object)
+        break
+
+      /*
+      If we've reached this point, we're dealing with an attribute that we don't know, so
+      we will forward it to the wrapped object.
+      */
+      default:
+        /* If we don't have a wrapped object for some reason, fail silently. */
+        if (this.object) applyProps(this.object, { [key]: newValue })
+    }
+  }
+
   private handleAttributeChange(attributes: IStringIndexable) {
-    const { attach, args, ticking, ...remainingAttributes } = attributes
-
-    /*
-    "ticking" will make the element subscribe to the game's ticker events.
-    */
-    if (ticking !== undefined) {
-      this.ticking = ticking
-    }
-
-    /*
-    When pointer event handlers are set as attributes, we'll construct new function from them. Typically,
-    HTMLElement would already do this for us, but we're going to hook a bit of functionality in there, including making
-    sure that a new frame is requested, and some convenient shortcuts.
-    */
-    for (const event of [
-      "pointerdown",
-      "pointerup",
-      "pointerenter",
-      "pointerleave",
-      "pointerover",
-      "pointerout",
-      "click",
-      "dblclick"
-    ]) {
-      const prop = `on${event}`
-      const value = remainingAttributes[prop]
-      if (value) {
-        delete remainingAttributes[prop]
-        const fun = new Function(`${value}; this.game.requestFrame()`).bind(this)
-        Object.assign(this, { [prop]: () => fun(this, this.object) })
-      }
-    }
-
-    /* Assign ticker callbacks. */
-    for (const event of ["onupdate", "onlateupdate", "onframe", "onrender"]) {
-      const value = remainingAttributes[event]
-
-      if (value) {
-        delete remainingAttributes[event]
-        applyProps(this, { [event]: value })
-      }
-    }
-
-    /* Assign everything else to the wrapped Three.js object */
-    if (this.object) {
-      applyProps(this.object, remainingAttributes)
+    for (const key in attributes) {
+      this.attributeChangedCallback(key, null, attributes[key])
     }
 
     /* Make sure a frame is queued */
