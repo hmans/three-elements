@@ -3,6 +3,7 @@ import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { IConstructable, isDisposable, IStringIndexable } from "./types"
 import { applyProps } from "./util/applyProps"
+import { forwardEvent } from "./util/forwardEvent"
 import { observeAttributeChange } from "./util/observeAttributeChange"
 
 export class ThreeElement<T> extends HTMLElement {
@@ -117,6 +118,9 @@ export class ThreeElement<T> extends HTMLElement {
     Also see: https://javascript.info/custom-elements#rendering-order
     */
     setTimeout(() => {
+      /* Subscribe to ticker events and mirror them */
+      this.game.addEventListener("update" as any, (e) => forwardEvent(this, e))
+
       /* Handle attach attribute */
       this.handleAttach()
 
@@ -137,6 +141,9 @@ export class ThreeElement<T> extends HTMLElement {
 
   disconnectedCallback() {
     this.debug("disconnectedCallback")
+
+    /* TODO: Stop listening to the game's ticker events */
+    // this.game.removeEventListener("update" as any, this.dispatchTickerEvent)
 
     /* If the wrapped object is parented, remove it from its parent */
     if (this.object instanceof THREE.Object3D && this.object.parent) {
@@ -292,7 +299,7 @@ export class ThreeElement<T> extends HTMLElement {
     /* Unregister previous callback */
     const previousCallback = this.callbacks[eventName]
     if (previousCallback) {
-      this.game.removeEventListener(eventName, previousCallback)
+      this.removeEventListener(eventName, previousCallback)
     }
 
     const createCallbackFunction = (fn?: TickerFunction | string) => {
@@ -320,7 +327,7 @@ export class ThreeElement<T> extends HTMLElement {
     /* Register new callback */
     const newCallback = this.callbacks[eventName]
     if (newCallback) {
-      setTimeout(() => this.game.addEventListener(eventName, newCallback))
+      setTimeout(() => this.addEventListener(eventName, newCallback))
     }
   }
 
