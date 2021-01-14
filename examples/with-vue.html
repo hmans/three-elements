@@ -54,8 +54,8 @@
           mounted() {
             const { object, game } = this.$el
 
-            this.$el.onupdate = (dt) => {
-              object.rotation.z = object.rotation.x += 0.03
+            this.$el.onupdate = ({ detail: { dt } }) => {
+              object.rotation.z = object.rotation.x += 3 * dt
               object.scale.setScalar(4 + Math.cos(Date.now() / 200) * 0.8)
               game.requestFrame()
             }

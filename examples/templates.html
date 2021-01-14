@@ -22,8 +22,8 @@
 
         <!-- Define a small helper function. -->
         <script type="module">
-          const rotate = (amount, object) => (dt) => {
-            object.rotation.z += amount * dt
+          const rotate = (amount, object) => (e) => {
+            object.rotation.z += amount * e.detail.dt
           }
 
           window.rotate = rotate
