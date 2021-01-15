@@ -30,6 +30,15 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
         applyProps(object[key], { [rest.join(":")]: value })
         break
 
+      /*
+      Handle boolean properties. We will check against the only values that we consider falsey here,
+      taking into account that they might be coming from string-based HTML element attributes, where a
+      stand-alone boolean attribute like "cast-shadow" will emit a value of "". Eh!
+      */
+      case typeof object[key] === "boolean":
+        object[key] = ![undefined, null, false, "no", "false"].includes(value)
+        break
+
       /* Handle properties that provide .set methods */
       case object[key]?.set !== undefined:
         switch (true) {
