@@ -246,6 +246,10 @@ export class ThreeElement<T = any> extends HTMLElement {
     ) as ThreeElement<T> | undefined
   }
 
+  requestFrame() {
+    this.game.requestFrame()
+  }
+
   private addObjectToScene() {
     /*
     If the wrapped object is an Object3D, add it to the scene. If we can find a parent somewhere in the

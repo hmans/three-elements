@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **New:** Elements now emit `connected`, `ready` and `disconnected` lifecycle events that bubble up the DOM tree.
 
+- **New:** Elements now expose the `requestFrame` function directly, making it a bit more convenient to request a new frame to be rendered (you no longer have to find the game object.)
+
 - **Breaking Change:** 💥 Completely revamped the ticker system to make it easier to use, and make three-elements more straight-forward to integrate with web application frameworks:
   - Ticker callbacks have been renamed from `onupdate`, `onlateupdate`, `onframe` and `onrender` to `ontick`, `onlatetick`, `onframetick` and `onrendertick`.
   - Ticker events now are normal CustomEvents, meaning that you would implement callbacks like any other DOM event callback, eg. `ontick="(e) => console.log(e)"`.
