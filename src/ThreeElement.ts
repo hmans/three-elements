@@ -369,20 +369,13 @@ export class ThreeElement<T = any> extends HTMLElement {
 
     const createCallbackFunction = (fn?: TickerFunction | string) => {
       switch (typeof fn) {
-        /*
-        If the value is a string, we'll create a function from it. Magic!
-        */
+        /* If the value is a string, we'll create a function from it. Magic! */
         case "string":
-          return new Function("delta", `fun = ${fn}`, "fun(delta, this)").bind(this)
+          return new Function("e", `fun = ${fn}`, "fun(e)") as TickerFunction
 
-        /*
-        If it's already a function, we'll do a bit of wrapping to make sure that both
-        normal and arrow functions are supported. Normal functions can be bound to `this`,
-        but arrow functions can't. In order to allow the use of arrow functions, we will
-        pass `this` as a second argument after the deltatime.
-        */
+        /* If it's already a function, we'll just use that. */
         case "function":
-          return (dt: number) => fn.bind(this)(dt, this)
+          return fn
       }
     }
 

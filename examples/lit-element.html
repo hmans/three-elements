@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <title>lit-element</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="https://jspm.dev/es-module-shims"></script>
+  </head>
+  <body>
+    <!-- Here's a simple Three.js scene. -->
+    <three-game id="game" autorender>
+      <three-scene background-color="#555">
+        <three-fog near="0" far="32" color="#111"></three-fog>
+        <three-ambient-light intensity="0.2"></three-ambient-light>
+        <three-directional-light position="10, 10, 40" intensity="0.8"></three-directional-light>
+
+        <lit-dodecahedron></lit-dodecahedron>
+
+        <three-orbit-controls></three-orbit-controls>
+      </three-scene>
+    </three-game>
+
+    <!-- Import dependencies via ESM. The future is now! -->
+    <script type="module">
+      importShim("/dist/index.esm.js")
+
+      import { css, html, LitElement } from "https://jspm.dev/lit-element"
+
+      export class LitDodecahedron extends LitElement {
+        static get properties() {
+          return {
+            speed: { type: Number }
+          }
+        }
+
+        constructor() {
+          super()
+          this.speed = 1
+        }
+
+        render() {
+          const onTick = (e) => {
+            const { object, game } = e.target
+            object.rotation.x = object.rotation.y += 3 * game.deltaTime
+          }
+
+          const output = html`
+            <three-mesh
+              scale="2.5"
+              receive-shadow="true"
+              cast-shadow="true"
+              ticking=${true}
+              @tick=${onTick}
+              @click=${(e) => {
+                e.target.object.material.color.setHSL(
+                  Math.random(),
+                  Math.random(),
+                  Math.random() * 0.5 + 0.5
+                )
+              }}
+            >
+              <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+              <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
+            </three-mesh>
+          `
+
+          console.log(output)
+          return output
+        }
+      }
+
+      customElements.define("lit-dodecahedron", LitDodecahedron)
+    </script>
+
+    <script type="importmap-shim">
+      {
+        "imports": {
+          "eventemitter3": "https://jspm.dev/eventemitter3",
+          "three": "https://jspm.dev/three",
+          "three/": "https://jspm.dev/three/"
+        }
+      }
+    </script>
+  </body>
+</html>

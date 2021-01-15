@@ -1,10 +1,9 @@
 import * as THREE from "three"
-import { ThreeElement } from "../ThreeElement"
 import { registerElement } from "../util/registerElement"
 
-export type TickerFunction = (dt: number, element?: ThreeElement<any>) => any
-
 export class TickerEvent extends CustomEvent<{ deltaTime: number }> {}
+
+export type TickerFunction = (event: TickerEvent) => any
 
 export class ThreeGame extends HTMLElement {
   renderer = new THREE.WebGLRenderer({

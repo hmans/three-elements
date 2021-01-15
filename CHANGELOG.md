@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Ticker events have an `event.detail.deltaTime` property that contains the current frame's delta time.
   - The `<three-game>` element now also exposes a property named `deltaTime` that contains the current frame's delta time.
 - **Breaking Change:** Nested properties can now be set using a colon syntax. Example: the `position:x` attribute will now map to `position.x`.
+- **Breaking Change:** When directly assigning a function to the `ontick`, `onlatetick` etc. properties, we no longer move heaven and earth to bind that function to the element's scope, which vastly improves interoperability with frontend frameworks that let you set properties directly.
 - **Changed:** You can now set a Three object's mixed-case properties through attributes of the same name, but dasherized. Example: The `cast-shadow` attribute will set the `castShadow` property.
 
 - **Fixed:** `<three-gltf-asset>` no longer loads the same GLTF twice.
