@@ -374,7 +374,7 @@ export class ThreeElement<T = any> extends HTMLElement {
       switch (typeof fn) {
         /* If the value is a string, we'll create a function from it. Magic! */
         case "string":
-          return new Function("e", `fun = ${fn}`, "fun(e)") as TickerFunction
+          return new Function(fn) as TickerFunction
 
         /* If it's already a function, we'll just use that. */
         case "function":

@@ -25,22 +25,20 @@
           <three-mesh-standard-material color="#ccc"></three-mesh-standard-material>
         </three-mesh>
 
-        <three-group
-          ontick="() => this.object.rotation.x = this.object.rotation.y += 1 * game.deltaTime"
-        >
+        <three-group ontick="this.object.rotation.x = this.object.rotation.y += 1 * game.deltaTime">
           <three-mesh scale="2.5" receive-shadow cast-shadow>
             <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
             <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
           </three-mesh>
 
           <three-group
-            ontick="() => this.object.rotation.x = this.object.rotation.y += 0.5 * game.deltaTime"
+            ontick="this.object.rotation.x = this.object.rotation.y += 0.5 * game.deltaTime"
           >
             <three-mesh
               receive-shadow
               cast-shadow
               position="-4, 0, 0"
-              ontick="() => this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
+              ontick="this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="red"></three-mesh-standard-material>
@@ -48,13 +46,13 @@
           </three-group>
 
           <three-group
-            ontick="() => this.object.rotation.x = this.object.rotation.z += 1.5 * game.deltaTime"
+            ontick="this.object.rotation.x = this.object.rotation.z += 1.5 * game.deltaTime"
           >
             <three-mesh
               receive-shadow
               cast-shadow
               position="4, 0, 0"
-              ontick="() => this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
+              ontick="this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="yellow"></three-mesh-standard-material>
@@ -62,13 +60,13 @@
           </three-group>
 
           <three-group
-            ontick="() => this.object.rotation.x = this.object.rotation.y += 2 * game.deltaTime"
+            ontick="this.object.rotation.x = this.object.rotation.y += 2 * game.deltaTime"
           >
             <three-mesh
               receive-shadow
               cast-shadow
               position="0, 4, 0"
-              ontick="() => this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
+              ontick="this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="green"></three-mesh-standard-material>
@@ -76,13 +74,13 @@
           </three-group>
 
           <three-group
-            ontick="() => this.object.rotation.x = this.object.rotation.z += 2.5 * game.deltaTime"
+            ontick="this.object.rotation.x = this.object.rotation.z += 2.5 * game.deltaTime"
           >
             <three-mesh
               receive-shadow
               cast-shadow
               position="0, -4, 0"
-              ontick="() => this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
+              ontick="this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="blue"></three-mesh-standard-material>
