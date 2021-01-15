@@ -11,7 +11,7 @@
 
         <three-mesh
           id="mesh"
-          ontick="() => this.object.rotation.x = this.object.rotation.y += 0.5 * game.deltaTime"
+          ontick="this.object.rotation.x = this.object.rotation.y += 0.5 * game.deltaTime"
           onclick="this.object.material.color.set('red')"
         >
           <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
