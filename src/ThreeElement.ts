@@ -77,10 +77,10 @@ export class ThreeElement<T = any> extends HTMLElement {
   get ticking() {
     return this._ticking
   }
-  set ticking(v) {
-    this._ticking = v
+  set ticking(v: boolean | string) {
+    this._ticking = !!v || v === ""
 
-    if (v) {
+    if (this._ticking) {
       this.debug("ticking is set; subscribing to game's ticker events")
 
       this.game.addEventListener("tick", this._forwarder)
