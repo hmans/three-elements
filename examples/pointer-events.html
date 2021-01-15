@@ -14,10 +14,10 @@
 
         <!-- Define a template. It automatically becomes available as a new HTML tag. -->
         <three-template tag="rotating-cube">
-          <three-group onpointerdown="this.object.rotateZ(0.4)">
+          <three-group onpointerdown="this.object.rotateZ(0.4); this.requestFrame()">
             <three-mesh
-              onpointerover="this.object.material.color.set('#fff'); this.object.scale.setScalar(1.2)"
-              onpointerout="this.object.material.color.set('#666'); this.object.scale.setScalar(1)"
+              onpointerover="this.object.material.color.set('#fff'); this.object.scale.setScalar(1.2); this.requestFrame()"
+              onpointerout="this.object.material.color.set('#666'); this.object.scale.setScalar(1); this.requestFrame()"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="#666"></three-mesh-standard-material>

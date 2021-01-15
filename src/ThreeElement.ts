@@ -20,15 +20,15 @@ export class ThreeElement<T = any> extends HTMLElement {
   /** The THREE.* object managed by this element. */
   object?: T
 
-  /** A dictionary of ticker callbacks (ontick, etc.) */
-  private callbacks = {} as Record<string, TickerFunction | undefined>
-
   /**
    * Returns this element's tag name, formatted as an actual HTML tag (eg. "<three-mesh>").
    */
   get htmlTagName() {
     return `<${this.tagName.toLowerCase()}>`
   }
+
+  /** A dictionary of ticker callbacks (ontick, etc.) */
+  private callbacks = {} as Record<string, TickerFunction | undefined>
 
   get ontick() {
     return this.callbacks["ontick"]
@@ -328,8 +328,7 @@ export class ThreeElement<T = any> extends HTMLElement {
       case "onpointerout":
       case "onclick":
       case "ondblclick":
-        const fun = new Function(`${newValue}; this.game.requestFrame()`).bind(this)
-        this[key] = () => fun(this, this.object)
+        this[key] = new Function(newValue).bind(this)
         break
 
       /*
