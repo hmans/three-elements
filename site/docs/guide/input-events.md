@@ -2,27 +2,23 @@
 
 If your application requires any kind of user interaction, three-elements aims at making this super-easy by exposing common input events (pointer movement/clicks, double-clicks et al) as normal DOM events emitted by the elements themselves.
 
-### Example
+Let's have an example with a mesh that reacts on the pointer entering, leaving, or clicking on it:
 
 ::: demo
 
 ```html
 <three-game autorender>
-  <three-scene background-color="#222">
-    <!-- Define a template. It automatically becomes available as a new HTML tag. -->
+  <three-scene background-color="#eee">
     <three-mesh
-      scale="4"
+      scale="3"
       onpointerdown="this.object.rotateZ(0.4)"
-      onpointerover="this.object.material.color.set('#fff'); this.object.scale.setScalar(1.2)"
-      onpointerout="this.object.material.color.set('#666'); this.object.scale.setScalar(1)"
+      onpointerover="this.object.material.color.set('#fff'); this.object.scale.setScalar(4)"
+      onpointerout="this.object.material.color.set('#666'); this.object.scale.setScalar(3)"
     >
       <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
       <three-mesh-standard-material color="#666"></three-mesh-standard-material>
     </three-mesh>
 
-    <three-orbit-controls></three-orbit-controls>
-
-    <!-- Lights on! -->
     <three-ambient-light intensity="0.2"></three-ambient-light>
     <three-directional-light
       intensity="0.8"
@@ -33,3 +29,13 @@ If your application requires any kind of user interaction, three-elements aims a
 ```
 
 :::
+
+::: tip Wait, what? How does this work?
+
+A typical approach to handling pointer events in a Three.js project is to retrieve the mouse position and then perform a raycast into the scene to see which object is hit. three-elements does this heavy lifting for you, finds the element that is home to the affected scene object, and makes it emit the corresponding DOM event. Voila!
+
+:::
+
+## List of Available Events
+
+Currently implemented are `pointerdown`, `pointerup`, `pointermove`, `pointerenter`, `pointerleave`, `pointerout`, `click`, and `dblclick`. Hook into them like you would do for any other DOM element.
