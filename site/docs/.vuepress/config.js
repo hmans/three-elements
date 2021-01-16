@@ -48,6 +48,7 @@ module.exports = {
         collapsable: false,
         children: [
           "/guide/",
+          "/guide/getting-started",
           "/guide/the-basics",
           "/guide/ticker-events",
           "/guide/input-events",
@@ -60,7 +61,7 @@ module.exports = {
       {
         type: "group",
         title: "Advanced Guides",
-        path: "/advanced/",
+        path: "/advanced/stacked-scenes",
         collapsable: false,
         children: ["/advanced/stacked-scenes", "/advanced/optimized-rendering"]
       }
