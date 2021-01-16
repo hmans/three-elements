@@ -422,10 +422,8 @@ export class ThreeElement<T = any> extends HTMLElement {
     /* Register new callback */
     const newCallback = this.callbacks[eventName]
     if (newCallback) {
-      setTimeout(() => {
-        this.ticking = true
-        this.addEventListener(eventName, newCallback)
-      })
+      this.ticking = true
+      this.addEventListener(eventName, newCallback)
     }
   }
 
@@ -439,9 +437,9 @@ export class ThreeElement<T = any> extends HTMLElement {
 
   static for<T>(constructor: IConstructable<T>): IConstructable<ThreeElement<T>> {
     /*
-      Create an anonymous class that inherits from our cool base class, but sets
-      its own Three.js constructor property.
-      */
+    Create an anonymous class that inherits from our cool base class, but sets
+    its own Three.js constructor property.
+    */
     return class extends ThreeElement<T> {
       static threeConstructor = constructor
     }
