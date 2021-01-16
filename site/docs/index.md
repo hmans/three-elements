@@ -2,7 +2,7 @@
 
 You're looking at the humble beginnings of a documentation site for [three-elements](https://github.com/hmans/three-elements), a library providing Web Components Custom Elements for building Three.js applications.
 
-Please bear with me while I fill in the blanks!
+Please bear with me while I fill in the blanks! In the meantime, here's a quick demo:
 
 ::: demo
 
