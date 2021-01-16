@@ -26,7 +26,7 @@ module.exports = {
     docsDir: "",
     editLinkText: "Edit this page on GitHub",
     lastUpdated: false,
-    displayAllHeaders: true,
+    displayAllHeaders: false,
     smoothScroll: true,
 
     nav: [
@@ -41,7 +41,14 @@ module.exports = {
         {
           title: "Guide",
           collapsable: false,
-          children: ["", "the-basics"]
+          children: [
+            "",
+            "the-basics",
+            "ticker-events",
+            "input-events",
+            "templates",
+            "components"
+          ]
         }
       ]
     }

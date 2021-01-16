@@ -80,7 +80,7 @@ Just like in Three.js itself, you can nest scene objects. three-elements will tr
       -->
       <three-mesh
         scale="0.5"
-        position:x="2"
+        position.x="2"
         ontick="this.object.rotation.x = this.object.rotation.y += 0.01"
       >
         <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
@@ -102,3 +102,35 @@ Just like in Three.js itself, you can nest scene objects. three-elements will tr
 ```
 
 :::
+
+## Setting Attributes
+
+**Attributes** on elements will typically set the **corresponding property** on the wrapped Three.js object. Some examples:
+
+```html
+<!-- Sets intensity to 0.8 and castShadow to true. -->
+<three-directional-light intensity="0.8" cast-shadow></three-directional-light>
+```
+
+Properties that expose a `.set(x, y, z)` method -- like THREE.Vector3 and others -- can be set using a comma separated list of values, or a JSON array:
+
+```html
+<!-- Equivalent to invoking mesh.position.set(0, 5, 0) -->
+<three-mesh position="0, 5, 0"></three-mesh>
+<three-mesh position="[0, 5, 0]"></three-mesh>
+```
+
+You can also use **dotty attributes** to set nested properties:
+
+```html
+<!-- Equivalent to mesh.position.x = -5 -->
+<three-mesh position.x="-5"></three-mesh>
+```
+
+## Constructor Arguments
+
+Every element will create its own instance of its corresponding class. The `args` attribute allows you to provide a list of constructor arguments as a JSON array.
+
+```html
+<three-box-buffer-geometry args="[2, 1, 1]"></three-box-buffer-geometry>
+```
