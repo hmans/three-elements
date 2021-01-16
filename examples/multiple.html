@@ -29,7 +29,7 @@
       <h2>Instance #1</h2>
       <three-game>
         <three-scene>
-          <three-mesh scale="3">
+          <three-mesh scale="3" onpointerdown="this.object.rotateZ(0.2); this.requestFrame()">
             <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
             <three-mesh-normal-material></three-mesh-normal-material>
           </three-mesh>
@@ -40,7 +40,7 @@
       <h2>Instance #2</h2>
       <three-game>
         <three-scene>
-          <three-mesh scale="6">
+          <three-mesh scale="6" onpointerdown="this.object.rotateZ(-0.2); this.requestFrame()">
             <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
             <three-mesh-normal-material></three-mesh-normal-material>
           </three-mesh>
