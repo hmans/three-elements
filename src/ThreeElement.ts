@@ -111,6 +111,9 @@ export class ThreeElement<T = any> extends HTMLElement {
   }
   private _scene?: ThreeScene
 
+  /** This element's MutationObserver. */
+  private _observer?: MutationObserver
+
   constructor() {
     super()
     this.debug("constructor", this.getAllAttributes())
@@ -133,7 +136,7 @@ export class ThreeElement<T = any> extends HTMLElement {
     since we don't know the set of attributes the wrapped Three.js classes expose beforehand. So instead
     we're hacking our way around it using a mutation observer. Fun times!)
     */
-    observeAttributeChange(this, (prop, value) => {
+    this._observer = observeAttributeChange(this, (prop, value) => {
       this.handleAttributeChange({ [prop]: value })
     })
 
@@ -185,6 +188,9 @@ export class ThreeElement<T = any> extends HTMLElement {
 
   disconnectedCallback() {
     this.debug("disconnectedCallback")
+
+    /* Disconnect observer */
+    this._observer?.disconnect()
 
     /* Emit disconnected event */
     this.dispatchEvent(
