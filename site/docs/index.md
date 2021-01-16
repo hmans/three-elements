@@ -1,8 +1,8 @@
 # three-elements
 
-You're looking at the humbe beginnings of a documentation site for [three-elements](https://github.com/hmans/three-elements), a library providing Web Components Custom Elements for building Three.js applications.
+You're looking at the humble beginnings of a documentation site for [three-elements](https://github.com/hmans/three-elements), a library providing Web Components Custom Elements for building Three.js applications.
 
-Please bear with me while I fill in the blanks.
+Please bear with me while I fill in the blanks!
 
 ::: demo
 
@@ -19,6 +19,9 @@ Please bear with me while I fill in the blanks.
         color="hotpink"
       ></three-mesh-standard-material>
     </three-mesh>
+
+    <!-- Orbit controls, because they're cool! -->
+    <three-orbit-controls></three-orbit-controls>
 
     <!-- Lights -->
     <three-ambient-light intensity="0.2"></three-ambient-light>
