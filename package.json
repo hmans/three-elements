@@ -40,7 +40,9 @@
     "build": "yarn clean && microbundle --globals three=THREE",
     "test": "web-test-runner --puppeteer",
     "examples": "serve -S examples",
-    "prepublishOnly": "yarn build && yarn test"
+    "prepublishOnly": "yarn build && yarn test",
+    "site:dev": "cd site && yarn dev",
+    "site:build": "cd site && yarn build"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
