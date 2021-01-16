@@ -423,7 +423,12 @@ export class ThreeElement<T = any> extends HTMLElement {
 
         /* Create managed object */
         const args = this.getAttribute("args")
-        this.object = args ? new constructor(...JSON.parse(args)) : new constructor()
+        if (args) {
+          const parsed = JSON.parse(args)
+          this.object = new constructor(...(Array.isArray(parsed) ? parsed : [parsed]))
+        } else {
+          this.object = new constructor()
+        }
       }
     }
   }
