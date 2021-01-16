@@ -17,8 +17,31 @@ export class ThreeElement<T = any> extends HTMLElement {
   /** Has the element been fully initialized? */
   isReady = false
 
+  /** Constructor that will instantiate our object. */
+  static threeConstructor?: IConstructable
+
   /** The THREE.* object managed by this element. */
-  object?: T
+  private _object?: T
+
+  get object() {
+    const constructor = (this.constructor as typeof ThreeElement).threeConstructor
+
+    if (!this._object && constructor) {
+      this.debug("object accessed for the first time, let's create the damn thing!")
+
+      /* Create managed object */
+      const args = this.getAttribute("args")
+      if (args) {
+        const parsed = JSON.parse(args)
+        this._object = new constructor(...(Array.isArray(parsed) ? parsed : [parsed]))
+      } else {
+        this._object = new constructor()
+      }
+    }
+
+    /* Return it */
+    return this._object
+  }
 
   /**
    * Returns this element's tag name, formatted as an actual HTML tag (eg. "<three-mesh>").
@@ -310,6 +333,8 @@ export class ThreeElement<T = any> extends HTMLElement {
   }
 
   attributeChangedCallback(key: string, oldValue: any, newValue: any) {
+    this.debug("attributeChangedCallback", key, newValue)
+
     switch (key) {
       /* NOOPs */
       case "args":
@@ -418,18 +443,7 @@ export class ThreeElement<T = any> extends HTMLElement {
       its own Three.js constructor property.
       */
     return class extends ThreeElement<T> {
-      constructor() {
-        super()
-
-        /* Create managed object */
-        const args = this.getAttribute("args")
-        if (args) {
-          const parsed = JSON.parse(args)
-          this.object = new constructor(...(Array.isArray(parsed) ? parsed : [parsed]))
-        } else {
-          this.object = new constructor()
-        }
-      }
+      static threeConstructor = constructor
     }
   }
 }
