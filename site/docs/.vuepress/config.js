@@ -29,16 +29,12 @@ module.exports = {
     displayAllHeaders: false,
     smoothScroll: true,
 
-    // nav: [
-    //   {
-    //     text: "Guide",
-    //     link: "/guide/"
-    //   },
-    //   {
-    //     text: "Advanced",
-    //     link: "/advanced/"
-    //   }
-    // ],
+    nav: [
+      {
+        text: "Discord",
+        link: "https://discord.gg/ybuUjFM"
+      }
+    ],
 
     sidebar: [
       {
