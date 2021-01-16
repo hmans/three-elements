@@ -28,14 +28,14 @@
 
 ```html
 <!-- Create a Three.js game with a default camera. -->
-<three-game>
+<three-game id="game">
   <three-scene background-color="#444">
     <!-- Lights on! -->
     <three-ambient-light intensity="0.2"></three-ambient-light>
     <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
 
     <!-- Spinning dodecahedron! -->
-    <three-mesh ontick="dt => this.rotation.z += dt">
+    <three-mesh ontick="this.rotation.z += game.deltaTime">
       <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
       <three-mesh-standard-material color="red"></three-mesh-standard-material>
     </three-mesh>
