@@ -39,7 +39,7 @@ Every three-elements projects starts with the `<three-game>` tag, which forms th
 
 In this example, we're also setting its `autorender` attribute. This simply makes sure that a new frame is being rendered on every tick.
 
-TODO: Link to "Optimized Rendering" section
+Also see: [Optimized Rendering](/advanced/optimized-rendering)
 
 ## The `<three-scene>` tag
 
@@ -49,7 +49,7 @@ When you have multiple `<three-scene>` tags, all scenes will be rendered on top 
 
 In the example above, we're also setting the scene's `background-color` attribute.
 
-TODO: Link to "Stacked Scenes" section
+Also see: [Stacked Scenes](/advanced/stacked-scenes)
 
 ## Scene Objects
 

@@ -29,28 +29,41 @@ module.exports = {
     displayAllHeaders: false,
     smoothScroll: true,
 
-    nav: [
-      {
-        text: "Guide",
-        link: "/guide/"
-      }
-    ],
+    // nav: [
+    //   {
+    //     text: "Guide",
+    //     link: "/guide/"
+    //   },
+    //   {
+    //     text: "Advanced",
+    //     link: "/advanced/"
+    //   }
+    // ],
 
-    sidebar: {
-      "/guide/": [
-        {
-          title: "Guide",
-          collapsable: false,
-          children: [
-            "",
-            "the-basics",
-            "ticker-events",
-            "input-events",
-            "templates",
-            "components"
-          ]
-        }
-      ]
-    }
+    sidebar: [
+      {
+        type: "group",
+        title: "Guide",
+        path: "/guide/",
+        collapsable: false,
+        children: [
+          "/guide/",
+          "/guide/the-basics",
+          "/guide/ticker-events",
+          "/guide/input-events",
+          "/guide/lifecycle-events",
+          "/guide/templates",
+          "/guide/components"
+        ]
+      },
+
+      {
+        type: "group",
+        title: "Advanced Guides",
+        path: "/advanced/",
+        collapsable: false,
+        children: ["/advanced/stacked-scenes", "/advanced/optimized-rendering"]
+      }
+    ]
   }
 }
