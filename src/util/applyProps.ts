@@ -6,7 +6,7 @@ const IGNORED_KEYS = ["id"]
 export const applyProps = (object: IStringIndexable, props: IStringIndexable) => {
   for (const incoming in props) {
     const value = props[incoming]
-    let [firstKey, ...rest] = incoming.split(":")
+    let [firstKey, ...rest] = incoming.split(/[\.:]/)
 
     const key = camelize(firstKey)
 
@@ -27,7 +27,7 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
 
       /* Handle nested keys, ie. position-x */
       case key in object && rest.length > 0:
-        applyProps(object[key], { [rest.join(":")]: value })
+        applyProps(object[key], { [rest.join(".")]: value })
         break
 
       /*
@@ -59,7 +59,8 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
 
           /* Otherwise, set the original string value, but split by commas */
           default:
-            object[key].set(...value.split(","))
+            const list = value.split(",").map((el: string) => parseFloat(el) || el)
+            object[key].set(...list)
         }
         break
 

@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Breaking Change:** When setting DOM event handlers through attributes (eg. `onclick="..."`), these will no longer automatically run `requestFrame` for you.
 
-- **Breaking Change:** Nested properties can now be set using a colon syntax. Example: the `position:x` attribute will now map to `position.x`.
+- **Breaking Change:** Nested properties can now be set using a period separator syntax. Example: the `position.x` attribute will now map to `position.x`. A colon separator (`position:x`) is also supported in case a framework is giving you trouble. The previous dashy syntax will now map attributes to their camel-cased counterparts (eg. `receive-shadow` will set `receiveShadow`.)
 
 - **Breaking Change:** When directly assigning a function to the `ontick`, `onlatetick` etc. properties, we no longer move heaven and earth to bind that function to the element's scope, which vastly improves interoperability with frontend frameworks that let you set properties directly.
 

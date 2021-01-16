@@ -20,7 +20,7 @@
         <three-orbit-controls></three-orbit-controls>
 
         <!-- Scene Contents -->
-        <three-mesh rotation="[-1.5707, 0, 0]" position:y="-8" receive-shadow>
+        <three-mesh rotation="[-1.5707, 0, 0]" position.y="-8" receive-shadow>
           <three-plane-buffer-geometry args="[1000, 1000]"></three-plane-buffer-geometry>
           <three-mesh-standard-material color="#ccc"></three-mesh-standard-material>
         </three-mesh>
@@ -37,7 +37,7 @@
             <three-mesh
               receive-shadow
               cast-shadow
-              position="-4, 0, 0"
+              position.x="-4"
               ontick="this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
@@ -51,7 +51,7 @@
             <three-mesh
               receive-shadow
               cast-shadow
-              position="4, 0, 0"
+              position.x="4"
               ontick="this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
@@ -65,7 +65,7 @@
             <three-mesh
               receive-shadow
               cast-shadow
-              position="0, 4, 0"
+              position.y="4"
               ontick="this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
@@ -79,7 +79,7 @@
             <three-mesh
               receive-shadow
               cast-shadow
-              position="0, -4, 0"
+              position.y="-4"
               ontick="this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>

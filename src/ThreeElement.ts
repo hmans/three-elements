@@ -346,8 +346,11 @@ export class ThreeElement<T = any> extends HTMLElement {
         } else {
           /*
           Okay, at this point, we'll just assume that the property lives on the wrapped object.
-          Good times! Let's assign it directly. */
-          if (this.object) applyProps(this.object, { [key]: newValue })
+          Good times! Let's assign it directly.
+          */
+          if (this.object) {
+            applyProps(this.object, { [key]: newValue })
+          }
         }
     }
   }

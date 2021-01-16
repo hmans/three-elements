@@ -16,7 +16,7 @@
         <three-mesh
           scale="2.5"
           id="mesh"
-          ontick="({target}) => { target.object.rotateZ(3 * game.deltaTime); game.requestFrame() }"
+          ontick="this.object.rotateZ(3 * game.deltaTime); game.requestFrame()"
         >
           <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
           <three-mesh-standard-material color="#a63"></three-mesh-standard-material>
