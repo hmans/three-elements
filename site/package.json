@@ -1,0 +1,16 @@
+{
+  "name": "three-elements-site",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Hendrik Mans",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs"
+  },
+  "devDependencies": {
+    "vuepress": "^1.8.0",
+    "vuepress-plugin-demo-container": "^0.2.0"
+  }
+}
