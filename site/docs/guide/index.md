@@ -72,9 +72,9 @@ Attributes are linked to the wrapped object's properties of the same name. They'
 
 On top of all this, three-elements adds a thin bit of scaffolding to reduce boilerplate in your own code. Most importantly:
 
-- A built-in **ticker** that lets you hook into various stages of each frame.
-- **Full pointer events support;** just set `onclick`, `onpointerover` & friends on your `<three-*>` elements like you're used to from normal, non-3D web application development.
-- Support for **stacked scenes**, making the implementation of HUDs or cockpit views trivial.
-- **Optimized rendering** where no new frames will be rendered if there hasn't been a change in the scene.
+- A built-in [**ticker**](./ticker-events) that lets you hook into various stages of each frame.
+- **Full [**pointer events**](./input-events) support;** just set `onclick`, `onpointerover` & friends on your `<three-*>` elements like you're used to from normal, non-3D web application development.
+- Support for [**stacked scenes**](/advanced/stacked-scenes/), making the implementation of HUDs or cockpit views trivial.
+- [**Optimized rendering**](/advanced/optimized-rendering/) where no new frames will be rendered if there hasn't been a change in the scene.
 
 But let's start at the beginning, shall we?

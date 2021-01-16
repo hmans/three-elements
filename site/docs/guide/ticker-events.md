@@ -19,7 +19,48 @@ The most important ticker events are `tick` and `latetick`. You may be wondering
 
 Every `<three-*>` element allows you to provide callbacks to these events via the attributes `ontick` and `onlatetick`. They look exactly like you're used to from the other DOM event handlers you're probably familiar with. Let's have an example!
 
-_TODO: Example here_
+::: demo
+
+```html{3}
+<three-game autorender>
+  <three-scene background-color="#eee">
+    <three-mesh scale="5" ontick="this.object.rotateZ(0.02)">
+      <three-box-buffer-geometry></three-box-buffer-geometry>
+      <three-mesh-basic-material color="red"></three-mesh-basic-material>
+    </three-mesh>
+  </three-scene>
+</three-game>
+```
+
+:::
+
+## Using deltaTime
+
+In the example above, we rotate the mesh around its Z axis by an amount of 0.02 radians on every frame. This will work fine as long as the device that's running our application isn't skipping frames, but if it ever does, it will result in the animation being choppy.
+
+A simple way to make animation code like the one above framerate-independent is to multiply animation values by the time passed since the last frame was rendered, often called "delta time".
+
+The `<three-game>` element exposes a property called `deltaTime` that provides this value. Whenever you animate something, multiply things by this value, and your animations will perform independently from the actual framerate.
+
+::: demo
+
+```html{3}
+<three-game autorender>
+  <three-scene background-color="#eee">
+    <three-mesh scale="5" ontick="this.object.rotateZ(2 * this.game.deltaTime)">
+      <three-box-buffer-geometry></three-box-buffer-geometry>
+      <three-mesh-basic-material color="red"></three-mesh-basic-material>
+    </three-mesh>
+  </three-scene>
+</three-game>
+```
+
+:::
+
+::: tip
+You will have noticed by now that, when setting ticker event handlers as string-based attributes, `this` will be bound to the element you're setting the attribute on. Since every element exposes a `game` property that provides a reference to the `<three-game>` element this object lives in, we can use that to conveniently access the `deltaTime`.
+
+:::
 
 ## Setting Event Listeners via Properties
 

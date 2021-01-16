@@ -7,7 +7,7 @@ Stacked Scenes are really cool, but the documentation isn't quite ready yet! Han
 
 ```html
 <three-game>
-  <three-scene background-color="black">...[ShootySpaceBang]...</three-scene>
+  <three-scene background-color="black">...[ShootyPewPew]...</three-scene>
   <three-scene>...[Cockpit View]...</three-scene>
   <three-scene>...[UI]...</three-scene>
 </three-game>

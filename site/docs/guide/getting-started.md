@@ -17,9 +17,9 @@ Modern browsers are awesome, they all speak JavaScript Modules now! This makes i
 
 This will import three-elements straight from [jspm](https://jspm.org/)'s wonderful CDN and automatically resolve whatever dependencies it may have, including Three.js itself.
 
-## Standalone (the non-modern way)
+## Standalone (the old-fashioned way)
 
-If, for whatever reason, you want to go the old-fashioned UMD route, you can choose to import three-elements from unpkg. Here, you will have to make sure you're also importing Three.js itself, because unpkg will not resolve dependencies for you automatically:
+If, for whatever reason, you want to go the old-fashioned UMD route, you can choose to import three-elements from [unpkg](https://unpkg.com/) (or similar). Here, you will have to make sure you're also importing Three.js itself, because unpkg will not resolve dependencies for you automatically:
 
 ```html
 <script src="https://unpkg.com/three"></script>
@@ -47,5 +47,5 @@ npm install -D three-elements three
 ::: tip Heeeeyyyyy, you know...
 Have you ever stopped to wonder why the documentation of pretty much every single package on NPM explains how to actually add the package to a project? I mean, seriously, shouldn't you know this at this point, and shouldn't it be enough to just give the official name of the package?
 
-It's `three-elements`, by the way.
+It's `three-elements`, by the way. Yeah.
 :::

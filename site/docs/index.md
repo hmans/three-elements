@@ -12,12 +12,21 @@ Please bear with me while I fill in the blanks! In the meantime, here's a quick 
     <!-- Spinning dodecahedron -->
     <three-mesh
       scale="4"
-      ontick="this.object.rotation.x = this.object.rotation.y += 0.01"
+      cast-shadow
+      ontick="this.object.rotation.x = this.object.rotation.y += 0.01; this.object.scale.setScalar(4 + Math.cos(Date.now() / 700) * 0.6)"
     >
       <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
       <three-mesh-standard-material
         color="hotpink"
       ></three-mesh-standard-material>
+    </three-mesh>
+
+    <!-- A floor. We like shadows. Shadows good! -->
+    <three-mesh rotation="[-1.5707, 0, 0]" position.y="-7" receive-shadow>
+      <three-plane-buffer-geometry
+        args="[1000, 1000, 32]"
+      ></three-plane-buffer-geometry>
+      <three-mesh-standard-material color="#888"></three-mesh-standard-material>
     </three-mesh>
 
     <!-- Orbit controls, because they're cool! -->
@@ -27,7 +36,7 @@ Please bear with me while I fill in the blanks! In the meantime, here's a quick 
     <three-ambient-light intensity="0.2"></three-ambient-light>
     <three-directional-light
       intensity="0.8"
-      position="10, 40, 50"
+      position="40, 40, 20"
       cast-shadow
     ></three-directional-light>
   </three-scene>
