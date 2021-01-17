@@ -4,6 +4,13 @@ module.exports = {
   description:
     "Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences. 🎉",
 
+  markdown: {
+    externalLinks: {
+      target: "",
+      rel: ""
+    }
+  },
+
   head: [
     ["meta", { name: "theme-color", content: "#3eaf7c" }],
     ["meta", { name: "apple-mobile-web-app-capable", content: "yes" }],
