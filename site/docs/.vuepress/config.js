@@ -25,7 +25,10 @@ module.exports = {
     ]
   ],
 
-  plugins: { "demo-container": { component: "CustomDemoBlock" } },
+  plugins: {
+    "demo-container": { component: "CustomDemoBlock" },
+    plausible: { domain: "three-elements.hmans.co" }
+  },
 
   themeConfig: {
     repo: "https://github.com/hmans/three-elements",

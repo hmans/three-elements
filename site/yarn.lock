@@ -7573,6 +7573,11 @@ vuepress-plugin-demo-container@^0.2.0:
   resolved "https://registry.yarnpkg.com/vuepress-plugin-demo-container/-/vuepress-plugin-demo-container-0.2.0.tgz#5d92161b1c033b91f3cabddd994d5beed47ab6a6"
   integrity sha512-IXWZUc9+mErxjhBMRvhjHkGlXC3aXLS8wRV4kh4RZYAOVtb8nLv2fmpzwrSZrnIOXLGMcMTObdFruVzX9kBylw==
 
+vuepress-plugin-plausible@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/vuepress-plugin-plausible/-/vuepress-plugin-plausible-0.0.2.tgz#adadd16b33fa769d9bd748d46d235b4cff7d6c1b"
+  integrity sha512-EbfcZZpsGb46K2C9zrhQZaj1fRCT4uZFDu9XRxecuFrqGX84dBTquTwRF/4SMUes3m7iAKVaK/qmZaSG08P1uA==
+
 vuepress-plugin-smooth-scroll@^0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/vuepress-plugin-smooth-scroll/-/vuepress-plugin-smooth-scroll-0.0.3.tgz#6eff2d4c186cca917cc9f7df2b0af7de7c8c6438"

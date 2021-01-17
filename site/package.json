@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "vuepress": "^1.8.0",
-    "vuepress-plugin-demo-container": "^0.2.0"
+    "vuepress-plugin-demo-container": "^0.2.0",
+    "vuepress-plugin-plausible": "^0.0.2"
   }
 }
