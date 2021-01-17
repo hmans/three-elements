@@ -31,6 +31,10 @@ module.exports = {
 
     nav: [
       {
+        text: "Guide",
+        link: "/guide/"
+      },
+      {
         text: "Discord",
         link: "https://discord.gg/ybuUjFM"
       }
