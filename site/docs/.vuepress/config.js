@@ -22,12 +22,13 @@ module.exports = {
 
   themeConfig: {
     repo: "https://github.com/hmans/three-elements",
-    editLinks: false,
-    docsDir: "",
+    editLinks: true,
+    docsDir: "site/docs",
+    docsBranch: "main",
     editLinkText: "Edit this page on GitHub",
     lastUpdated: false,
     displayAllHeaders: false,
-    smoothScroll: true,
+    smoothScroll: false,
 
     nav: [
       {

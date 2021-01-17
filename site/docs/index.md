@@ -5,6 +5,7 @@ heroImage: /three-elements-logo.jpg
 tagline: Web Components for Three.js! 🎉
 actionText: Read the Guide →
 actionLink: /guide/
+footer: MIT Licensed | Copyright © 2021-present Hendrik Mans
 ---
 
 ::: demo
