@@ -22,7 +22,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
   set camera(camera) {
     this._camera = camera
-      this.handleWindowResize()
+    this.handleWindowResize()
 
     if (this.pointer) {
       this.pointer.camera = camera
@@ -78,12 +78,12 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
       case "camera":
         setTimeout(() => {
-          const el = document.querySelector(newValue) as ThreeElement<Camera>
+          const el = document.getElementById(newValue) as ThreeElement<Camera>
 
           if (!el) {
-            throw `A scene referenced a camera element with the selector "${newValue}", but it could not be found.`
+            throw `A scene referenced a camera element with the DOM ID "${newValue}", but it could not be found.`
           } else if (!(el.object instanceof Camera)) {
-            throw `A scene referenced a camera element with the selector "${newValue}", but that element did not provide a camera object.`
+            throw `A scene referenced a camera element with the DOM ID "${newValue}", but that element did not provide a camera object.`
           } else {
             this.camera = el.object!
             this.camera.lookAt(0, 0, 0)
