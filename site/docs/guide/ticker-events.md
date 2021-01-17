@@ -1,5 +1,7 @@
 # Ticker Events
 
+## What's a Ticker?!
+
 No matter if you're just building a simple scene or a full game, at the core there will always be a loop that performs the following jobs over and over again:
 
 1. Update application state (rotate meshes, update animations, fire guns, explode enemies, etc.)
@@ -36,11 +38,14 @@ Every `<three-*>` element allows you to provide callbacks to these events via th
 
 ## Using deltaTime
 
-In the example above, we rotate the mesh around its Z axis by an amount of 0.02 radians on every frame. This will work fine as long as the device that's running our application isn't skipping frames, but if it ever does, it will result in the animation being choppy.
+In the example above, we rotate the mesh around its Z axis by an amount of 0.02 radians on every frame. This approach has two problems:
 
-A simple way to make animation code like the one above framerate-independent is to multiply animation values by the time passed since the last frame was rendered, often called "delta time".
+- The speed at which your animation plays entirely depends on the refresh rate of the device that runs it. On a 144 Hz monitor, your animation will play more than twice as fast as on a 60 Hz monitor.
+- If that device ever misses frames, your animation will stutter, and/or slow down. If your game runs at a lousy 30 FPS because you overdid it with the postprocessing, your players will already be irate enough. Imagine how they'd feel if it also ran at half the speed!
 
-The `<three-game>` element exposes a property called `deltaTime` that provides this value. Whenever you animate something, multiply things by this value, and your animations will perform independently from the actual framerate.
+A simple way to make animation and other state-updating code framerate-independent is to multiply values by the time passed since the last frame was rendered, often called "delta time". Instead of thinking "how much do I want to rotate this per frame", think "how much do I want to rotate it _per second_", and multiply that value by the delta time.
+
+The `<three-game>` element exposes a property called `deltaTime` that provides this value:
 
 ::: demo
 

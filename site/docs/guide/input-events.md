@@ -1,5 +1,7 @@
 # Input Events
 
+## Handling Pointer Events
+
 If your application requires any kind of user interaction, three-elements aims at making this super-easy by exposing common input events (pointer movement/clicks, double-clicks et al) as normal DOM events emitted by the elements themselves.
 
 Let's have an example with a mesh that reacts on the pointer entering, leaving, or clicking on it:

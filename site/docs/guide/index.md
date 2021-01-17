@@ -1,6 +1,12 @@
 # Introduction
 
-## What you need to know about Three.js
+## What is three-elements?
+
+three-elements is a small library that provides a **Web Components layer** for declaratively building **Three.js applications**.
+
+If you're familiar with both Web Components and Three.js, that may be all you need to know, so feel free to jump straight to the [Getting Started](./getting-started.html) section. If not, keep reading!
+
+## What does Three.js look like?
 
 [Three.js](https://threejs.org/), which is three-elements' only dependency, is a JavaScript library providing a slightly higher-level API over WebGL. It is one of the most popular libraries used by web-based 3D applications, experiences, and games.
 
@@ -40,7 +46,15 @@ const animate = function() {
 animate()
 ```
 
-## But what about three-elements?
+::: tip "Imperative", "declarative"?!
+This documentation will mention these terms a lot, so if you're confused, here's a quick explainer. In the context of programming, "imperative" refers to code that executes a series of commands ("do this!"), while "declarative" describes code that describes an intended result ("this is what I want!").
+
+Both approaches have advantages and disadvantages. The main advantage of three-elements doing things declaratively is that you can easily pair it with any of the _countless_ declarative web application frameworks out there, like React, Vue, or Svelte.
+
+three-elements' primary job is to translate your declarative code into the imperative commands that Three.js understands. Yay!
+:::
+
+## What does three-elements add?
 
 three-elements wraps Three.js and provides a set of custom HTML elements (Web Components) that allow you to declaratively construct Three.js applications. If this sentence sounds confusing, here's a simpler way to put it:
 
@@ -70,11 +84,13 @@ Attributes are linked to the wrapped object's properties of the same name. They'
 <three-mesh-standard-material color="green"></three-mesh-standard-material>
 ```
 
-On top of all this, three-elements adds a thin bit of scaffolding to reduce boilerplate in your own code. Most importantly:
+You can use three-elements to build 3D applications using **static HTML** (like we've been doing in the examples), or **pair it with any web application framework** that interacts with the DOM.
+
+On top of all this, three-elements provides a thin bit of scaffolding to reduce boilerplate in your own code. Most importantly:
 
 - A built-in [**ticker**](./ticker-events) that lets you hook into various stages of each frame.
 - **Full [**pointer events**](./input-events) support;** just set `onclick`, `onpointerover` & friends on your `<three-*>` elements like you're used to from normal, non-3D web application development.
 - Support for [**stacked scenes**](/advanced/stacked-scenes/), making the implementation of HUDs or cockpit views trivial.
 - [**Optimized rendering**](/advanced/optimized-rendering/) where no new frames will be rendered if there hasn't been a change in the scene.
 
-But let's start at the beginning, shall we?
+But let's start at [the beginning](./getting-started.html), shall we?

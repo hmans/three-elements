@@ -3,11 +3,11 @@
 ## Prerequisites
 
 - At least a basic understanding of the [Three.js API](https://threejs.org/docs/). Remember that three-elements is just a wafer-thin layer on top of it. Keep the [reference documentation](https://threejs.org/docs/) handy!
-- The terrible burden of an imagination that knows no limits!
+- Your favorite browser and code editor, as well as the terrible burden of an imagination that knows no limits! (But mostly the browser and the editor.)
 
 ## Standalone (the modern way)
 
-Modern browsers are awesome, they all speak JavaScript Modules now! This makes it almost too easy to consume NPM packages that use them straight from the confines of your browser:
+Modern browsers are awesome, they all speak JavaScript Modules now! This makes it almost too easy to consume modern NPM packages straight from the confines of your browser:
 
 ```html
 <script type="module">
@@ -15,7 +15,7 @@ Modern browsers are awesome, they all speak JavaScript Modules now! This makes i
 </script>
 ```
 
-This will import three-elements straight from [jspm](https://jspm.org/)'s wonderful CDN and automatically resolve whatever dependencies it may have, including Three.js itself.
+This will import three-elements straight from [jspm](https://jspm.org/)'s wonderful CDN and automatically resolve whatever dependencies it may have, including Three.js itself. (You can also use any other NPM hosting service that automatically resolves and imports dependencies.)
 
 ## Standalone (the old-fashioned way)
 
