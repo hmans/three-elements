@@ -28,7 +28,7 @@ module.exports = {
     editLinkText: "Edit this page on GitHub",
     lastUpdated: false,
     displayAllHeaders: false,
-    smoothScroll: false,
+    smoothScroll: true,
 
     nav: [
       {
@@ -51,6 +51,7 @@ module.exports = {
           "/guide/",
           "/guide/getting-started",
           "/guide/the-basics",
+          "/guide/custom-cameras",
           "/guide/ticker-events",
           "/guide/input-events",
           "/guide/lifecycle-events",

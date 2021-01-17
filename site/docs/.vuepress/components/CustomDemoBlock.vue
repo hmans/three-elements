@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="demo">
     <div class="demo-demo">
       <slot name="demo"></slot>
     </div>
@@ -10,6 +10,10 @@
 </template>
 
 <style>
+.demo {
+  margin: 1.5em 0;
+}
+
 .demo-demo > div {
   box-sizing: border-box;
   width: 100%;
