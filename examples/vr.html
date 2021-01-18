@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <title>VR</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="https://jspm.dev/es-module-shims"></script>
+  </head>
+  <body>
+    <three-game autorender id="game">
+      <three-scene background-color="#ffe" id="mainScene">
+        <!-- Lights -->
+        <three-ambient-light intensity="0.2"></three-ambient-light>
+        <three-directional-light
+          intensity="0.8"
+          position="10, 40, 50"
+          cast-shadow
+        ></three-directional-light>
+
+        <three-orbit-controls></three-orbit-controls>
+
+        <!-- Scene Contents -->
+        <three-mesh rotation="[-1.5707, 0, 0]" position.y="-8" receive-shadow>
+          <three-plane-buffer-geometry args="[1000, 1000]"></three-plane-buffer-geometry>
+          <three-mesh-standard-material color="#ccc"></three-mesh-standard-material>
+        </three-mesh>
+
+        <three-mesh scale="2.5" receive-shadow cast-shadow>
+          <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+          <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
+        </three-mesh>
+      </three-scene>
+    </three-game>
+
+    <!-- Import dependencies via ESM. The future is now! -->
+    <script type="module">
+      import { VRButton } from "https://cdn.skypack.dev/three/examples/jsm/webxr/VRButton.js"
+      import { XRControllerModelFactory } from "https://cdn.skypack.dev/three/examples/jsm/webxr/XRControllerModelFactory.js"
+      import { XRHandModelFactory } from "https://cdn.skypack.dev/three/examples/jsm/webxr/XRHandModelFactory.js"
+
+      importShim("/dist/index.esm.js").then(() => {
+        /* Fetch renderer and scene */
+        const renderer = game.renderer
+        const scene = mainScene.object
+
+        /* Tell the renderer that we want XR */
+        renderer.xr.enabled = true
+
+        /* Add the VR button */
+        document.body.appendChild(VRButton.createButton(game.renderer))
+
+        /* Add controllers */
+        const controller1 = renderer.xr.getController(0)
+        scene.add(controller1)
+        const controller2 = renderer.xr.getController(1)
+        scene.add(controller2)
+
+        /* Create controller and hand models */
+        const controllerModelFactory = new XRControllerModelFactory()
+        const handModelFactory = new XRHandModelFactory()
+
+        /* Add Joysticks */
+        const controllerGrip1 = renderer.xr.getControllerGrip(0)
+        controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1))
+        scene.add(controllerGrip1)
+
+        const controllerGrip2 = renderer.xr.getControllerGrip(1)
+        controllerGrip2.add(controllerModelFactory.createControllerModel(controllerGrip2))
+        scene.add(controllerGrip2)
+
+        /* Add hands */
+        const hand1 = renderer.xr.getHand(0)
+        hand1.add(handModelFactory.createHandModel(hand1))
+        scene.add(hand1)
+
+        const hand2 = renderer.xr.getHand(1)
+        hand2.add(handModelFactory.createHandModel(hand2))
+        scene.add(hand2)
+      })
+    </script>
+    <script type="importmap-shim">
+      {
+        "imports": {
+          "eventemitter3": "https://cdn.skypack.dev/eventemitter3",
+          "three": "https://cdn.skypack.dev/three",
+          "three/": "https://cdn.skypack.dev/three/"
+        }
+      }
+    </script>
+  </body>
+</html>
