@@ -75,7 +75,11 @@ module.exports = {
         title: "Advanced Guides",
         path: "/advanced/stacked-scenes",
         collapsable: false,
-        children: ["/advanced/stacked-scenes", "/advanced/optimized-rendering"]
+        children: [
+          "/advanced/stacked-scenes",
+          "/advanced/optimized-rendering",
+          "/advanced/frameworks"
+        ]
       }
     ]
   }
