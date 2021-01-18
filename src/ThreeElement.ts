@@ -423,7 +423,15 @@ export class ThreeElement<T = any> extends HTMLElement {
     const newCallback = this.callbacks[eventName]
     if (newCallback) {
       this.ticking = true
-      this.addEventListener(eventName, newCallback)
+
+      /*
+      We're using setTimeout as a stopgap measure here to accomodate for the fact
+      that the three-game tag may not be available and upgraded at the time this
+      property is set. We'll find a nicer solution for this eventually.
+      */
+      setTimeout(() => {
+        this.addEventListener(eventName, newCallback)
+      })
     }
   }
 
