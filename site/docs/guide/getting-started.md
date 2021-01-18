@@ -11,11 +11,11 @@ Modern browsers are awesome, they all speak JavaScript Modules now! This makes i
 
 ```html
 <script type="module">
-  import "https://jspm.dev/three-elements"
+  import "https://cdn.skypack.dev/three-elements"
 </script>
 ```
 
-This will import three-elements straight from [jspm](https://jspm.org/)'s wonderful CDN and automatically resolve whatever dependencies it may have, including Three.js itself. (You can also use any other NPM hosting service that automatically resolves and imports dependencies.)
+This will import three-elements straight from [Skypack](https://www.skypack.dev/)'s wonderful CDN and automatically resolve whatever dependencies it may have, including Three.js itself. (You can also use any other NPM hosting service that automatically resolves and imports dependencies.)
 
 ## Standalone (the old-fashioned way)
 
