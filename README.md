@@ -46,12 +46,13 @@
 
 ## DOCUMENTATION
 
-- [Documentation](https://three-elements.hmans.co) & [Guide](https://three-elements.hmans.co/guide/)
+- [**Documentation**](https://three-elements.hmans.co) & [**Guide**](https://three-elements.hmans.co/guide/)
 - [Announcement blog post](https://hmans.co/posts/2021-01-18-three-elements/)
 
 ## COMMUNITY
 
 - [Discord] for chat & help
+- [Twitter](https://twitter.com/hmans) for news
 
 ## CONTRIBUTING
 
