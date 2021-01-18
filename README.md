@@ -15,7 +15,7 @@
     |_____||__||_____|__|__|__|_____|__|__||____|_____|   🌳🌲 🏡 🌲   🌲🌳  🐄   🌲 🌲🌳     🌳
 ```
 
-### **three-elements is a set of Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences.** 🎉
+### **three-elements provides Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences.** 🎉
 
 > **WARNING:** It is early days for this library, so pleace proceed with caution!
 
@@ -29,7 +29,7 @@
 
 ```html
 <!-- Create a Three.js game with a default camera. -->
-<three-game id="game">
+<three-game id="game" autorender>
   <three-scene background-color="#444">
     <!-- Lights on! -->
     <three-ambient-light intensity="0.2"></three-ambient-light>
@@ -46,12 +46,12 @@
 
 ## DOCUMENTATION
 
-- The [three-elements documentation site](https://three-elements.hmans.co) has a step-by-step [guide](https://three-elements.hmans.co/guide/) and a growing collection of advanced recipes.
+- [Documentation](https://three-elements.hmans.co) & [Guide](https://three-elements.hmans.co/guide/)
 - [Announcement blog post](https://hmans.co/posts/2021-01-18-three-elements/)
 
 ## COMMUNITY
 
-- [Discord] for chat & help.
+- [Discord] for chat & help
 
 ## CONTRIBUTING
 
