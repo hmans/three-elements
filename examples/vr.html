@@ -15,8 +15,6 @@
           cast-shadow
         ></three-directional-light>
 
-        <three-orbit-controls></three-orbit-controls>
-
         <!-- Scene Contents -->
         <three-mesh rotation="[-1.5707, 0, 0]" position.y="-8" receive-shadow>
           <three-plane-buffer-geometry args="[1000, 1000]"></three-plane-buffer-geometry>
@@ -40,6 +38,9 @@
         /* Fetch renderer and scene */
         const renderer = game.renderer
         const scene = mainScene.object
+
+        /* Move camera way back */
+        mainScene.camera.position.set(0, 0, 50)
 
         /* Tell the renderer that we want XR */
         renderer.xr.enabled = true
