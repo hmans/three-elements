@@ -22,18 +22,19 @@
 
         <!-- Define a small helper function. -->
         <script type="module">
-          const rotate = (amount, object) => (e) => {
-            object.rotation.z += amount * e.detail.deltaTime
+          const rotate = (amount, element) => {
+            const { object, game } = element
+            object.rotation.z += amount * game.deltaTime
           }
 
           window.rotate = rotate
         </script>
 
         <!-- A bunch of rotating cubes. They're really dodecahedrons, sorry! -->
-        <rotating-cube position="+2, +2, 0" ontick="rotate(1, this.object)"></rotating-cube>
-        <rotating-cube position="+2, -2, 0" ontick="rotate(2, this.object)"></rotating-cube>
-        <rotating-cube position="-2, -2, 0" ontick="rotate(-2, this.object)"></rotating-cube>
-        <rotating-cube position="-2, +2, 0" ontick="rotate(-1, this.object)"></rotating-cube>
+        <rotating-cube position="+2, +2, 0" ontick="rotate(1, this)"></rotating-cube>
+        <rotating-cube position="+2, -2, 0" ontick="rotate(2, this)"></rotating-cube>
+        <rotating-cube position="-2, -2, 0" ontick="rotate(-2, this)"></rotating-cube>
+        <rotating-cube position="-2, +2, 0" ontick="rotate(-1, this)"></rotating-cube>
 
         <three-orbit-controls></three-orbit-controls>
       </three-scene>
