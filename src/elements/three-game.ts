@@ -13,9 +13,6 @@ export class ThreeGame extends HTMLElement {
     depth: true
   })
 
-  /** Is the ticker running? */
-  private ticking = false
-
   /** The time delta since the last frame, in fractions of a second. */
   deltaTime = 0
 
@@ -125,17 +122,13 @@ export class ThreeGame extends HTMLElement {
         /* Finally, emit render event. This will trigger scenes to render. */
         dispatch("rendertick", dt)
       }
-
-      /* Loop as long as this ticker is active. */
-      if (this.ticking) requestAnimationFrame(tick)
     }
 
-    this.ticking = true
-    requestAnimationFrame(tick)
+    this.renderer.setAnimationLoop(tick)
   }
 
   stopTicking() {
-    this.ticking = false
+    this.renderer.setAnimationLoop(null)
   }
 }
 
