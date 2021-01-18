@@ -20,14 +20,23 @@ module.exports = {
     ],
     [
       "script",
+      {
+        async: true,
+        defer: "true",
+        src: "https://plau.hmans.co/js/index.js",
+        "data-domain": "three-elements.hmans.co"
+      }
+    ],
+
+    [
+      "script",
       { type: "module" },
       `import "https://cdn.skypack.dev/three-elements@next"`
     ]
   ],
 
   plugins: {
-    "demo-container": { component: "CustomDemoBlock" },
-    plausible: { domain: "three-elements.hmans.co" }
+    "demo-container": { component: "CustomDemoBlock" }
   },
 
   themeConfig: {
