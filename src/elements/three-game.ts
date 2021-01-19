@@ -40,6 +40,9 @@ export class ThreeGame extends HTMLElement {
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
+    /* Configure WebXR */
+    this.renderer.xr.enabled = Boolean(this.hasAttribute('xr'))
+
     /* We'll plug our canvas into the shadow root. */
     const shadow = this.attachShadow({ mode: "open" })
     shadow.appendChild(this.renderer.domElement)
