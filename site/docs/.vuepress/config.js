@@ -87,7 +87,8 @@ module.exports = {
         children: [
           "/advanced/stacked-scenes",
           "/advanced/optimized-rendering",
-          "/advanced/frameworks"
+          "/advanced/frameworks",
+          "/advanced/webxr"
         ]
       }
     ]

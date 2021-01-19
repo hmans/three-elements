@@ -1,6 +1,6 @@
 <html>
   <body>
-    <three-game id="game" autorender>
+    <three-game id="game" autorender xr>
       <three-scene id="scene" background-color="#555">
         <three-ambient-light intensity="0.2"></three-ambient-light>
         <three-directional-light
@@ -31,6 +31,12 @@
         describe("three-game autorender attribute", () => {
           it("sets the ThreeGame.autorender property to true", () => {
             expect(game.autorender).to.equal(true)
+          })
+        })
+
+        describe("three-game renderer xr attribute", () => {
+          it("enables WebXR features on ThreeGame.renderer", () => {
+            expect(game.renderer.xr.enabled).to.equal(true)
           })
         })
 
