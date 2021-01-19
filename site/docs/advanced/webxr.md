@@ -4,7 +4,7 @@
 
 three-elements makes it easy to get started with WebXR.
 
-You can enable WebXR features by adding the `xr` attribute to `<three-game>` (Just make sure that you also enable `autorender`).
+You can enable WebXR features by adding the `xr` attribute to `<three-game>`. You will also want to enable `autorender` to make sure that new frames are rendered on every engine tick.
 
 ```html
 <three-game id="game" autorender xr>
@@ -13,36 +13,40 @@ You can enable WebXR features by adding the `xr` attribute to `<three-game>` (Ju
 
     <three-mesh scale="4" rotation.x="-1.5707">
       <three-plane-buffer-geometry></three-plane-buffer-geometry>
-      <three-mesh-standard-material color="#eeeeee"></three-mesh-standard-material>
+      <three-mesh-standard-material
+        color="#eeeeee"
+      ></three-mesh-standard-material>
     </three-mesh>
   </three-scene>
 </three-game>
 ```
 
-Now that your app renders in XR, you have to create a way for users to step into a WebXR session. Luckily, three.js has a [built-in VR button](https://github.com/mrdoob/three.js/blob/master/examples/jsm/webxr/VRButton.js).
+Now that your app renders in XR, you have to create a way for users to step into a WebXR session. Luckily, Three.js provides an [VR button](https://github.com/mrdoob/three.js/blob/master/examples/jsm/webxr/VRButton.js) that can be added to your scene.
 
-To add this to your app, simply import the button from three and target your app's renderer. (Elements are globally accessible via their id.)
+Simply import the button from Three.js and target your app's renderer. (HTML elements with DOM IDs automatically become available as properties on the `window` object, which allows us to directly refer to `game` in this example.)
 
 ```js
-import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
+import { VRButton } from "three/examples/jsm/webxr/VRButton.js"
 
-const button = VRButton.createButton(game.renderer);
-document.body.appendChild(button);
+const button = VRButton.createButton(game.renderer)
+document.body.appendChild(button)
 ```
 
-You can also create your own XR button with [navigator.xr.requestSession()](https://developer.mozilla.org/en-US/docs/Web/API/XRSystem/requestSession).
+Alternatively, you can create your own XR button through [navigator.xr.requestSession()](https://developer.mozilla.org/en-US/docs/Web/API/XRSystem/requestSession).
 
 ```js
-const optionalFeatures = ['local-floor', 'bounded-floor', 'hand-tracking'];
+const optionalFeatures = ["local-floor", "bounded-floor", "hand-tracking"]
 
-const button = document.createElement('button');
-button.onclick = navigator.xr.requestSession('immersive-vr', { optionalFeatures });
-document.body.appendChild(button);
+const button = document.createElement("button")
+button.onclick = navigator.xr.requestSession("immersive-vr", {
+  optionalFeatures
+})
+document.body.appendChild(button)
 ```
 
 ### Configuring AR
 
-You can configure AR by using three.js's [ARButton](https://github.com/mrdoob/three.js/blob/master/examples/jsm/webxr/ARButton.js) and/or changing [XRSessionMode](https://developer.mozilla.org/en-US/docs/Web/API/XRSessionMode) to `immersive-ar` on custom buttons.
+You can configure AR by using Three.js's [ARButton](https://github.com/mrdoob/three.js/blob/master/examples/jsm/webxr/ARButton.js) and/or changing [XRSessionMode](https://developer.mozilla.org/en-US/docs/Web/API/XRSessionMode) to `immersive-ar` on custom buttons.
 
 ## Events
 
