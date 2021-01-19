@@ -5,7 +5,7 @@
     <script type="module" src="https://jspm.dev/es-module-shims"></script>
   </head>
   <body>
-    <three-game autorender id="game">
+    <three-game autorender xr id="game">
       <three-scene background-color="#ffe" id="mainScene">
         <!-- Lights -->
         <three-ambient-light intensity="0.2"></three-ambient-light>
@@ -41,9 +41,6 @@
 
         /* Move camera way back */
         mainScene.camera.position.set(0, 0, 50)
-
-        /* Tell the renderer that we want XR */
-        renderer.xr.enabled = true
 
         /* Add the VR button */
         document.body.appendChild(VRButton.createButton(game.renderer))
