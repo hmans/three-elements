@@ -254,6 +254,8 @@ export class ThreeElement<T = any> extends HTMLElement {
    * node where the function returns true.
    */
   find<T extends HTMLElement>(fn: (node: HTMLElement) => any) {
+    /* TODO: We might be able to replace this entire function with something like this.closest(). */
+
     /* Start here */
     let node: HTMLElement | undefined
     node = this
