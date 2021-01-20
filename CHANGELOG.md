@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **New:** `<three-game>` now can receive an `xr` attribute to enable WebXR features.
 
+- **Changed:** When attributes on an element map to a non-existing property on the wrapped object, there will no longer be a warning logged to the console. (This is very useful when you're combining three-elements with other frameworks that make use of their own attribute names on your elements.)
+
 ## [0.2.0] - 2021-01-18
 
 - **New:** Elements now emit `connected`, `ready` and `disconnected` lifecycle events that bubble up the DOM tree.

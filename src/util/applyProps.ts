@@ -66,7 +66,6 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
 
       default:
         if (key in object) object[key] = parsed || value
-        else console.warn("Trying to assign unknown property:", key)
     }
   }
 }
