@@ -49,6 +49,11 @@ module.exports = {
     displayAllHeaders: false,
     smoothScroll: true,
 
+    algolia: {
+      apiKey: "8bacebd83dc02de71183ea1364848bbc",
+      indexName: "three-elements"
+    },
+
     nav: [
       {
         text: "Guide",
