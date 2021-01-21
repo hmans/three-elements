@@ -65,7 +65,7 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
         break
 
       default:
-        if (key in object) object[key] = parsed || value
+        if (key in object) object[key] = parsed !== undefined ? parsed : value
     }
   }
 }
