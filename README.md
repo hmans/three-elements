@@ -47,6 +47,7 @@
 ## DOCUMENTATION
 
 - [**Documentation**](https://three-elements.hmans.co) & [**Guide**](https://three-elements.hmans.co/guide/)
+- [Changelog](./CHANGELOG.md)
 - [Announcement blog post](https://hmans.co/posts/2021-01-18-three-elements/)
 
 ## COMMUNITY
