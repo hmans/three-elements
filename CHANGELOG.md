@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Fixed:** When assigning attributes a value of "0", this will now correctly assign the parsed numerical value of 0 to the corresponding property, not a string representation of it. Programming, how does it work?
 
+- **Fixed:** Orthographic cameras now have their frustums and projection matrices updated when the viewport is resized.
+
 ## [0.2.0] - 2021-01-18
 
 - **New:** Elements now emit `connected`, `ready` and `disconnected` lifecycle events that bubble up the DOM tree.

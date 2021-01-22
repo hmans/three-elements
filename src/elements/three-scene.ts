@@ -1,4 +1,4 @@
-import { Camera, Color, PerspectiveCamera, Scene } from "three"
+import { Camera, Color, OrthographicCamera, PerspectiveCamera, Scene } from "three"
 import { PointerEvents } from "../PointerEvents"
 import { ThreeElement } from "../ThreeElement"
 import { registerElement } from "../util/registerElement"
@@ -100,10 +100,20 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     const el = this.game
     const width = el.clientWidth
     const height = el.clientHeight
+    const aspect = width / height
 
     /* Update camera */
     if (this._camera instanceof PerspectiveCamera) {
-      this._camera.aspect = width / height
+      this._camera.aspect = aspect
+      this._camera.updateProjectionMatrix()
+    } else if (this._camera instanceof OrthographicCamera) {
+      /* We're going to assume that the vertical frustum represents our frustum size. */
+      const frustumSize = this._camera.top - this._camera.bottom
+
+      /* Adjust horizontal frustum */
+      this._camera.left = (frustumSize * aspect) / -2
+      this._camera.right = (frustumSize * aspect) / 2
+
       this._camera.updateProjectionMatrix()
     }
 
