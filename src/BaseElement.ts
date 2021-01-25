@@ -75,32 +75,6 @@ export class BaseElement extends HTMLElement {
     this.setCallback("onrendertick", fn)
   }
 
-  /** Is this element connected to the game's ticker? */
-  get ticking() {
-    return this._ticking
-  }
-  set ticking(v: boolean | string) {
-    this._ticking = !!v || v === ""
-
-    if (this._ticking) {
-      this.debug("ticking is set; subscribing to game's ticker events")
-
-      this.game.addEventListener("tick", this._forwarder)
-      this.game.addEventListener("latetick", this._forwarder)
-      this.game.addEventListener("frametick", this._forwarder)
-      this.game.addEventListener("rendertick", this._forwarder)
-    } else {
-      this.debug("Unregistering ticker listeners")
-
-      this.game.removeEventListener("tick", this._forwarder)
-      this.game.removeEventListener("latetick", this._forwarder)
-      this.game.removeEventListener("frametick", this._forwarder)
-      this.game.removeEventListener("rendertick", this._forwarder)
-    }
-  }
-  protected _forwarder = eventForwarder(this)
-  protected _ticking = false
-
   protected setCallback(propName: string, fn?: TickerFunction | string) {
     const eventName = propName.replace(/^on/, "") as any
 
@@ -128,8 +102,6 @@ export class BaseElement extends HTMLElement {
     /* Register new callback */
     const newCallback = this.callbacks[eventName]
     if (newCallback) {
-      this.ticking = true
-
       /*
       We're using queueMicrotask here because at the point when a ticker event
       property is assigned, it's possible that the elements required to make this
@@ -229,7 +201,6 @@ export class BaseElement extends HTMLElement {
 
     switch (key) {
       /* A bunch of known properties that we will assign directly */
-      case "ticking":
       case "ontick":
       case "onlatetick":
       case "onframetick":
