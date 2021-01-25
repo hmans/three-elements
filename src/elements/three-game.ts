@@ -1,11 +1,12 @@
+import EventEmitter from "eventemitter3"
 import * as THREE from "three"
 import { registerElement } from "../util/registerElement"
 
-export class TickerEvent extends CustomEvent<{ deltaTime: number }> {}
-
-export type TickerFunction = (event: TickerEvent) => any
+export type TickerFunction = (dt: number) => any
 
 export class ThreeGame extends HTMLElement {
+  emitter = new EventEmitter()
+
   renderer = new THREE.WebGLRenderer({
     powerPreference: "high-performance",
     antialias: true,
@@ -41,7 +42,7 @@ export class ThreeGame extends HTMLElement {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
     /* Configure WebXR */
-    this.renderer.xr.enabled = Boolean(this.hasAttribute('xr'))
+    this.renderer.xr.enabled = Boolean(this.hasAttribute("xr"))
 
     /* We'll plug our canvas into the shadow root. */
     const shadow = this.attachShadow({ mode: "open" })
@@ -94,11 +95,6 @@ export class ThreeGame extends HTMLElement {
   startTicking() {
     let lastNow = performance.now()
 
-    const dispatch = (name: string, deltaTime: number) =>
-      this.dispatchEvent(
-        new TickerEvent(name, { bubbles: false, cancelable: false, detail: { deltaTime } })
-      )
-
     const tick = () => {
       /*
       Figure out deltatime. This is a very naive way of doing this, we'll eventually
@@ -112,18 +108,18 @@ export class ThreeGame extends HTMLElement {
       this.deltaTime = dt
 
       /* Execute tick and latetick events. */
-      dispatch("tick", dt)
-      dispatch("latetick", dt)
+      this.emitter.emit("tick", dt)
+      this.emitter.emit("latetick", dt)
 
       /* Has a frame been requested? */
       if (this.frameRequested || this.autorender) {
         this.frameRequested = false
 
         /* If we know that we're rendering a frame, execute frame callbacks. */
-        dispatch("frametick", dt)
+        this.emitter.emit("frametick", dt)
 
         /* Finally, emit render event. This will trigger scenes to render. */
-        dispatch("rendertick", dt)
+        this.emitter.emit("rendertick", dt)
       }
     }
 
