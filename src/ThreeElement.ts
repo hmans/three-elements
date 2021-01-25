@@ -90,13 +90,15 @@ export class ThreeElement<T = any> extends HTMLElement {
    * Returns the instance of ThreeGame that this element is nested under.
    */
   get game(): ThreeGame {
-    if (!this._game) {
-      this._game = this.find((node) => node instanceof ThreeGame) as ThreeGame
-      if (!this._game) throw "No <three-game> tag found!"
-    }
-    return this._game
+    return (this._game ||= this.findGame())
   }
   private _game?: ThreeGame
+
+  protected findGame() {
+    const game = this.find((node) => node instanceof ThreeGame) as ThreeGame
+    if (!game) throw "No <three-game> tag found!"
+    return game
+  }
 
   get ticking() {
     return this._ticking
