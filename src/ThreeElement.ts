@@ -189,15 +189,10 @@ export class ThreeElement<T = any> extends HTMLElement {
     are defined, which isn't always what we want (because a Material node that intends to attach itself to
     a Mesh might be defined before the element that represents that Mesh. Woops!)
 
-    For this reason, we'll use a simple trick -- we will wait with the actual mounting until another tick
-    has passed, by way of setTimeout.
-
-    Yeah, I know. Crazy. But it solves the problem elegantly. Except that classes overloading
-    connectedCallback() will need to remember doing this. But maybe we will find a better way in the future.
-
-    Also see: https://javascript.info/custom-elements#rendering-order
+    For this reason, we'll run some extra initialization inside a microtask:
+    https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide
     */
-    setTimeout(() => {
+    queueMicrotask(() => {
       /* Handle attach attribute */
       this.handleAttach()
 
@@ -221,8 +216,18 @@ export class ThreeElement<T = any> extends HTMLElement {
     })
   }
 
+  /**
+   * This callback is invoked when the element is deemed properly initialized. Most
+   * importantly, this happens in a microtask that is very likely executed after all
+   * the other elements in the document have finished running their connectedCallbacks.
+   */
   readyCallback() {}
 
+  /**
+   * While disconnectedCallback is invoked whenever the element is removed from the DOM
+   * _or_ just moved to a new parent, removedCallback will only be invoked when the
+   * element is actually being removed from the DOM entirely.
+   */
   removedCallback() {}
 
   disconnectedCallback() {
