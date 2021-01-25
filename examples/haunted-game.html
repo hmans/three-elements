@@ -17,7 +17,6 @@
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
       import { css, html, LitElement } from "https://jspm.dev/lit-element"
-      import { makeStore } from "https://jspm.dev/statery"
       import { component, useState } from "https://jspm.dev/haunted"
 
       importShim("/dist/index.esm.js").then(() => {
@@ -37,12 +36,6 @@
 
         const pickRandomTile = () => tiles[Math.floor(Math.random() * tiles.length)]
 
-        const store = makeStore({
-          board: makeBoard()
-        })
-
-        const removeTile = (x, y) => (store.state.board[y][x] = null)
-
         customElements.define(
           "scene-lights",
           component(() => {
@@ -60,18 +53,18 @@
         customElements.define(
           "game-board",
           component(() => {
-            const rows = store.state.board
-            const [version, setVersion] = useState(0)
+            const [board, setBoard] = useState(() => makeBoard())
+
+            const removeTile = (x, y) => (board[y][x] = null)
 
             const handleTileClick = (x, y) => () => {
               removeTile(x, y)
-              console.log("omg", version)
-              setVersion(version + 1)
+              setBoard(board)
             }
 
             return html`
               <three-group position="-4, -4, 0">
-                ${rows.map((row, y) =>
+                ${board.map((row, y) =>
                   row.map((color, x) =>
                     color
                       ? html`<game-tile
