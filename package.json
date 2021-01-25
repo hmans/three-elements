@@ -39,7 +39,7 @@
     "watch": "yarn clean && microbundle watch --globals three=THREE",
     "build": "yarn clean && microbundle --globals three=THREE",
     "test": "web-test-runner --puppeteer",
-    "examples": "live-server examples",
+    "examples": "live-server --port=5000 --no-browser examples",
     "prepublishOnly": "yarn build && yarn test",
     "site:dev": "cd site && yarn dev",
     "site:build": "cd site && yarn build"
