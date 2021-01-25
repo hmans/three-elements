@@ -1,14 +1,11 @@
+import * as THREE from "three"
 import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { IConstructable } from "./types"
-import { observeAttributeChange } from "./util/observeAttributeChange"
-import * as THREE from "three"
 import { eventForwarder } from "./util/eventForwarder"
+import { observeAttributeChange } from "./util/observeAttributeChange"
 
 export class BaseElement extends HTMLElement {
-  /** Has the element been fully initialized? */
-  isReady = false
-
   /**
    * Returns the instance of ThreeGame that this element is nested under.
    */
@@ -199,8 +196,6 @@ export class BaseElement extends HTMLElement {
 
       /* Emit ready event */
       this.dispatchEvent(new CustomEvent("ready", { bubbles: true, cancelable: false }))
-
-      this.isReady = true
     })
   }
 

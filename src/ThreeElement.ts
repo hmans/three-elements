@@ -1,15 +1,9 @@
 import * as THREE from "three"
 import { BaseElement } from "./BaseElement"
-import { ThreeGame, TickerFunction } from "./elements/three-game"
-import { ThreeScene } from "./elements/three-scene"
 import { IConstructable, isDisposable } from "./types"
 import { applyProps } from "./util/applyProps"
-import { eventForwarder } from "./util/eventForwarder"
 
 export class ThreeElement<T = any> extends BaseElement {
-  /** Has the element been fully initialized? */
-  isReady = false
-
   /** Constructor that will instantiate our object. */
   static threeConstructor?: IConstructable
 
