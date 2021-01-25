@@ -72,7 +72,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     switch (name) {
       case "background-color":
         this.object!.background = new Color(newValue)
-        return
+        return true
 
       case "camera":
         queueMicrotask(() => {
@@ -87,10 +87,10 @@ export class ThreeScene extends ThreeElement.for(Scene) {
             this.camera.lookAt(0, 0, 0)
           }
         })
-        return
+        return true
     }
 
-    super.attributeChangedCallback(name, oldValue, newValue)
+    return super.attributeChangedCallback(name, oldValue, newValue)
   }
 
   handleWindowResize() {

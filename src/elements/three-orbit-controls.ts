@@ -31,9 +31,9 @@ export class ThreeOrbitControls extends ThreeElement<OrbitControls> {
     })
   }
 
-  disconnectedCallback() {
+  removedCallback() {
     this.controls?.dispose()
-    super.disconnectedCallback()
+    super.removedCallback()
   }
 }
 

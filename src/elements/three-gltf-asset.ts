@@ -28,9 +28,9 @@ export class ThreeGLTFAsset extends ThreeElement.for(Group) {
     switch (name) {
       case "url":
         this.url = newValue
-        return
+        return true
       default:
-        super.attributeChangedCallback(name, oldValue, newValue)
+        return super.attributeChangedCallback(name, oldValue, newValue)
     }
   }
 

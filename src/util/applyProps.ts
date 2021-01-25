@@ -65,6 +65,10 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
         break
 
       default:
+        /*
+        If we've reached this point, we're finally able to set a property on the object.
+        Amazing! But let's only do it if the property key is actually known.
+        */
         if (key in object) object[key] = parsed !== undefined ? parsed : value
     }
   }

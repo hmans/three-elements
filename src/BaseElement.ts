@@ -1,8 +1,148 @@
+import { ThreeGame, TickerFunction } from "./elements/three-game"
+import { ThreeScene } from "./elements/three-scene"
+import { IConstructable } from "./types"
 import { observeAttributeChange } from "./util/observeAttributeChange"
+import * as THREE from "three"
+import { eventForwarder } from "./util/eventForwarder"
 
 export class BaseElement extends HTMLElement {
   /** Has the element been fully initialized? */
   isReady = false
+
+  /**
+   * Returns the instance of ThreeGame that this element is nested under.
+   */
+  get game(): ThreeGame {
+    if (!this.isConnected)
+      throw "Something is accessing my .game property while I'm not connected. This shouldn't happen! 😭"
+
+    return (this._game ||= this.findGame())
+  }
+  private _game?: ThreeGame
+
+  protected findGame() {
+    const game = this.find((node) => node instanceof ThreeGame) as ThreeGame
+    if (!game) throw "No <three-game> tag found!"
+    return game
+  }
+
+  /**
+   * Returns the instance of ThreeScene that this element is nested under.
+   */
+  get scene(): ThreeScene {
+    if (!this.isConnected)
+      throw "Something is accessing my .scene property while I'm not connected. This shouldn't happen! 😭"
+
+    return (this._scene ||= this.findScene())
+  }
+  private _scene?: ThreeScene
+
+  protected findScene() {
+    const scene = this.findElementWithInstanceOf(THREE.Scene) as ThreeScene
+    if (!scene) throw "No <three-scene> tag found!"
+    return scene
+  }
+
+  /** A dictionary of ticker callbacks (ontick, etc.) */
+  private callbacks = {} as Record<string, TickerFunction | undefined>
+
+  get ontick() {
+    return this.callbacks["ontick"]
+  }
+
+  set ontick(fn: TickerFunction | string | undefined) {
+    this.setCallback("ontick", fn)
+  }
+
+  get onlatetick() {
+    return this.callbacks["onlatetick"]
+  }
+
+  set onlatetick(fn: TickerFunction | string | undefined) {
+    this.setCallback("onlatetick", fn)
+  }
+
+  get onframetick() {
+    return this.callbacks["onframetick"]
+  }
+
+  set onframetick(fn: TickerFunction | string | undefined) {
+    this.setCallback("onframetick", fn)
+  }
+
+  get onrendertick() {
+    return this.callbacks["onrendertick"]
+  }
+
+  set onrendertick(fn: TickerFunction | string | undefined) {
+    this.setCallback("onrendertick", fn)
+  }
+
+  /** Is this element connected to the game's ticker? */
+  get ticking() {
+    return this._ticking
+  }
+  set ticking(v: boolean | string) {
+    this._ticking = !!v || v === ""
+
+    if (this._ticking) {
+      this.debug("ticking is set; subscribing to game's ticker events")
+
+      this.game.addEventListener("tick", this._forwarder)
+      this.game.addEventListener("latetick", this._forwarder)
+      this.game.addEventListener("frametick", this._forwarder)
+      this.game.addEventListener("rendertick", this._forwarder)
+    } else {
+      this.debug("Unregistering ticker listeners")
+
+      this.game.removeEventListener("tick", this._forwarder)
+      this.game.removeEventListener("latetick", this._forwarder)
+      this.game.removeEventListener("frametick", this._forwarder)
+      this.game.removeEventListener("rendertick", this._forwarder)
+    }
+  }
+  protected _forwarder = eventForwarder(this)
+  protected _ticking = false
+
+  protected setCallback(propName: string, fn?: TickerFunction | string) {
+    const eventName = propName.replace(/^on/, "") as any
+
+    /* Unregister previous callback */
+    const previousCallback = this.callbacks[eventName]
+    if (previousCallback) {
+      this.removeEventListener(eventName, previousCallback)
+    }
+
+    const createCallbackFunction = (fn?: TickerFunction | string) => {
+      switch (typeof fn) {
+        /* If the value is a string, we'll create a function from it. Magic! */
+        case "string":
+          return new Function(fn) as TickerFunction
+
+        /* If it's already a function, we'll just use that. */
+        case "function":
+          return fn
+      }
+    }
+
+    /* Store new value, constructing a function from a string if necessary */
+    this.callbacks[eventName] = createCallbackFunction(fn)
+
+    /* Register new callback */
+    const newCallback = this.callbacks[eventName]
+    if (newCallback) {
+      this.ticking = true
+
+      /*
+      We're using queueMicrotask here because at the point when a ticker event
+      property is assigned, it's possible that the elements required to make this
+      work are not done initializing yet.
+      */
+      queueMicrotask(() => {
+        this.addEventListener(eventName, newCallback)
+      })
+    }
+  }
 
   /** This element's MutationObserver. */
   private _observer?: MutationObserver
@@ -89,7 +229,22 @@ export class BaseElement extends HTMLElement {
     }
   }
 
-  attributeChangedCallback(key: string, oldValue: string, newValue: string) {}
+  attributeChangedCallback(key: string, oldValue: string, newValue: string): boolean {
+    this.debug("attributeChangedCallback", key, newValue)
+
+    switch (key) {
+      /* A bunch of known properties that we will assign directly */
+      case "ticking":
+      case "ontick":
+      case "onlatetick":
+      case "onframetick":
+      case "onrendertick":
+        this[key] = newValue
+        return true
+    }
+
+    return false
+  }
 
   /**
    * Returns a dictionary containing all attributes on this element.
@@ -121,6 +276,10 @@ export class BaseElement extends HTMLElement {
         return node as T
       }
     } while (node)
+  }
+
+  findElementWithInstanceOf<T = HTMLElement>(constructor: IConstructable): T | undefined {
+    return this.find((node: any) => node.object instanceof constructor) as T | undefined
   }
 
   /**

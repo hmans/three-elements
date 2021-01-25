@@ -48,101 +48,6 @@ export class ThreeElement<T = any> extends BaseElement {
     }
   }
 
-  /** A dictionary of ticker callbacks (ontick, etc.) */
-  private callbacks = {} as Record<string, TickerFunction | undefined>
-
-  get ontick() {
-    return this.callbacks["ontick"]
-  }
-
-  set ontick(fn: TickerFunction | string | undefined) {
-    this.setCallback("ontick", fn)
-  }
-
-  get onlatetick() {
-    return this.callbacks["onlatetick"]
-  }
-
-  set onlatetick(fn: TickerFunction | string | undefined) {
-    this.setCallback("onlatetick", fn)
-  }
-
-  get onframetick() {
-    return this.callbacks["onframetick"]
-  }
-
-  set onframetick(fn: TickerFunction | string | undefined) {
-    this.setCallback("onframetick", fn)
-  }
-
-  get onrendertick() {
-    return this.callbacks["onrendertick"]
-  }
-
-  set onrendertick(fn: TickerFunction | string | undefined) {
-    this.setCallback("onrendertick", fn)
-  }
-
-  /**
-   * Returns the instance of ThreeGame that this element is nested under.
-   */
-  get game(): ThreeGame {
-    if (!this.isConnected)
-      throw "Something is accessing my .game property while I'm not connected. This shouldn't happen! 😭"
-
-    return (this._game ||= this.findGame())
-  }
-  private _game?: ThreeGame
-
-  protected findGame() {
-    const game = this.find((node) => node instanceof ThreeGame) as ThreeGame
-    if (!game) throw "No <three-game> tag found!"
-    return game
-  }
-
-  /**
-   * Returns the instance of ThreeScene that this element is nested under.
-   */
-  get scene(): ThreeScene {
-    if (!this.isConnected)
-      throw "Something is accessing my .scene property while I'm not connected. This shouldn't happen! 😭"
-
-    return (this._scene ||= this.findScene())
-  }
-  private _scene?: ThreeScene
-
-  protected findScene() {
-    const scene = this.findElementWith(THREE.Scene) as ThreeScene
-    if (!scene) throw "No <three-scene> tag found!"
-    return scene
-  }
-
-  /** Is this element connected to the game's ticker? */
-  get ticking() {
-    return this._ticking
-  }
-  set ticking(v: boolean | string) {
-    this._ticking = !!v || v === ""
-
-    if (this._ticking) {
-      this.debug("ticking is set; subscribing to game's ticker events")
-
-      this.game.addEventListener("tick", this._forwarder)
-      this.game.addEventListener("latetick", this._forwarder)
-      this.game.addEventListener("frametick", this._forwarder)
-      this.game.addEventListener("rendertick", this._forwarder)
-    } else {
-      this.debug("Unregistering ticker listeners")
-
-      this.game.removeEventListener("tick", this._forwarder)
-      this.game.removeEventListener("latetick", this._forwarder)
-      this.game.removeEventListener("frametick", this._forwarder)
-      this.game.removeEventListener("rendertick", this._forwarder)
-    }
-  }
-  private _forwarder = eventForwarder(this)
-  private _ticking = false
-
   readyCallback() {
     super.readyCallback()
 
@@ -178,12 +83,6 @@ export class ThreeElement<T = any> extends BaseElement {
     }
   }
 
-  findElementWith<T>(constructor: IConstructable<T>): ThreeElement<T> | undefined {
-    return this.find(
-      (node) => node instanceof ThreeElement && node.object instanceof constructor
-    ) as ThreeElement<T> | undefined
-  }
-
   requestFrame() {
     this.game.requestFrame()
   }
@@ -194,7 +93,7 @@ export class ThreeElement<T = any> extends BaseElement {
     tree above it, parent our object to that.
     */
     if (this.object instanceof THREE.Object3D && !(this.object instanceof THREE.Scene)) {
-      const parent = this.findElementWith(THREE.Object3D)
+      const parent = this.findElementWithInstanceOf(THREE.Object3D) as ThreeElement<THREE.Object3D>
 
       if (parent) {
         this.debug("Parenting under:", parent)
@@ -242,22 +141,13 @@ export class ThreeElement<T = any> extends BaseElement {
   }
 
   attributeChangedCallback(key: string, oldValue: any, newValue: any) {
-    this.debug("attributeChangedCallback", key, newValue)
+    if (super.attributeChangedCallback(key, oldValue, newValue)) return true
 
     switch (key) {
       /* NOOPs */
       case "args":
       case "id":
-        break
-
-      /* A bunch of known properties that we will assign directly */
-      case "ticking":
-      case "ontick":
-      case "onlatetick":
-      case "onframetick":
-      case "onrendertick":
-        this[key] = newValue
-        break
+        return true
 
       /* Event handlers that we will want to convert into a function first */
       case "onpointerdown":
@@ -269,7 +159,7 @@ export class ThreeElement<T = any> extends BaseElement {
       case "onclick":
       case "ondblclick":
         this[key] = new Function(newValue).bind(this)
-        break
+        return true
 
       /*
       If we've reached this point, we're dealing with an attribute that we don't know.
@@ -281,48 +171,11 @@ export class ThreeElement<T = any> extends BaseElement {
         */
         if (this.object) {
           applyProps(this.object, { [key]: newValue })
+          return true
         }
     }
-  }
 
-  protected setCallback(propName: string, fn?: TickerFunction | string) {
-    const eventName = propName.replace(/^on/, "") as any
-
-    /* Unregister previous callback */
-    const previousCallback = this.callbacks[eventName]
-    if (previousCallback) {
-      this.removeEventListener(eventName, previousCallback)
-    }
-
-    const createCallbackFunction = (fn?: TickerFunction | string) => {
-      switch (typeof fn) {
-        /* If the value is a string, we'll create a function from it. Magic! */
-        case "string":
-          return new Function(fn) as TickerFunction
-
-        /* If it's already a function, we'll just use that. */
-        case "function":
-          return fn
-      }
-    }
-
-    /* Store new value, constructing a function from a string if necessary */
-    this.callbacks[eventName] = createCallbackFunction(fn)
-
-    /* Register new callback */
-    const newCallback = this.callbacks[eventName]
-    if (newCallback) {
-      this.ticking = true
-
-      /*
-      We're using queueMicrotask here because at the point when a ticker event
-      property is assigned, it's possible that the elements required to make this
-      work are not done initializing yet.
-      */
-      queueMicrotask(() => {
-        this.addEventListener(eventName, newCallback)
-      })
-    }
+    return false
   }
 
   static for<T>(constructor: IConstructable<T>): IConstructable<ThreeElement<T>> {
