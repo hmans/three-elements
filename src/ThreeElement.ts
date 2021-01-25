@@ -259,7 +259,7 @@ export class ThreeElement<T = any> extends HTMLElement {
    * Takes a function, then walks up the node tree and returns the first
    * node where the function returns true.
    */
-  find<T extends HTMLElement>(fn: (node: HTMLElement) => any) {
+  find<T extends HTMLElement>(fn: (node: HTMLElement) => any): T | undefined {
     /* TODO: We might be able to replace this entire function with something like this.closest(). */
 
     /* Start here */
@@ -272,7 +272,7 @@ export class ThreeElement<T = any> extends HTMLElement {
 
       /* Check against the supplied function */
       if (node && fn(node)) {
-        return node
+        return node as T
       }
     } while (node)
   }
