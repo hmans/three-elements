@@ -51,7 +51,6 @@
         )
 
         const GameBoard = () => {
-          const [version, setVersion] = useState(0)
           const [board, setBoard] = useState(() => makeBoard())
           const [selectedTile, setSelectedTile] = useState([])
 
@@ -59,7 +58,6 @@
 
           const handleTileClick = (x, y) => () => {
             setSelectedTile([x, y])
-            setVersion(version + 1)
           }
 
           return html`
