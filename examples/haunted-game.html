@@ -20,89 +20,6 @@
       import { component, useState } from "https://jspm.dev/haunted"
 
       importShim("/dist/index.esm.js").then(() => {
-        class Board {
-          constructor() {
-            const makeRow = () => {
-              const row = []
-              for (let x = 0; x < 8; x++) row.push(pickRandomTile())
-              return row
-            }
-
-            const makeBoard = () => {
-              const rows = []
-              for (let y = 0; y < 8; y++) rows.push(makeRow())
-              return rows
-            }
-
-            const tiles = ["#2f2", "white", "#22f", "#f22"]
-
-            const pickRandomTile = () => tiles[Math.floor(Math.random() * tiles.length)]
-
-            this.board = makeBoard()
-          }
-
-          getTile(x, y) {
-            return this.board[y][x]
-          }
-
-          setTile(x, y, color) {
-            this.board[y][x] = color
-          }
-
-          removeTile(x, y) {
-            this.setTile(x, y, null)
-          }
-
-          findMatchAt(x, y) {
-            const color = this.getTile(x, y)
-
-            if (color) {
-              {
-                /* find horizontal match */
-                let match = []
-                for (let sx = x; sx < 8; sx++) {
-                  if (this.getTile(sx, y) == color) match.push([sx, y])
-                  else break
-                }
-                if (match.length >= 3) return match
-              }
-
-              {
-                /* find vertical match */
-                let match = []
-                for (let sy = y; sy < 8; sy++) {
-                  if (this.getTile(x, sy) == color) match.push([x, sy])
-                  else break
-                }
-                if (match.length >= 3) return match
-              }
-            }
-          }
-
-          findMatch() {
-            for (let y = 0; y < 8; y++) {
-              for (let x = 0; x < 8; x++) {
-                const match = this.findMatchAt(x, y)
-                if (match) return match
-              }
-            }
-          }
-
-          clearMatch(match) {
-            for (const position of match) {
-              this.removeTile(position[0], position[1])
-            }
-          }
-
-          clearAllMatches() {
-            let match
-            while ((match = this.findMatch())) {
-              console.log("clearing match:", match)
-              this.clearMatch(match)
-            }
-          }
-        }
-
         customElements.define(
           "scene-lights",
           component(() => {
@@ -203,6 +120,89 @@
         GameTile.observedAttributes = ["x", "y", "color", "selected"]
 
         customElements.define("game-tile", component(GameTile))
+
+        class Board {
+          constructor() {
+            const makeRow = () => {
+              const row = []
+              for (let x = 0; x < 8; x++) row.push(pickRandomTile())
+              return row
+            }
+
+            const makeBoard = () => {
+              const rows = []
+              for (let y = 0; y < 8; y++) rows.push(makeRow())
+              return rows
+            }
+
+            const tiles = ["#2f2", "white", "#22f", "#f22"]
+
+            const pickRandomTile = () => tiles[Math.floor(Math.random() * tiles.length)]
+
+            this.board = makeBoard()
+          }
+
+          getTile(x, y) {
+            return this.board[y][x]
+          }
+
+          setTile(x, y, color) {
+            this.board[y][x] = color
+          }
+
+          removeTile(x, y) {
+            this.setTile(x, y, null)
+          }
+
+          findMatchAt(x, y) {
+            const color = this.getTile(x, y)
+
+            if (color) {
+              {
+                /* find horizontal match */
+                let match = []
+                for (let sx = x; sx < 8; sx++) {
+                  if (this.getTile(sx, y) == color) match.push([sx, y])
+                  else break
+                }
+                if (match.length >= 3) return match
+              }
+
+              {
+                /* find vertical match */
+                let match = []
+                for (let sy = y; sy < 8; sy++) {
+                  if (this.getTile(x, sy) == color) match.push([x, sy])
+                  else break
+                }
+                if (match.length >= 3) return match
+              }
+            }
+          }
+
+          findMatch() {
+            for (let y = 0; y < 8; y++) {
+              for (let x = 0; x < 8; x++) {
+                const match = this.findMatchAt(x, y)
+                if (match) return match
+              }
+            }
+          }
+
+          clearMatch(match) {
+            for (const position of match) {
+              this.removeTile(position[0], position[1])
+            }
+          }
+
+          clearAllMatches() {
+            let match
+            while ((match = this.findMatch())) {
+              console.log("clearing match:", match)
+              this.clearMatch(match)
+            }
+          }
+        }
       })
     </script>
 
