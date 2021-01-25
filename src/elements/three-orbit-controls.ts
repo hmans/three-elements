@@ -5,7 +5,7 @@ import { registerElement } from "../util/registerElement"
 export class ThreeOrbitControls extends ThreeElement<OrbitControls> {
   controls?: OrbitControls
 
-  readyCallback() {
+  mountedCallback() {
     const { renderer } = this.game
     let { camera } = this.scene
     this.controls = new OrbitControls(camera, renderer.domElement)
@@ -31,9 +31,9 @@ export class ThreeOrbitControls extends ThreeElement<OrbitControls> {
     })
   }
 
-  disconnectedCallback() {
+  removedCallback() {
     this.controls?.dispose()
-    super.disconnectedCallback()
+    super.removedCallback()
   }
 }
 

@@ -6,10 +6,6 @@ import { registerElement } from "../util/registerElement"
 const loadedUrls: Record<string, GLTF> = {}
 
 export class ThreeGLTFAsset extends ThreeElement.for(Group) {
-  static get observedAttributes() {
-    return [...ThreeElement.observedAttributes, "url"]
-  }
-
   public get url() {
     return this.getAttribute("url")
   }
@@ -25,6 +21,16 @@ export class ThreeGLTFAsset extends ThreeElement.for(Group) {
           this.setupGLTF(gltf)
         })
       }
+    }
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    switch (name) {
+      case "url":
+        this.url = newValue
+        return true
+      default:
+        return super.attributeChangedCallback(name, oldValue, newValue)
     }
   }
 

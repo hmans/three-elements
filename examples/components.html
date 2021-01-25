@@ -23,7 +23,9 @@
 
       importShim("/dist/index.esm.js").then(({ ThreeElement }) => {
         class RotatingThingy extends ThreeElement.for(THREE.Mesh) {
-          readyCallback() {
+          mountedCallback() {
+            super.mountedCallback()
+
             this.speed = this.getAttribute("speed")
 
             const geometry = document.createElement("three-dodecahedron-buffer-geometry")

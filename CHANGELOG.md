@@ -17,6 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Fixed:** Orthographic cameras now have their frustums and projection matrices updated when the viewport is resized.
 
+### Internals
+
+If you've been extending ThreeElement in your own code, please note the following changes:
+
+- **New:** All element logic that does not deal with managing a wrapped Three.js object has been moved to a new base class called `BaseElement` that `ThreeElement` now extends. `BaseElement` performs lifecycle management, ticker event handling and other base functionality.
+
+- **Breaking Change:** `readyCallback` was renamed to `mountedCallback` to better reflect when this callback is invoked.
+
+- **New:** The `BaseElement` class now also provides a `removedCallback` method that will be invoked when we know the element is being _removed_ from the DOM entirely, not just _moved_ to a new parent (as is often the case when pairing three-element with a web application framework.)
+
 ## [0.2.0] - 2021-01-18
 
 - **New:** Elements now emit `connected`, `ready` and `disconnected` lifecycle events that bubble up the DOM tree.

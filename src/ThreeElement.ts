@@ -1,224 +1,65 @@
 import * as THREE from "three"
-import { ThreeGame, TickerFunction } from "./elements/three-game"
-import { ThreeScene } from "./elements/three-scene"
-import { IConstructable, isDisposable, IStringIndexable } from "./types"
+import { BaseElement } from "./BaseElement"
+import { IConstructable, isDisposable } from "./types"
 import { applyProps } from "./util/applyProps"
-import { camelize } from "./util/camelize"
-import { eventForwarder } from "./util/eventForwarder"
-import { observeAttributeChange } from "./util/observeAttributeChange"
 
-export class ThreeElementLifecycleEvent extends CustomEvent<{}> {}
-
-export class ThreeElement<T = any> extends HTMLElement {
-  static get observedAttributes(): string[] {
-    return []
-  }
-
-  /** Has the element been fully initialized? */
-  isReady = false
-
+export class ThreeElement<T = any> extends BaseElement {
   /** Constructor that will instantiate our object. */
   static threeConstructor?: IConstructable
 
   /** The THREE.* object managed by this element. */
+  get object() {
+    if (!this.isConnected)
+      throw "Something is accessing my .game property while I'm not connected. This shouldn't happen! 😭"
+
+    return (this._object ||= this.constructWrappedObject())
+  }
+
   private _object?: T
 
-  get object() {
+  protected constructWrappedObject() {
     const constructor = (this.constructor as typeof ThreeElement).threeConstructor
 
-    if (!this._object && constructor) {
-      this.debug("object accessed for the first time, let's create the damn thing!")
+    if (constructor) {
+      this.debug("Creating wrapped object instance")
+      let object: T
 
       /* Create managed object */
       const args = this.getAttribute("args")
       if (args) {
         const parsed = JSON.parse(args)
-        this._object = new constructor(...(Array.isArray(parsed) ? parsed : [parsed]))
+        object = new constructor(...(Array.isArray(parsed) ? parsed : [parsed]))
       } else {
-        this._object = new constructor()
+        object = new constructor()
       }
-    }
 
-    /* Return it */
-    return this._object
-  }
+      /* Store a reference to this element in the wrapped object's userData. */
+      if (object instanceof THREE.Object3D) {
+        object.userData.threeElement = this
+      }
 
-  /**
-   * Returns this element's tag name, formatted as an actual HTML tag (eg. "<three-mesh>").
-   */
-  get htmlTagName() {
-    return `<${this.tagName.toLowerCase()}>`
-  }
-
-  /** A dictionary of ticker callbacks (ontick, etc.) */
-  private callbacks = {} as Record<string, TickerFunction | undefined>
-
-  get ontick() {
-    return this.callbacks["ontick"]
-  }
-
-  set ontick(fn: TickerFunction | string | undefined) {
-    this.setCallback("ontick", fn)
-  }
-
-  get onlatetick() {
-    return this.callbacks["onlatetick"]
-  }
-
-  set onlatetick(fn: TickerFunction | string | undefined) {
-    this.setCallback("onlatetick", fn)
-  }
-
-  get onframetick() {
-    return this.callbacks["onframetick"]
-  }
-
-  set onframetick(fn: TickerFunction | string | undefined) {
-    this.setCallback("onframetick", fn)
-  }
-
-  get onrendertick() {
-    return this.callbacks["onrendertick"]
-  }
-
-  set onrendertick(fn: TickerFunction | string | undefined) {
-    this.setCallback("onrendertick", fn)
-  }
-
-  /**
-   * Returns the instance of ThreeGame that this element is nested under.
-   */
-  get game(): ThreeGame {
-    if (!this._game) {
-      this._game = this.find((node) => node instanceof ThreeGame) as ThreeGame
-      if (!this._game) throw "No <three-game> tag found!"
-    }
-    return this._game
-  }
-  private _game?: ThreeGame
-
-  get ticking() {
-    return this._ticking
-  }
-  set ticking(v: boolean | string) {
-    this._ticking = !!v || v === ""
-
-    if (this._ticking) {
-      this.debug("ticking is set; subscribing to game's ticker events")
-
-      this.game.addEventListener("tick", this._forwarder)
-      this.game.addEventListener("latetick", this._forwarder)
-      this.game.addEventListener("frametick", this._forwarder)
-      this.game.addEventListener("rendertick", this._forwarder)
-    } else {
-      this.debug("Unregistering ticker listeners")
-
-      this.game.removeEventListener("tick", this._forwarder)
-      this.game.removeEventListener("latetick", this._forwarder)
-      this.game.removeEventListener("frametick", this._forwarder)
-      this.game.removeEventListener("rendertick", this._forwarder)
+      return object
     }
   }
-  private _forwarder = eventForwarder(this)
-  private _ticking = false
 
-  /**
-   * Returns the instance of ThreeScene that this element is nested under.
-   */
-  get scene(): ThreeScene {
-    if (!this._scene) {
-      this._scene = this.findElementWith(THREE.Scene) as ThreeScene
-      if (!this._scene) throw "No <three-scene> tag found!"
-    }
-    return this._scene
-  }
-  private _scene?: ThreeScene
+  mountedCallback() {
+    super.mountedCallback()
 
-  /** This element's MutationObserver. */
-  private _observer?: MutationObserver
+    /* Handle attach attribute */
+    this.handleAttach()
 
-  constructor() {
-    super()
-    this.debug("constructor", this.getAllAttributes())
+    /* Add object to scene */
+    this.addObjectToParent()
+
+    /* Make sure a frame is queued */
+    this.game.requestFrame()
   }
 
-  connectedCallback() {
-    this.debug("connectedCallback")
+  removedCallback() {
+    super.removedCallback()
 
-    /* Store a reference to this element in the wrapped object's userData. */
-    if (this.object instanceof THREE.Object3D) {
-      this.object!.userData.threeElement = this
-    }
-
-    /* Apply props */
-    this.handleAttributeChange(this.getAllAttributes())
-
-    /*
-    When one of this element's attributes changes, apply it to the object. Custom Elements have a built-in
-    mechanism for this (attributeChangedCallback and observedAttributes, but unfortunately we can't use it,
-    since we don't know the set of attributes the wrapped Three.js classes expose beforehand. So instead
-    we're hacking our way around it using a mutation observer. Fun times!)
-    */
-    this._observer = observeAttributeChange(this, (prop, value) => {
-      this.handleAttributeChange({ [prop]: value })
-    })
-
-    /* Emit connected event */
-    this.dispatchEvent(
-      new ThreeElementLifecycleEvent("connected", { bubbles: true, cancelable: false })
-    )
-
-    /*
-    Some stuff relies on all custom elements being fully defined and connected. However:
-
-    If there are already tags in the DOM, newly created custom elements will connect in the order they
-    are defined, which isn't always what we want (because a Material node that intends to attach itself to
-    a Mesh might be defined before the element that represents that Mesh. Woops!)
-
-    For this reason, we'll use a simple trick -- we will wait with the actual mounting until another tick
-    has passed, by way of setTimeout.
-
-    Yeah, I know. Crazy. But it solves the problem elegantly. Except that classes overloading
-    connectedCallback() will need to remember doing this. But maybe we will find a better way in the future.
-
-    Also see: https://javascript.info/custom-elements#rendering-order
-    */
-    setTimeout(() => {
-      /* Handle attach attribute */
-      this.handleAttach()
-
-      /* Add object to scene */
-      this.addObjectToScene()
-
-      /* Make sure a frame is queued */
-      this.game.requestFrame()
-
-      /* Invoke mount method */
-      this.readyCallback()
-
-      /* Emit ready event */
-      this.dispatchEvent(
-        new ThreeElementLifecycleEvent("ready", { bubbles: true, cancelable: false })
-      )
-
-      this.isReady = true
-
-      this.debug("isReady:", this.object)
-    })
-  }
-
-  readyCallback() {}
-
-  disconnectedCallback() {
-    this.debug("disconnectedCallback")
-
-    /* Disconnect observer */
-    this._observer?.disconnect()
-
-    /* Emit disconnected event */
-    this.dispatchEvent(
-      new ThreeElementLifecycleEvent("disconnected", { bubbles: true, cancelable: false })
-    )
+    /* Queue a frame, because very likely something just changed in the scene :) */
+    this.game.requestFrame()
 
     /* Stop listening to the game's ticker events */
     this.ticking = false
@@ -234,60 +75,19 @@ export class ThreeElement<T = any> extends HTMLElement {
       this.debug("Disposing:", this.object)
       this.object.dispose()
     }
-
-    /* Queue a frame, because very likely something just disappeared from the scene :) */
-    this.game.requestFrame()
-  }
-
-  /**
-   * Returns a dictionary containing all attributes on this element.
-   */
-  getAllAttributes() {
-    return this.getAttributeNames().reduce((acc, name) => {
-      acc[name] = this.getAttribute(name)
-      return acc
-    }, {} as Record<string, any>)
-  }
-
-  /**
-   * Takes a function, then walks up the node tree and returns the first
-   * node where the function returns true.
-   */
-  find<T extends HTMLElement>(fn: (node: HTMLElement) => any) {
-    /* TODO: We might be able to replace this entire function with something like this.closest(). */
-
-    /* Start here */
-    let node: HTMLElement | undefined
-    node = this
-
-    do {
-      /* Get the immediate parent, or, if we're inside a shaodow DOM, the host element */
-      node = node.parentElement || (node.getRootNode() as any).host
-
-      /* Check against the supplied function */
-      if (node && fn(node)) {
-        return node
-      }
-    } while (node)
-  }
-
-  findElementWith<T>(constructor: IConstructable<T>): ThreeElement<T> | undefined {
-    return this.find(
-      (node) => node instanceof ThreeElement && node.object instanceof constructor
-    ) as ThreeElement<T> | undefined
   }
 
   requestFrame() {
     this.game.requestFrame()
   }
 
-  private addObjectToScene() {
+  protected addObjectToParent() {
     /*
     If the wrapped object is an Object3D, add it to the scene. If we can find a parent somewhere in the
     tree above it, parent our object to that.
     */
     if (this.object instanceof THREE.Object3D && !(this.object instanceof THREE.Scene)) {
-      const parent = this.findElementWith(THREE.Object3D)
+      const parent = this.findElementWithInstanceOf(THREE.Object3D) as ThreeElement<THREE.Object3D>
 
       if (parent) {
         this.debug("Parenting under:", parent)
@@ -298,7 +98,7 @@ export class ThreeElement<T = any> extends HTMLElement {
     }
   }
 
-  private handleAttach() {
+  protected handleAttach() {
     /* Use provided attach, or auto-set it based on the tag name. */
     let attach = this.getAttribute("attach")
 
@@ -335,22 +135,13 @@ export class ThreeElement<T = any> extends HTMLElement {
   }
 
   attributeChangedCallback(key: string, oldValue: any, newValue: any) {
-    this.debug("attributeChangedCallback", key, newValue)
+    if (super.attributeChangedCallback(key, oldValue, newValue)) return true
 
     switch (key) {
       /* NOOPs */
       case "args":
       case "id":
-        break
-
-      /* A bunch of known properties that we will assign directly */
-      case "ticking":
-      case "ontick":
-      case "onlatetick":
-      case "onframetick":
-      case "onrendertick":
-        this[key] = newValue
-        break
+        return true
 
       /* Event handlers that we will want to convert into a function first */
       case "onpointerdown":
@@ -362,87 +153,23 @@ export class ThreeElement<T = any> extends HTMLElement {
       case "onclick":
       case "ondblclick":
         this[key] = new Function(newValue).bind(this)
-        break
+        return true
 
       /*
       If we've reached this point, we're dealing with an attribute that we don't know.
       */
       default:
         /*
-        First of all, let's see if we're observing the attribute (as a child class may do.)
-        This is just a cheap way to find out if the class is actually interested in having this
-        property set as an attribute, so we don't randomly just overwrite _any_ property.
+        Okay, at this point, we'll just assume that the property lives on the wrapped object.
+        Good times! Let's assign it directly.
         */
-        if ((this.constructor as any).observedAttributes.includes(key)) {
-          const camelKey = camelize(key)
-          this[camelKey as keyof this] = newValue
-        } else {
-          /*
-          Okay, at this point, we'll just assume that the property lives on the wrapped object.
-          Good times! Let's assign it directly.
-          */
-          if (this.object) {
-            applyProps(this.object, { [key]: newValue })
-          }
+        if (this.object) {
+          applyProps(this.object, { [key]: newValue })
+          return true
         }
     }
-  }
 
-  private handleAttributeChange(attributes: IStringIndexable) {
-    for (const key in attributes) {
-      this.attributeChangedCallback(key, null, attributes[key])
-    }
-
-    /* Make sure a frame is queued */
-    this.game.requestFrame()
-  }
-
-  private setCallback(propName: string, fn?: TickerFunction | string) {
-    const eventName = propName.replace(/^on/, "") as any
-
-    /* Unregister previous callback */
-    const previousCallback = this.callbacks[eventName]
-    if (previousCallback) {
-      this.removeEventListener(eventName, previousCallback)
-    }
-
-    const createCallbackFunction = (fn?: TickerFunction | string) => {
-      switch (typeof fn) {
-        /* If the value is a string, we'll create a function from it. Magic! */
-        case "string":
-          return new Function(fn) as TickerFunction
-
-        /* If it's already a function, we'll just use that. */
-        case "function":
-          return fn
-      }
-    }
-
-    /* Store new value, constructing a function from a string if necessary */
-    this.callbacks[eventName] = createCallbackFunction(fn)
-
-    /* Register new callback */
-    const newCallback = this.callbacks[eventName]
-    if (newCallback) {
-      this.ticking = true
-
-      /*
-      We're using setTimeout as a stopgap measure here to accomodate for the fact
-      that the three-game tag may not be available and upgraded at the time this
-      property is set. We'll find a nicer solution for this eventually.
-      */
-      setTimeout(() => {
-        this.addEventListener(eventName, newCallback)
-      })
-    }
-  }
-
-  private debug(...output: any) {
-    // console.debug(`${this.htmlTagName}`, ...output)
-  }
-
-  private error(...output: any) {
-    console.error(`${this.htmlTagName}>`, ...output)
+    return false
   }
 
   static for<T>(constructor: IConstructable<T>): IConstructable<ThreeElement<T>> {

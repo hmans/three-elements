@@ -4,10 +4,6 @@ import { ThreeElement } from "../ThreeElement"
 import { registerElement } from "../util/registerElement"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
-  static get observedAttributes() {
-    return ["background-color", "camera"]
-  }
-
   /** The current camera that is being used to render the scene. */
   private _camera: Camera = new PerspectiveCamera(
     75,
@@ -40,7 +36,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     this.camera.lookAt(0, 0, 0)
   }
 
-  readyCallback() {
+  mountedCallback() {
     /* Set up event processor */
     this.pointer = new PointerEvents(this.game.renderer, this.object!, this.camera)
 
@@ -68,16 +64,18 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     /* Unregister event handlers */
     this.game.removeEventListener("rendertick", this.render)
     window.removeEventListener("resize", this.handleWindowResize)
+
+    super.disconnectedCallback()
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     switch (name) {
       case "background-color":
         this.object!.background = new Color(newValue)
-        return
+        return true
 
       case "camera":
-        setTimeout(() => {
+        queueMicrotask(() => {
           const el = document.getElementById(newValue) as ThreeElement<Camera>
 
           if (!el) {
@@ -89,10 +87,10 @@ export class ThreeScene extends ThreeElement.for(Scene) {
             this.camera.lookAt(0, 0, 0)
           }
         })
-        return
+        return true
     }
 
-    super.attributeChangedCallback(name, oldValue, newValue)
+    return super.attributeChangedCallback(name, oldValue, newValue)
   }
 
   handleWindowResize() {
