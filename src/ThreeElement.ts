@@ -21,26 +21,27 @@ export class ThreeElement<T = any> extends HTMLElement {
   static threeConstructor?: IConstructable
 
   /** The THREE.* object managed by this element. */
+  get object() {
+    return (this._object ||= this.constructWrappedObject())
+  }
+
   private _object?: T
 
-  get object() {
+  protected constructWrappedObject() {
     const constructor = (this.constructor as typeof ThreeElement).threeConstructor
 
-    if (!this._object && constructor) {
-      this.debug("object accessed for the first time, let's create the damn thing!")
+    if (constructor) {
+      this.debug("Creating wrapped object instance")
 
       /* Create managed object */
       const args = this.getAttribute("args")
       if (args) {
         const parsed = JSON.parse(args)
-        this._object = new constructor(...(Array.isArray(parsed) ? parsed : [parsed]))
+        return new constructor(...(Array.isArray(parsed) ? parsed : [parsed]))
       } else {
-        this._object = new constructor()
+        return new constructor()
       }
     }
-
-    /* Return it */
-    return this._object
   }
 
   /**
