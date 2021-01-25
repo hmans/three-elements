@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Fixed:** Orthographic cameras now have their frustums and projection matrices updated when the viewport is resized.
 
+- **Fixed:** When using the `attach` attribute, a valid candidate element to attach to is now searched for across the boundaries of Shadow DOMs. If this sentence makes any sense to you, I bow to you, for we are united in this madness.
+
 ### Internals
 
 If you've been extending ThreeElement in your own code, please note the following changes:

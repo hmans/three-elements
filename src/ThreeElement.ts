@@ -118,7 +118,7 @@ export class ThreeElement<T = any> extends BaseElement {
     /* If the wrapped object has an "attach" attribute, automatically assign it to the
        value of the same name in the parent object. */
     if (attach) {
-      const parent = this.parentElement
+      const parent = this.find((node) => node instanceof ThreeElement)
 
       if (!parent) {
         this.error(`Tried to attach to the "${attach} property, but there was no parent! 😢`)
