@@ -287,7 +287,7 @@ export class ThreeElement<T = any> extends HTMLElement {
     this.game.requestFrame()
   }
 
-  private addObjectToScene() {
+  protected addObjectToScene() {
     /*
     If the wrapped object is an Object3D, add it to the scene. If we can find a parent somewhere in the
     tree above it, parent our object to that.
@@ -304,7 +304,7 @@ export class ThreeElement<T = any> extends HTMLElement {
     }
   }
 
-  private handleAttach() {
+  protected handleAttach() {
     /* Use provided attach, or auto-set it based on the tag name. */
     let attach = this.getAttribute("attach")
 
@@ -394,7 +394,7 @@ export class ThreeElement<T = any> extends HTMLElement {
     }
   }
 
-  private handleAttributeChange(attributes: IStringIndexable) {
+  protected handleAttributeChange(attributes: IStringIndexable) {
     for (const key in attributes) {
       this.attributeChangedCallback(key, null, attributes[key])
     }
@@ -403,7 +403,7 @@ export class ThreeElement<T = any> extends HTMLElement {
     this.game.requestFrame()
   }
 
-  private setCallback(propName: string, fn?: TickerFunction | string) {
+  protected setCallback(propName: string, fn?: TickerFunction | string) {
     const eventName = propName.replace(/^on/, "") as any
 
     /* Unregister previous callback */
@@ -443,11 +443,11 @@ export class ThreeElement<T = any> extends HTMLElement {
     }
   }
 
-  private debug(...output: any) {
+  protected debug(...output: any) {
     // console.debug(`${this.htmlTagName}`, ...output)
   }
 
-  private error(...output: any) {
+  protected error(...output: any) {
     console.error(`${this.htmlTagName}>`, ...output)
   }
 
