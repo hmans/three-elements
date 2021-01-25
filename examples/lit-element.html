@@ -38,9 +38,8 @@
           }
 
           render() {
-            const onTick = (dt, el) => {
+            const onTick = (dt, { object, game }) => {
               /* Directly mutate the Three object. */
-              const { object, game } = el
               object.rotation.x = object.rotation.y += this.speed * game.deltaTime
 
               /*
@@ -54,15 +53,15 @@
             }
 
             /*
-          Render some three-elements stuff. Note that we can directly bind functions as event
-          handlers, and not just to normal DOM events, but also to three-elements' own ticker events
-          (but don't forget to register this element with the ticker by setting the "ticking" attribute!)
-          */
+            Render some three-elements stuff. Note that we can directly bind functions as event
+            handlers, and not just to normal DOM events, but also to three-elements' own ticker events
+            (but don't forget to register this element with the ticker by setting the "ticking" attribute!)
+            */
             const output = html`
               <three-mesh
                 scale=${this.scale}
                 .ontick=${onTick}
-                @click=${(e) => {
+                .onclick=${(e) => {
                   e.target.object.material.color.setHSL(
                     Math.random(),
                     Math.random(),
