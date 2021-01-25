@@ -10,10 +10,6 @@ import { observeAttributeChange } from "./util/observeAttributeChange"
 export class ThreeElementLifecycleEvent extends CustomEvent<{}> {}
 
 export class ThreeElement<T = any> extends HTMLElement {
-  static get observedAttributes(): string[] {
-    return []
-  }
-
   /** Has the element been fully initialized? */
   isReady = false
 
@@ -417,21 +413,11 @@ export class ThreeElement<T = any> extends HTMLElement {
       */
       default:
         /*
-        First of all, let's see if we're observing the attribute (as a child class may do.)
-        This is just a cheap way to find out if the class is actually interested in having this
-        property set as an attribute, so we don't randomly just overwrite _any_ property.
+        Okay, at this point, we'll just assume that the property lives on the wrapped object.
+        Good times! Let's assign it directly.
         */
-        if ((this.constructor as any).observedAttributes.includes(key)) {
-          const camelKey = camelize(key)
-          this[camelKey as keyof this] = newValue
-        } else {
-          /*
-          Okay, at this point, we'll just assume that the property lives on the wrapped object.
-          Good times! Let's assign it directly.
-          */
-          if (this.object) {
-            applyProps(this.object, { [key]: newValue })
-          }
+        if (this.object) {
+          applyProps(this.object, { [key]: newValue })
         }
     }
   }
