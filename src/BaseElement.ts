@@ -88,7 +88,7 @@ export class BaseElement extends HTMLElement {
       switch (typeof fn) {
         /* If the value is a string, we'll create a function from it. Magic! */
         case "string":
-          return new Function("", fn).bind(this) as TickerFunction
+          return new Function(fn).bind(this) as TickerFunction
 
         /* If it's already a function, we'll just use that. */
         case "function":
