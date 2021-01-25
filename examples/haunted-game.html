@@ -20,21 +20,88 @@
       import { component, useState } from "https://jspm.dev/haunted"
 
       importShim("/dist/index.esm.js").then(() => {
-        const makeRow = () => {
-          const row = []
-          for (let x = 0; x < 8; x++) row.push(pickRandomTile())
-          return row
+        class Board {
+          constructor() {
+            const makeRow = () => {
+              const row = []
+              for (let x = 0; x < 8; x++) row.push(pickRandomTile())
+              return row
+            }
+
+            const makeBoard = () => {
+              const rows = []
+              for (let y = 0; y < 8; y++) rows.push(makeRow())
+              return rows
+            }
+
+            const tiles = ["#2f2", "white", "#22f", "#f22"]
+
+            const pickRandomTile = () => tiles[Math.floor(Math.random() * tiles.length)]
+
+            this.board = makeBoard()
+          }
+
+          getTile(x, y) {
+            return this.board[y][x]
+          }
+
+          setTile(x, y, color) {
+            this.board[y][x] = color
+          }
+
+          removeTile(x, y) {
+            this.setTile(x, y, null)
+          }
+
+          findMatchAt(x, y) {
+            const color = this.getTile(x, y)
+
+            if (color) {
+              {
+                /* find horizontal match */
+                let match = []
+                for (let sx = x; sx < 8; sx++) {
+                  if (this.getTile(sx, y) == color) match.push([sx, y])
+                  else break
+                }
+                if (match.length >= 3) return match
+              }
+
+              {
+                /* find vertical match */
+                let match = []
+                for (let sy = y; sy < 8; sy++) {
+                  if (this.getTile(x, sy) == color) match.push([x, sy])
+                  else break
+                }
+                if (match.length >= 3) return match
+              }
+            }
+          }
+
+          findMatch() {
+            for (let y = 0; y < 8; y++) {
+              for (let x = 0; x < 8; x++) {
+                const match = this.findMatchAt(x, y)
+                if (match) return match
+              }
+            }
+          }
+
+          clearMatch(match) {
+            for (const position of match) {
+              this.removeTile(position[0], position[1])
+            }
+          }
+
+          clearAllMatches() {
+            let match
+            while ((match = this.findMatch())) {
+              console.log("clearing match:", match)
+              this.clearMatch(match)
+            }
+          }
         }
-
-        const makeBoard = () => {
-          const rows = []
-          for (let y = 0; y < 8; y++) rows.push(makeRow())
-          return rows
-        }
-
-        const tiles = ["#2f2", "white", "#22f", "#f22"]
-
-        const pickRandomTile = () => tiles[Math.floor(Math.random() * tiles.length)]
 
         customElements.define(
           "scene-lights",
@@ -51,22 +118,16 @@
         )
 
         const GameBoard = () => {
-          const [board, setBoard] = useState(() => makeBoard())
+          const [board] = useState(new Board())
           const [selectedTile, setSelectedTile] = useState(null)
-
-          /* API */
-          const getTile = (x, y) => board[y][x]
-          const setTile = (x, y, color) => (board[y][x] = color)
-
-          const removeTile = (x, y) => setTile(x, y, null)
 
           const swapWithSelectedTile = (x, y) => {
             if (selectedTile) {
               const [sx, sy] = selectedTile
-              const selectedColor = getTile(sx, sy)
-              const otherColor = getTile(x, y)
-              setTile(sx, sy, otherColor)
-              setTile(x, y, selectedColor)
+              const selectedColor = board.getTile(sx, sy)
+              const otherColor = board.getTile(x, y)
+              board.setTile(sx, sy, otherColor)
+              board.setTile(x, y, selectedColor)
 
               setSelectedTile(null)
             }
@@ -81,62 +142,11 @@
             }
           }
 
-          const removeIfMatching = (positions) => {}
-
-          const findMatchAt = (x, y) => {
-            const color = getTile(x, y)
-
-            if (color) {
-              {
-                /* find horizontal match */
-                let match = []
-                for (let sx = x; sx < 8; sx++) {
-                  if (getTile(sx, y) == color) match.push([sx, y])
-                  else break
-                }
-                if (match.length >= 3) return match
-              }
-
-              {
-                /* find vertical match */
-                let match = []
-                for (let sy = y; sy < 8; sy++) {
-                  if (getTile(x, sy) == color) match.push([x, sy])
-                  else break
-                }
-                if (match.length >= 3) return match
-              }
-            }
-          }
-
-          const findMatch = () => {
-            for (let y = 0; y < 8; y++) {
-              for (let x = 0; x < 8; x++) {
-                const match = findMatchAt(x, y)
-                if (match) return match
-              }
-            }
-          }
-
-          const clearMatch = (match) => {
-            for (const position of match) {
-              removeTile(position[0], position[1])
-            }
-          }
-
-          const clearAllMatches = () => {
-            let match
-            while ((match = findMatch())) {
-              console.log("clearing match:", match)
-              clearMatch(match)
-            }
-          }
-
           const selectTile = (x, y) => {
             /* If a tile is already selected, swap the two tiles */
             if (selectedTile && adjacentToSelectedTile(x, y)) {
               swapWithSelectedTile(x, y)
-              clearAllMatches()
+              board.clearAllMatches()
             } else {
               setSelectedTile([x, y])
             }
@@ -144,7 +154,7 @@
 
           return html`
             <three-group position="-4, -4, 0">
-              ${board.map((row, y) =>
+              ${board.board.map((row, y) =>
                 row.map((color, x) => {
                   return color
                     ? html`<game-tile
