@@ -38,9 +38,10 @@
         const pickRandomTile = () => tiles[Math.floor(Math.random() * tiles.length)]
 
         const store = makeStore({
-          version: 0,
           board: makeBoard()
         })
+
+        const removeTile = (x, y) => (store.state.board[y][x] = null)
 
         customElements.define(
           "scene-lights",
@@ -63,7 +64,7 @@
             const [version, setVersion] = useState(0)
 
             const handleTileClick = (x, y) => () => {
-              store.state.board[y][x] = null
+              removeTile(x, y)
               console.log("omg", version)
               setVersion(version + 1)
             }
@@ -96,8 +97,7 @@
 
             const [hover, setHover] = useState(false)
 
-            const onTick = (dt, target) => {
-              const { object, game } = target
+            const onTick = (dt, { object, game }) => {
               object.rotation.x = object.rotation.y += (hover ? 1.5 : 0.5) * dt
               game.requestFrame()
             }
