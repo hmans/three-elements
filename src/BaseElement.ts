@@ -1,5 +1,3 @@
-import { ThreeElementLifecycleEvent } from "./ThreeElement"
-import { IConstructable } from "./types"
 import { observeAttributeChange } from "./util/observeAttributeChange"
 
 export class BaseElement extends HTMLElement {
@@ -43,9 +41,7 @@ export class BaseElement extends HTMLElement {
     })
 
     /* Emit connected event */
-    this.dispatchEvent(
-      new ThreeElementLifecycleEvent("connected", { bubbles: true, cancelable: false })
-    )
+    this.dispatchEvent(new CustomEvent("connected", { bubbles: true, cancelable: false }))
 
     /*
     Some stuff relies on all custom elements being fully defined and connected. However:
@@ -62,9 +58,7 @@ export class BaseElement extends HTMLElement {
       this.readyCallback()
 
       /* Emit ready event */
-      this.dispatchEvent(
-        new ThreeElementLifecycleEvent("ready", { bubbles: true, cancelable: false })
-      )
+      this.dispatchEvent(new CustomEvent("ready", { bubbles: true, cancelable: false }))
 
       this.isReady = true
     })
@@ -74,9 +68,7 @@ export class BaseElement extends HTMLElement {
     this.debug("disconnectedCallback")
 
     /* Emit disconnected event */
-    this.dispatchEvent(
-      new ThreeElementLifecycleEvent("disconnected", { bubbles: true, cancelable: false })
-    )
+    this.dispatchEvent(new CustomEvent("disconnected", { bubbles: true, cancelable: false }))
 
     /*
     If isConnected is false, this element is being removed entirely. In this case,
@@ -85,9 +77,7 @@ export class BaseElement extends HTMLElement {
     if (!this.isConnected) {
       queueMicrotask(() => {
         /* Emit disconnected event */
-        this.dispatchEvent(
-          new ThreeElementLifecycleEvent("removed", { bubbles: true, cancelable: false })
-        )
+        this.dispatchEvent(new CustomEvent("removed", { bubbles: true, cancelable: false }))
 
         /* Invoke removedCallback */
         this.removedCallback()

@@ -5,9 +5,6 @@ import { ThreeScene } from "./elements/three-scene"
 import { IConstructable, isDisposable } from "./types"
 import { applyProps } from "./util/applyProps"
 import { eventForwarder } from "./util/eventForwarder"
-import { observeAttributeChange } from "./util/observeAttributeChange"
-
-export class ThreeElementLifecycleEvent extends CustomEvent<{}> {}
 
 export class ThreeElement<T = any> extends BaseElement {
   /** Has the element been fully initialized? */
