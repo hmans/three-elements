@@ -159,6 +159,9 @@ export class ThreeElement<T = any> extends HTMLElement {
   connectedCallback() {
     this.debug("connectedCallback")
 
+    /* Construct wrapped object if we don't have on already. */
+    this._object ||= this.constructWrappedObject()
+
     /* Apply props */
     const attributes = this.getAllAttributes()
     for (const key in attributes) {
@@ -171,11 +174,9 @@ export class ThreeElement<T = any> extends HTMLElement {
     since we don't know the set of attributes the wrapped Three.js classes expose beforehand. So instead
     we're hacking our way around it using a mutation observer. Fun times!)
     */
-    if (!this._observer) {
-      this._observer = observeAttributeChange(this, (prop, value) => {
-        this.attributeChangedCallback(prop, this[prop as keyof this], value)
-      })
-    }
+    this._observer ||= observeAttributeChange(this, (prop, value) => {
+      this.attributeChangedCallback(prop, this[prop as keyof this], value)
+    })
 
     /* Emit connected event */
     this.dispatchEvent(
