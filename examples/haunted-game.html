@@ -16,97 +16,97 @@
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
-      importShim("/dist/index.esm.js")
-
       import { css, html, LitElement } from "https://jspm.dev/lit-element"
       import { makeStore } from "https://jspm.dev/statery"
       import { component, useState } from "https://jspm.dev/haunted"
 
-      const makeRow = () => {
-        const row = []
-        for (let x = 0; x < 8; x++) row.push(pickRandomTile())
-        return row
-      }
+      importShim("/dist/index.esm.js").then(() => {
+        const makeRow = () => {
+          const row = []
+          for (let x = 0; x < 8; x++) row.push(pickRandomTile())
+          return row
+        }
 
-      const makeBoard = () => {
-        const rows = []
-        for (let y = 0; y < 8; y++) rows.push(makeRow())
-        return rows
-      }
+        const makeBoard = () => {
+          const rows = []
+          for (let y = 0; y < 8; y++) rows.push(makeRow())
+          return rows
+        }
 
-      const tiles = ["#2f2", "white", "#22f", "#f22"]
+        const tiles = ["#2f2", "white", "#22f", "#f22"]
 
-      const pickRandomTile = () => tiles[Math.floor(Math.random() * tiles.length)]
+        const pickRandomTile = () => tiles[Math.floor(Math.random() * tiles.length)]
 
-      const store = makeStore({
-        board: makeBoard()
+        const store = makeStore({
+          board: makeBoard()
+        })
+
+        customElements.define(
+          "scene-lights",
+          component(() => {
+            return html`
+              <three-fog near="0" far="32" color="#111"></three-fog>
+              <three-ambient-light intensity="0.2"></three-ambient-light>
+              <three-directional-light
+                position="10, 10, 40"
+                intensity="0.8"
+              ></three-directional-light>
+            `
+          })
+        )
+
+        customElements.define(
+          "game-board",
+          component(() => {
+            const rows = store.state.board
+
+            return html`
+              <three-group position="-4, -4, 0">
+                ${rows.map((row, y) =>
+                  row.map((color, x) => html`<game-tile color=${color} y=${y} x=${x}></game-tile>`)
+                )}
+              </three-group>
+            `
+          })
+        )
+
+        customElements.define(
+          "game-tile",
+          component((el) => {
+            const x = el.getAttribute("x")
+            const y = el.getAttribute("y")
+            const color = el.getAttribute("color")
+
+            const [hover, setHover] = useState(false)
+
+            const onTick = (dt, target) => {
+              const { object, game } = target
+              object.rotation.x = object.rotation.y += (hover ? 1.5 : 0.5) * dt
+              game.requestFrame()
+            }
+
+            console.log("rendering game-tile")
+
+            return html`
+              <three-group position.x=${x} position.y=${y} ticking scale=${hover ? 1.3 : 1}>
+                <three-mesh
+                  scale="0.4"
+                  .ontick=${onTick}
+                  @pointerenter=${(e) => setHover(true)}
+                  @pointerleave=${(e) => setHover(false)}
+                >
+                  <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+                  <three-mesh-standard-material
+                    color=${color}
+                    emissive=${hover ? color : ""}
+                    emissive-intensity=${hover ? 0.9 : 0}
+                  ></three-mesh-standard-material>
+                </three-mesh>
+              </three-group>
+            `
+          })
+        )
       })
-
-      customElements.define(
-        "scene-lights",
-        component(() => {
-          return html`
-            <three-fog near="0" far="32" color="#111"></three-fog>
-            <three-ambient-light intensity="0.2"></three-ambient-light>
-            <three-directional-light
-              position="10, 10, 40"
-              intensity="0.8"
-            ></three-directional-light>
-          `
-        })
-      )
-
-      customElements.define(
-        "game-board",
-        component(() => {
-          const rows = store.state.board
-
-          return html`
-            <three-group position="-4, -4, 0">
-              ${rows.map((row, y) =>
-                row.map((color, x) => html`<game-tile color=${color} y=${y} x=${x}></game-tile>`)
-              )}
-            </three-group>
-          `
-        })
-      )
-
-      customElements.define(
-        "game-tile",
-        component((el) => {
-          const x = el.getAttribute("x")
-          const y = el.getAttribute("y")
-          const color = el.getAttribute("color")
-
-          const [hover, setHover] = useState(false)
-
-          const onTick = (target) => {
-            const { object, game } = target
-            object.rotation.x = object.rotation.y += (hover ? 1.5 : 0.5) * game.deltaTime
-            game.requestFrame()
-          }
-
-          console.log("rendering game-tile")
-
-          return html`
-            <three-group position.x=${x} position.y=${y} ticking scale=${hover ? 1.3 : 1}>
-              <three-mesh
-                scale="0.4"
-                .ontick="foo"
-                @pointerenter=${(e) => setHover(true)}
-                @pointerleave=${(e) => setHover(false)}
-              >
-                <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-                <three-mesh-standard-material
-                  color=${color}
-                  emissive=${hover ? color : ""}
-                  emissive-intensity=${hover ? 0.9 : 0}
-                ></three-mesh-standard-material>
-              </three-mesh>
-            </three-group>
-          `
-        })
-      )
     </script>
 
     <script type="importmap-shim">
