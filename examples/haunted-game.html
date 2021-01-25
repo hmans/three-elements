@@ -139,7 +139,9 @@
 
             const pickRandomTile = () => tiles[Math.floor(Math.random() * tiles.length)]
 
-            this.board = makeBoard()
+            do {
+              this.board = makeBoard()
+            } while (this.findMatch())
           }
 
           getTile(x, y) {
