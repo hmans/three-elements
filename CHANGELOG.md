@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **New:** `<three-game>` now can receive an `xr` attribute to enable WebXR features.
 
+- **New:** The `ThreeElement` class now also provides a `removedCallback` method that will be invoked when we know the element is being _removed_ from the DOM entirely, not just _moved_ to a new parent (as is often the case when pairing three-element with a web application framework.)
+
 - **Changed:** When attributes on an element map to a non-existing property on the wrapped object, there will no longer be a warning logged to the console. (This is very useful when you're combining three-elements with other frameworks that make use of their own attribute names on your elements.)
 
 - **Fixed:** When assigning attributes a value of "0", this will now correctly assign the parsed numerical value of 0 to the corresponding property, not a string representation of it. Programming, how does it work?

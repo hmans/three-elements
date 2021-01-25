@@ -32,15 +32,23 @@ export class ThreeElement<T = any> extends HTMLElement {
 
     if (constructor) {
       this.debug("Creating wrapped object instance")
+      let object: T
 
       /* Create managed object */
       const args = this.getAttribute("args")
       if (args) {
         const parsed = JSON.parse(args)
-        return new constructor(...(Array.isArray(parsed) ? parsed : [parsed]))
+        object = new constructor(...(Array.isArray(parsed) ? parsed : [parsed]))
       } else {
-        return new constructor()
+        object = new constructor()
       }
+
+      /* Store a reference to this element in the wrapped object's userData. */
+      if (object instanceof THREE.Object3D) {
+        object.userData.threeElement = this
+      }
+
+      return object
     }
   }
 
@@ -151,11 +159,6 @@ export class ThreeElement<T = any> extends HTMLElement {
   connectedCallback() {
     this.debug("connectedCallback")
 
-    /* Store a reference to this element in the wrapped object's userData. */
-    if (this.object instanceof THREE.Object3D) {
-      this.object!.userData.threeElement = this
-    }
-
     /* Apply props */
     const attributes = this.getAllAttributes()
     for (const key in attributes) {
@@ -168,9 +171,11 @@ export class ThreeElement<T = any> extends HTMLElement {
     since we don't know the set of attributes the wrapped Three.js classes expose beforehand. So instead
     we're hacking our way around it using a mutation observer. Fun times!)
     */
-    this._observer = observeAttributeChange(this, (prop, value) => {
-      this.attributeChangedCallback(prop, this[prop as keyof this], value)
-    })
+    if (!this._observer) {
+      this._observer = observeAttributeChange(this, (prop, value) => {
+        this.attributeChangedCallback(prop, this[prop as keyof this], value)
+      })
+    }
 
     /* Emit connected event */
     this.dispatchEvent(
@@ -197,7 +202,7 @@ export class ThreeElement<T = any> extends HTMLElement {
       this.handleAttach()
 
       /* Add object to scene */
-      this.addObjectToScene()
+      this.addObjectToParent()
 
       /* Make sure a frame is queued */
       this.game.requestFrame()
@@ -218,34 +223,51 @@ export class ThreeElement<T = any> extends HTMLElement {
 
   readyCallback() {}
 
+  removedCallback() {}
+
   disconnectedCallback() {
     this.debug("disconnectedCallback")
-
-    /* Disconnect observer */
-    this._observer?.disconnect()
 
     /* Emit disconnected event */
     this.dispatchEvent(
       new ThreeElementLifecycleEvent("disconnected", { bubbles: true, cancelable: false })
     )
 
-    /* Stop listening to the game's ticker events */
-    this.ticking = false
-
-    /* If the wrapped object is parented, remove it from its parent */
-    if (this.object instanceof THREE.Object3D && this.object.parent) {
-      this.debug("Removing from scene:", this.object)
-      this.object.parent.remove(this.object)
-    }
-
-    /* If the object can be disposed, dispose of it! */
-    if (isDisposable(this.object)) {
-      this.debug("Disposing:", this.object)
-      this.object.dispose()
-    }
-
-    /* Queue a frame, because very likely something just disappeared from the scene :) */
+    /* Queue a frame, because very likely something just changed in the scene :) */
     this.game.requestFrame()
+
+    /*
+    If isConnected is false, this element is being removed entirely. In this case,
+    we'll do some extra cleanup.
+    */
+    if (!this.isConnected) {
+      /* Emit disconnected event */
+      this.dispatchEvent(
+        new ThreeElementLifecycleEvent("removed", { bubbles: true, cancelable: false })
+      )
+
+      /* Invoke removedCallback */
+      this.removedCallback()
+
+      /* Disconnect observer */
+      this._observer?.disconnect()
+      this._observer = undefined
+
+      /* Stop listening to the game's ticker events */
+      this.ticking = false
+
+      /* If the wrapped object is parented, remove it from its parent */
+      if (this.object instanceof THREE.Object3D && this.object.parent) {
+        this.debug("Removing from scene:", this.object)
+        this.object.parent.remove(this.object)
+      }
+
+      /* If the object can be disposed, dispose of it! */
+      if (isDisposable(this.object)) {
+        this.debug("Disposing:", this.object)
+        this.object.dispose()
+      }
+    }
   }
 
   /**
@@ -290,7 +312,7 @@ export class ThreeElement<T = any> extends HTMLElement {
     this.game.requestFrame()
   }
 
-  protected addObjectToScene() {
+  protected addObjectToParent() {
     /*
     If the wrapped object is an Object3D, add it to the scene. If we can find a parent somewhere in the
     tree above it, parent our object to that.
