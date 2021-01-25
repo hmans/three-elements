@@ -38,6 +38,7 @@
         const pickRandomTile = () => tiles[Math.floor(Math.random() * tiles.length)]
 
         const store = makeStore({
+          version: 0,
           board: makeBoard()
         })
 
@@ -59,11 +60,27 @@
           "game-board",
           component(() => {
             const rows = store.state.board
+            const [version, setVersion] = useState(0)
+
+            const handleTileClick = (x, y) => () => {
+              store.state.board[y][x] = null
+              console.log("omg", version)
+              setVersion(version + 1)
+            }
 
             return html`
               <three-group position="-4, -4, 0">
                 ${rows.map((row, y) =>
-                  row.map((color, x) => html`<game-tile color=${color} y=${y} x=${x}></game-tile>`)
+                  row.map((color, x) =>
+                    color
+                      ? html`<game-tile
+                          .onclick=${handleTileClick(x, y)}
+                          color=${color}
+                          y=${y}
+                          x=${x}
+                        ></game-tile>`
+                      : null
+                  )
                 )}
               </three-group>
             `
@@ -85,15 +102,13 @@
               game.requestFrame()
             }
 
-            console.log("rendering game-tile")
-
             return html`
               <three-group position.x=${x} position.y=${y} ticking scale=${hover ? 1.3 : 1}>
                 <three-mesh
                   scale="0.4"
                   .ontick=${onTick}
-                  @pointerenter=${(e) => setHover(true)}
-                  @pointerleave=${(e) => setHover(false)}
+                  .onpointerenter=${(e) => setHover(true)}
+                  .onpointerleave=${(e) => setHover(false)}
                 >
                   <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
                   <three-mesh-standard-material
