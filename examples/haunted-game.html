@@ -125,7 +125,7 @@
           constructor() {
             const makeRow = () => {
               const row = []
-              for (let x = 0; x < 8; x++) row.push(pickRandomTile())
+              for (let x = 0; x < 8; x++) row.push(this.pickRandomColor())
               return row
             }
 
@@ -135,13 +135,15 @@
               return rows
             }
 
-            const tiles = ["#2f2", "white", "#22f", "#f22"]
-
-            const pickRandomTile = () => tiles[Math.floor(Math.random() * tiles.length)]
+            this.colors = ["#2f2", "white", "#22f", "#f22"]
 
             do {
               this.board = makeBoard()
             } while (this.findMatch())
+          }
+
+          pickRandomColor() {
+            return this.colors[Math.floor(Math.random() * this.colors.length)]
           }
 
           getTile(x, y) {
@@ -154,6 +156,12 @@
 
           removeTile(x, y) {
             this.setTile(x, y, null)
+          }
+
+          swapTiles(x1, y1, x2, y2) {
+            const temp = this.getTile(x1, y1)
+            this.setTile(x1, y1, this.getTile(x2, y2))
+            this.setTile(x2, y2, temp)
           }
 
           findMatchAt(x, y) {
@@ -199,9 +207,27 @@
 
           clearAllMatches() {
             let match
+            console.log("clearAllMatches")
             while ((match = this.findMatch())) {
               console.log("clearing match:", match)
               this.clearMatch(match)
+              this.applyGravity()
+            }
+          }
+
+          applyGravity() {
+            for (let y = 0; y < 8; y++) {
+              for (let x = 0; x < 8; x++) {
+                while (this.getTile(x, y) === null) {
+                  /* Shift everything else down */
+                  for (let sy = y; sy < 7; sy++) {
+                    this.swapTiles(x, sy, x, sy + 1)
+                  }
+
+                  /* Create a new tile at the top */
+                  this.setTile(x, 7, this.pickRandomColor())
+                }
+              }
             }
           }
         }
