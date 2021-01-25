@@ -69,14 +69,13 @@ You will have noticed by now that, when setting ticker event handlers as string-
 
 ## Setting Event Listeners via Properties
 
-From within JavaScript code, you can also set the `ontick` and `onlatetick` properties on the element. This allows you to pass references to functions defined elsewhere. If you're building components using Lit-Element, you can use the `@tick` or `@latetick` syntax to assign these, too!
+From within JavaScript code, you can also set the `ontick` and `onlatetick` properties on the element to point at a callback function. These functions will receive the delta time as well as a reference to the element itself as arguments. Example:
 
-## Using Event Listeners
+```js
+const handleTick = (dt, { object, game }) => {
+  object.rotation.x = object.rotation.y += 5 * dt
+  game.requestFrame()
+}
 
-Finally, you can also directly subscribe to the emitted events by going through `element.addEventListener("tick", ...)`.
-
-::: warning
-For this to work, you also need to set the element's `ticking` property or attribute to `true`. If you directly assign `ontick` or `onlatetick`, this will be done for you.
-:::
-
-_TODO: Example here_
+element.ontick = handleTick
+```
