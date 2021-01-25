@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
-import { IConstructable, isDisposable, IStringIndexable } from "./types"
+import { IConstructable, isDisposable } from "./types"
 import { applyProps } from "./util/applyProps"
 import { camelize } from "./util/camelize"
 import { eventForwarder } from "./util/eventForwarder"
