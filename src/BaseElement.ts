@@ -183,6 +183,12 @@ export class BaseElement extends HTMLElement {
     */
     if (!this.isConnected) {
       queueMicrotask(() => {
+        /* Remove event handlers */
+        this.ontick = undefined
+        this.onlatetick = undefined
+        this.onframetick = undefined
+        this.onrendertick = undefined
+
         /* Emit disconnected event */
         this.dispatchEvent(new CustomEvent("removed", { bubbles: true, cancelable: false }))
 
