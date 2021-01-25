@@ -4,10 +4,6 @@ import { ThreeElement } from "../ThreeElement"
 import { registerElement } from "../util/registerElement"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
-  static get observedAttributes() {
-    return ["background-color", "camera"]
-  }
-
   /** The current camera that is being used to render the scene. */
   private _camera: Camera = new PerspectiveCamera(
     75,
