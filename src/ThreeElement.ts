@@ -238,40 +238,42 @@ export class ThreeElement<T = any> extends HTMLElement {
       new ThreeElementLifecycleEvent("disconnected", { bubbles: true, cancelable: false })
     )
 
-    /* Queue a frame, because very likely something just changed in the scene :) */
-    this.game.requestFrame()
-
     /*
     If isConnected is false, this element is being removed entirely. In this case,
     we'll do some extra cleanup.
     */
     if (!this.isConnected) {
-      /* Emit disconnected event */
-      this.dispatchEvent(
-        new ThreeElementLifecycleEvent("removed", { bubbles: true, cancelable: false })
-      )
+      queueMicrotask(() => {
+        /* Emit disconnected event */
+        this.dispatchEvent(
+          new ThreeElementLifecycleEvent("removed", { bubbles: true, cancelable: false })
+        )
 
-      /* Invoke removedCallback */
-      this.removedCallback()
+        /* Invoke removedCallback */
+        this.removedCallback()
 
-      /* Disconnect observer */
-      this._observer?.disconnect()
-      this._observer = undefined
+        /* Queue a frame, because very likely something just changed in the scene :) */
+        this.game.requestFrame()
 
-      /* Stop listening to the game's ticker events */
-      this.ticking = false
+        /* Disconnect observer */
+        this._observer?.disconnect()
+        this._observer = undefined
 
-      /* If the wrapped object is parented, remove it from its parent */
-      if (this.object instanceof THREE.Object3D && this.object.parent) {
-        this.debug("Removing from scene:", this.object)
-        this.object.parent.remove(this.object)
-      }
+        /* Stop listening to the game's ticker events */
+        this.ticking = false
 
-      /* If the object can be disposed, dispose of it! */
-      if (isDisposable(this.object)) {
-        this.debug("Disposing:", this.object)
-        this.object.dispose()
-      }
+        /* If the wrapped object is parented, remove it from its parent */
+        if (this.object instanceof THREE.Object3D && this.object.parent) {
+          this.debug("Removing from scene:", this.object)
+          this.object.parent.remove(this.object)
+        }
+
+        /* If the object can be disposed, dispose of it! */
+        if (isDisposable(this.object)) {
+          this.debug("Disposing:", this.object)
+          this.object.dispose()
+        }
+      })
     }
   }
 
