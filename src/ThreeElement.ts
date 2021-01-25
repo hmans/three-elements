@@ -9,9 +9,6 @@ export class ThreeElement<T = any> extends BaseElement {
 
   /** The THREE.* object managed by this element. */
   get object() {
-    if (!this.isConnected)
-      throw "Something is accessing my .game property while I'm not connected. This shouldn't happen! 😭"
-
     return (this._object ||= this.constructWrappedObject())
   }
 

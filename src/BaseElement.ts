@@ -2,7 +2,6 @@ import * as THREE from "three"
 import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { IConstructable } from "./types"
-import { eventForwarder } from "./util/eventForwarder"
 import { observeAttributeChange } from "./util/observeAttributeChange"
 
 export class BaseElement extends HTMLElement {
@@ -10,14 +9,14 @@ export class BaseElement extends HTMLElement {
    * Returns the instance of ThreeGame that this element is nested under.
    */
   get game(): ThreeGame {
-    if (!this.isConnected)
-      throw "Something is accessing my .game property while I'm not connected. This shouldn't happen! 😭"
-
     return (this._game ||= this.findGame())
   }
   private _game?: ThreeGame
 
   protected findGame() {
+    if (!this.isConnected)
+      throw "Something is accessing my .game property while I'm not connected. This shouldn't happen! 😭"
+
     const game = this.find((node) => node instanceof ThreeGame) as ThreeGame
     if (!game) throw "No <three-game> tag found!"
     return game
@@ -27,21 +26,21 @@ export class BaseElement extends HTMLElement {
    * Returns the instance of ThreeScene that this element is nested under.
    */
   get scene(): ThreeScene {
-    if (!this.isConnected)
-      throw "Something is accessing my .scene property while I'm not connected. This shouldn't happen! 😭"
-
     return (this._scene ||= this.findScene())
   }
   private _scene?: ThreeScene
 
   protected findScene() {
+    if (!this.isConnected)
+      throw "Something is accessing my .scene property while I'm not connected. This shouldn't happen! 😭"
+
     const scene = this.findElementWithInstanceOf(THREE.Scene) as ThreeScene
     if (!scene) throw "No <three-scene> tag found!"
     return scene
   }
 
   /** A dictionary of ticker callbacks (ontick, etc.) */
-  private callbacks = {} as Record<string, TickerFunction | undefined>
+  protected callbacks = {} as Record<string, TickerFunction | undefined>
 
   get ontick() {
     return this.callbacks["ontick"]
