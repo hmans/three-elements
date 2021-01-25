@@ -4,6 +4,7 @@ import { IConstructable } from "./types"
 import { dasherize } from "./util/dasherize"
 import { registerElement } from "./util/registerElement"
 export * from "./elements"
+export { BaseElement } from "./BaseElement"
 export { registerElement, ThreeElement }
 
 const banner = () =>

@@ -1,15 +1,15 @@
 import * as THREE from "three"
+import { BaseElement } from "./BaseElement"
 import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { IConstructable, isDisposable } from "./types"
 import { applyProps } from "./util/applyProps"
-import { camelize } from "./util/camelize"
 import { eventForwarder } from "./util/eventForwarder"
 import { observeAttributeChange } from "./util/observeAttributeChange"
 
 export class ThreeElementLifecycleEvent extends CustomEvent<{}> {}
 
-export class ThreeElement<T = any> extends HTMLElement {
+export class ThreeElement<T = any> extends BaseElement {
   /** Has the element been fully initialized? */
   isReady = false
 
@@ -49,13 +49,6 @@ export class ThreeElement<T = any> extends HTMLElement {
 
       return object
     }
-  }
-
-  /**
-   * Returns this element's tag name, formatted as an actual HTML tag (eg. "<three-mesh>").
-   */
-  get htmlTagName() {
-    return `<${this.tagName.toLowerCase()}>`
   }
 
   /** A dictionary of ticker callbacks (ontick, etc.) */
@@ -153,166 +146,39 @@ export class ThreeElement<T = any> extends HTMLElement {
   private _forwarder = eventForwarder(this)
   private _ticking = false
 
-  /** This element's MutationObserver. */
-  private _observer?: MutationObserver
+  readyCallback() {
+    super.readyCallback()
 
-  constructor() {
-    super()
-    this.debug("constructor", this.getAllAttributes())
+    /* Handle attach attribute */
+    this.handleAttach()
+
+    /* Add object to scene */
+    this.addObjectToParent()
+
+    /* Make sure a frame is queued */
+    this.game.requestFrame()
   }
 
-  connectedCallback() {
-    this.debug("connectedCallback")
+  removedCallback() {
+    super.removedCallback()
 
-    /* Construct wrapped object if we don't have on already. */
-    this._object ||= this.constructWrappedObject()
+    /* Queue a frame, because very likely something just changed in the scene :) */
+    this.game.requestFrame()
 
-    /* Apply props */
-    const attributes = this.getAllAttributes()
-    for (const key in attributes) {
-      this.attributeChangedCallback(key, null, attributes[key])
+    /* Stop listening to the game's ticker events */
+    this.ticking = false
+
+    /* If the wrapped object is parented, remove it from its parent */
+    if (this.object instanceof THREE.Object3D && this.object.parent) {
+      this.debug("Removing from scene:", this.object)
+      this.object.parent.remove(this.object)
     }
 
-    /*
-    When one of this element's attributes changes, apply it to the object. Custom Elements have a built-in
-    mechanism for this (attributeChangedCallback and observedAttributes, but unfortunately we can't use it,
-    since we don't know the set of attributes the wrapped Three.js classes expose beforehand. So instead
-    we're hacking our way around it using a mutation observer. Fun times!)
-    */
-    this._observer ||= observeAttributeChange(this, (prop, value) => {
-      this.attributeChangedCallback(prop, this[prop as keyof this], value)
-    })
-
-    /* Emit connected event */
-    this.dispatchEvent(
-      new ThreeElementLifecycleEvent("connected", { bubbles: true, cancelable: false })
-    )
-
-    /*
-    Some stuff relies on all custom elements being fully defined and connected. However:
-
-    If there are already tags in the DOM, newly created custom elements will connect in the order they
-    are defined, which isn't always what we want (because a Material node that intends to attach itself to
-    a Mesh might be defined before the element that represents that Mesh. Woops!)
-
-    For this reason, we'll run some extra initialization inside a microtask:
-    https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide
-    */
-    queueMicrotask(() => {
-      /* Handle attach attribute */
-      this.handleAttach()
-
-      /* Add object to scene */
-      this.addObjectToParent()
-
-      /* Make sure a frame is queued */
-      this.game.requestFrame()
-
-      /* Invoke mount method */
-      this.readyCallback()
-
-      /* Emit ready event */
-      this.dispatchEvent(
-        new ThreeElementLifecycleEvent("ready", { bubbles: true, cancelable: false })
-      )
-
-      this.isReady = true
-
-      this.debug("isReady:", this.object)
-    })
-  }
-
-  /**
-   * This callback is invoked when the element is deemed properly initialized. Most
-   * importantly, this happens in a microtask that is very likely executed after all
-   * the other elements in the document have finished running their connectedCallbacks.
-   */
-  readyCallback() {}
-
-  /**
-   * While disconnectedCallback is invoked whenever the element is removed from the DOM
-   * _or_ just moved to a new parent, removedCallback will only be invoked when the
-   * element is actually being removed from the DOM entirely.
-   */
-  removedCallback() {}
-
-  disconnectedCallback() {
-    this.debug("disconnectedCallback")
-
-    /* Emit disconnected event */
-    this.dispatchEvent(
-      new ThreeElementLifecycleEvent("disconnected", { bubbles: true, cancelable: false })
-    )
-
-    /*
-    If isConnected is false, this element is being removed entirely. In this case,
-    we'll do some extra cleanup.
-    */
-    if (!this.isConnected) {
-      queueMicrotask(() => {
-        /* Emit disconnected event */
-        this.dispatchEvent(
-          new ThreeElementLifecycleEvent("removed", { bubbles: true, cancelable: false })
-        )
-
-        /* Invoke removedCallback */
-        this.removedCallback()
-
-        /* Queue a frame, because very likely something just changed in the scene :) */
-        this.game.requestFrame()
-
-        /* Disconnect observer */
-        this._observer?.disconnect()
-        this._observer = undefined
-
-        /* Stop listening to the game's ticker events */
-        this.ticking = false
-
-        /* If the wrapped object is parented, remove it from its parent */
-        if (this.object instanceof THREE.Object3D && this.object.parent) {
-          this.debug("Removing from scene:", this.object)
-          this.object.parent.remove(this.object)
-        }
-
-        /* If the object can be disposed, dispose of it! */
-        if (isDisposable(this.object)) {
-          this.debug("Disposing:", this.object)
-          this.object.dispose()
-        }
-      })
+    /* If the object can be disposed, dispose of it! */
+    if (isDisposable(this.object)) {
+      this.debug("Disposing:", this.object)
+      this.object.dispose()
     }
-  }
-
-  /**
-   * Returns a dictionary containing all attributes on this element.
-   */
-  getAllAttributes() {
-    return this.getAttributeNames().reduce((acc, name) => {
-      acc[name] = this.getAttribute(name)
-      return acc
-    }, {} as Record<string, any>)
-  }
-
-  /**
-   * Takes a function, then walks up the node tree and returns the first
-   * node where the function returns true.
-   */
-  find<T extends HTMLElement>(fn: (node: HTMLElement) => any): T | undefined {
-    /* TODO: We might be able to replace this entire function with something like this.closest(). */
-
-    /* Start here */
-    let node: HTMLElement | undefined
-    node = this
-
-    do {
-      /* Get the immediate parent, or, if we're inside a shaodow DOM, the host element */
-      node = node.parentElement || (node.getRootNode() as any).host
-
-      /* Check against the supplied function */
-      if (node && fn(node)) {
-        return node as T
-      }
-    } while (node)
   }
 
   findElementWith<T>(constructor: IConstructable<T>): ThreeElement<T> | undefined {
@@ -460,14 +326,6 @@ export class ThreeElement<T = any> extends HTMLElement {
         this.addEventListener(eventName, newCallback)
       })
     }
-  }
-
-  protected debug(...output: any) {
-    // console.debug(`${this.htmlTagName}`, ...output)
-  }
-
-  protected error(...output: any) {
-    console.error(`${this.htmlTagName}>`, ...output)
   }
 
   static for<T>(constructor: IConstructable<T>): IConstructable<ThreeElement<T>> {
