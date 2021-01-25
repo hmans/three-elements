@@ -107,14 +107,14 @@ export class BaseElement extends HTMLElement {
     /* Unregister previous callback */
     const previousCallback = this.callbacks[eventName]
     if (previousCallback) {
-      this.removeEventListener(eventName, previousCallback)
+      this.game.emitter.off(eventName, previousCallback)
     }
 
     const createCallbackFunction = (fn?: TickerFunction | string) => {
       switch (typeof fn) {
         /* If the value is a string, we'll create a function from it. Magic! */
         case "string":
-          return new Function(fn) as TickerFunction
+          return new Function("", fn).bind(this) as TickerFunction
 
         /* If it's already a function, we'll just use that. */
         case "function":
@@ -136,7 +136,7 @@ export class BaseElement extends HTMLElement {
       work are not done initializing yet.
       */
       queueMicrotask(() => {
-        this.addEventListener(eventName, newCallback)
+        this.game.emitter.on(eventName, newCallback)
       })
     }
   }
