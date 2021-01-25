@@ -22,6 +22,9 @@ export class ThreeElement<T = any> extends HTMLElement {
 
   /** The THREE.* object managed by this element. */
   get object() {
+    if (!this.isConnected)
+      throw "Something is accessing my .game property while I'm not connected. This shouldn't happen! 😭"
+
     return (this._object ||= this.constructWrappedObject())
   }
 
@@ -98,6 +101,9 @@ export class ThreeElement<T = any> extends HTMLElement {
    * Returns the instance of ThreeGame that this element is nested under.
    */
   get game(): ThreeGame {
+    if (!this.isConnected)
+      throw "Something is accessing my .game property while I'm not connected. This shouldn't happen! 😭"
+
     return (this._game ||= this.findGame())
   }
   private _game?: ThreeGame
@@ -112,6 +118,9 @@ export class ThreeElement<T = any> extends HTMLElement {
    * Returns the instance of ThreeScene that this element is nested under.
    */
   get scene(): ThreeScene {
+    if (!this.isConnected)
+      throw "Something is accessing my .scene property while I'm not connected. This shouldn't happen! 😭"
+
     return (this._scene ||= this.findScene())
   }
   private _scene?: ThreeScene
