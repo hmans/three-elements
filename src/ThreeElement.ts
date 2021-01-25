@@ -157,7 +157,10 @@ export class ThreeElement<T = any> extends HTMLElement {
     }
 
     /* Apply props */
-    this.handleAttributeChange(this.getAllAttributes())
+    const attributes = this.getAllAttributes()
+    for (const key in attributes) {
+      this.attributeChangedCallback(key, null, attributes[key])
+    }
 
     /*
     When one of this element's attributes changes, apply it to the object. Custom Elements have a built-in
@@ -166,7 +169,7 @@ export class ThreeElement<T = any> extends HTMLElement {
     we're hacking our way around it using a mutation observer. Fun times!)
     */
     this._observer = observeAttributeChange(this, (prop, value) => {
-      this.handleAttributeChange({ [prop]: value })
+      this.attributeChangedCallback(prop, this[prop as keyof this], value)
     })
 
     /* Emit connected event */
@@ -392,15 +395,6 @@ export class ThreeElement<T = any> extends HTMLElement {
           }
         }
     }
-  }
-
-  protected handleAttributeChange(attributes: IStringIndexable) {
-    for (const key in attributes) {
-      this.attributeChangedCallback(key, null, attributes[key])
-    }
-
-    /* Make sure a frame is queued */
-    this.game.requestFrame()
   }
 
   protected setCallback(propName: string, fn?: TickerFunction | string) {
