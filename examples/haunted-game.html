@@ -54,11 +54,10 @@
           const [board, setBoard] = useState(() => makeBoard())
           const [selectedTile, setSelectedTile] = useState([])
 
+          /* API */
           const removeTile = (x, y) => (board[y][x] = null)
 
-          const handleTileClick = (x, y) => () => {
-            setSelectedTile([x, y])
-          }
+          const selectTile = (x, y) => setSelectedTile([x, y])
 
           return html`
             <three-group position="-4, -4, 0">
@@ -66,7 +65,7 @@
                 row.map((color, x) => {
                   return color
                     ? html`<game-tile
-                        .onclick=${handleTileClick(x, y)}
+                        .onclick=${() => selectTile(x, y)}
                         color=${color}
                         y=${y}
                         x=${x}
