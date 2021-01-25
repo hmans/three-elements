@@ -139,7 +139,7 @@
 
             do {
               this.board = makeBoard()
-            } while (this.findMatch())
+            } while (this.findMatches().length > 0)
           }
 
           pickRandomColor() {
@@ -190,13 +190,17 @@
             }
           }
 
-          findMatch() {
+          findMatches() {
+            const matches = []
+
             for (let y = 0; y < 8; y++) {
               for (let x = 0; x < 8; x++) {
                 const match = this.findMatchAt(x, y)
-                if (match) return match
+                if (match) matches.push(match)
               }
             }
+
+            return matches
           }
 
           clearMatch(match) {
@@ -206,13 +210,14 @@
           }
 
           clearAllMatches() {
-            let match
-            console.log("clearAllMatches")
-            while ((match = this.findMatch())) {
-              console.log("clearing match:", match)
-              this.clearMatch(match)
+            let matches
+            do {
+              matches = this.findMatches()
+              for (const match of matches) {
+                this.clearMatch(match)
+              }
               this.applyGravity()
-            }
+            } while (matches.length > 0)
           }
 
           applyGravity() {
