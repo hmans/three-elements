@@ -64,6 +64,8 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     /* Unregister event handlers */
     this.game.removeEventListener("rendertick", this.render)
     window.removeEventListener("resize", this.handleWindowResize)
+
+    super.disconnectedCallback()
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
