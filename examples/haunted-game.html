@@ -52,12 +52,95 @@
 
         const GameBoard = () => {
           const [board, setBoard] = useState(() => makeBoard())
-          const [selectedTile, setSelectedTile] = useState([])
+          const [selectedTile, setSelectedTile] = useState(null)
 
           /* API */
-          const removeTile = (x, y) => (board[y][x] = null)
+          const getTile = (x, y) => board[y][x]
+          const setTile = (x, y, color) => (board[y][x] = color)
 
-          const selectTile = (x, y) => setSelectedTile([x, y])
+          const removeTile = (x, y) => setTile(x, y, null)
+
+          const swapWithSelectedTile = (x, y) => {
+            if (selectedTile) {
+              const [sx, sy] = selectedTile
+              const selectedColor = getTile(sx, sy)
+              const otherColor = getTile(x, y)
+              setTile(sx, sy, otherColor)
+              setTile(x, y, selectedColor)
+
+              setSelectedTile(null)
+            }
+          }
+
+          const adjacentToSelectedTile = (x, y) => {
+            if (selectedTile) {
+              const [sx, sy] = selectedTile
+              return (
+                (x >= sx - 1 && x <= sx + 1 && y == sy) || (y >= sy - 1 && y <= sy + 1 && x == sx)
+              )
+            }
+          }
+
+          const removeIfMatching = (positions) => {}
+
+          const findMatchAt = (x, y) => {
+            const color = getTile(x, y)
+
+            if (color) {
+              {
+                /* find horizontal match */
+                let match = []
+                for (let sx = x; sx < 8; sx++) {
+                  if (getTile(sx, y) == color) match.push([sx, y])
+                  else break
+                }
+                if (match.length >= 3) return match
+              }
+
+              {
+                /* find vertical match */
+                let match = []
+                for (let sy = y; sy < 8; sy++) {
+                  if (getTile(x, sy) == color) match.push([x, sy])
+                  else break
+                }
+                if (match.length >= 3) return match
+              }
+            }
+          }
+
+          const findMatch = () => {
+            for (let y = 0; y < 8; y++) {
+              for (let x = 0; x < 8; x++) {
+                const match = findMatchAt(x, y)
+                if (match) return match
+              }
+            }
+          }
+
+          const clearMatch = (match) => {
+            for (const position of match) {
+              removeTile(position[0], position[1])
+            }
+          }
+
+          const clearAllMatches = () => {
+            let match
+            while ((match = findMatch())) {
+              console.log("clearing match:", match)
+              clearMatch(match)
+            }
+          }
+
+          const selectTile = (x, y) => {
+            /* If a tile is already selected, swap the two tiles */
+            if (selectedTile && adjacentToSelectedTile(x, y)) {
+              swapWithSelectedTile(x, y)
+              clearAllMatches()
+            } else {
+              setSelectedTile([x, y])
+            }
+          }
 
           return html`
             <three-group position="-4, -4, 0">
@@ -69,7 +152,7 @@
                         color=${color}
                         y=${y}
                         x=${x}
-                        ?selected=${x == selectedTile[0] && y == selectedTile[1]}
+                        ?selected=${selectedTile && x == selectedTile[0] && y == selectedTile[1]}
                       ></game-tile>`
                     : null
                 })
