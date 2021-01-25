@@ -92,7 +92,7 @@ export class BaseElement extends HTMLElement {
 
         /* If it's already a function, we'll just use that. */
         case "function":
-          return fn
+          return (dt: number) => fn(dt, this)
       }
     }
 

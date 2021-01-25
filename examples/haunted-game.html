@@ -80,7 +80,7 @@
 
           const [hover, setHover] = useState(false)
 
-          const onTick = ({ target }) => {
+          const onTick = (target) => {
             const { object, game } = target
             object.rotation.x = object.rotation.y += (hover ? 1.5 : 0.5) * game.deltaTime
             game.requestFrame()
@@ -92,8 +92,7 @@
             <three-group position.x=${x} position.y=${y} ticking scale=${hover ? 1.3 : 1}>
               <three-mesh
                 scale="0.4"
-                ticking
-                @tick=${onTick}
+                .ontick="foo"
                 @pointerenter=${(e) => setHover(true)}
                 @pointerleave=${(e) => setHover(false)}
               >

@@ -2,7 +2,7 @@ import EventEmitter from "eventemitter3"
 import * as THREE from "three"
 import { registerElement } from "../util/registerElement"
 
-export type TickerFunction = (dt: number) => any
+export type TickerFunction = (dt: number, el: HTMLElement) => any
 
 export class ThreeGame extends HTMLElement {
   emitter = new EventEmitter()
