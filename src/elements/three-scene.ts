@@ -77,7 +77,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
         return
 
       case "camera":
-        setTimeout(() => {
+        queueMicrotask(() => {
           const el = document.getElementById(newValue) as ThreeElement<Camera>
 
           if (!el) {

@@ -456,11 +456,11 @@ export class ThreeElement<T = any> extends HTMLElement {
       this.ticking = true
 
       /*
-      We're using setTimeout as a stopgap measure here to accomodate for the fact
-      that the three-game tag may not be available and upgraded at the time this
-      property is set. We'll find a nicer solution for this eventually.
+      We're using queueMicrotask here because at the point when a ticker event
+      property is assigned, it's possible that the elements required to make this
+      work are not done initializing yet.
       */
-      setTimeout(() => {
+      queueMicrotask(() => {
         this.addEventListener(eventName, newCallback)
       })
     }
