@@ -50,70 +50,69 @@
           })
         )
 
-        customElements.define(
-          "game-board",
-          component(() => {
-            const [board, setBoard] = useState(() => makeBoard())
+        const GameBoard = () => {
+          const [version, setVersion] = useState(0)
+          const [board, setBoard] = useState(() => makeBoard())
+          const [selectedTile, setSelectedTile] = useState([])
 
-            const removeTile = (x, y) => (board[y][x] = null)
+          const removeTile = (x, y) => (board[y][x] = null)
 
-            const handleTileClick = (x, y) => () => {
-              removeTile(x, y)
-              setBoard(board)
-            }
+          const handleTileClick = (x, y) => () => {
+            setSelectedTile([x, y])
+            setVersion(version + 1)
+          }
 
-            return html`
-              <three-group position="-4, -4, 0">
-                ${board.map((row, y) =>
-                  row.map((color, x) =>
-                    color
-                      ? html`<game-tile
-                          .onclick=${handleTileClick(x, y)}
-                          color=${color}
-                          y=${y}
-                          x=${x}
-                        ></game-tile>`
-                      : null
-                  )
-                )}
-              </three-group>
-            `
-          })
-        )
+          return html`
+            <three-group position="-4, -4, 0">
+              ${board.map((row, y) =>
+                row.map((color, x) => {
+                  return color
+                    ? html`<game-tile
+                        .onclick=${handleTileClick(x, y)}
+                        color=${color}
+                        y=${y}
+                        x=${x}
+                        ?selected=${x == selectedTile[0] && y == selectedTile[1]}
+                      ></game-tile>`
+                    : null
+                })
+              )}
+            </three-group>
+          `
+        }
 
-        customElements.define(
-          "game-tile",
-          component((el) => {
-            const x = el.getAttribute("x")
-            const y = el.getAttribute("y")
-            const color = el.getAttribute("color")
+        customElements.define("game-board", component(GameBoard))
 
-            const [hover, setHover] = useState(false)
+        const GameTile = ({ x, y, selected, color }) => {
+          const [hover, setHover] = useState(false)
 
-            const onTick = (dt, { object, game }) => {
-              object.rotation.x = object.rotation.y += (hover ? 1.5 : 0.5) * dt
-              game.requestFrame()
-            }
+          const onTick = (dt, { object, game }) => {
+            object.rotation.x = object.rotation.y += (hover ? 1.5 : 0.5) * dt
+            game.requestFrame()
+          }
 
-            return html`
-              <three-group position.x=${x} position.y=${y} ticking scale=${hover ? 1.3 : 1}>
-                <three-mesh
-                  scale="0.4"
-                  .ontick=${onTick}
-                  .onpointerenter=${(e) => setHover(true)}
-                  .onpointerleave=${(e) => setHover(false)}
-                >
-                  <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-                  <three-mesh-standard-material
-                    color=${color}
-                    emissive=${hover ? color : ""}
-                    emissive-intensity=${hover ? 0.9 : 0}
-                  ></three-mesh-standard-material>
-                </three-mesh>
-              </three-group>
-            `
-          })
-        )
+          return html`
+            <three-group position.x=${x} position.y=${y} scale=${selected ? 1.3 : 1}>
+              <three-mesh
+                scale="0.4"
+                .ontick=${onTick}
+                .onpointerenter=${(e) => setHover(true)}
+                .onpointerleave=${(e) => setHover(false)}
+              >
+                <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+                <three-mesh-standard-material
+                  color=${color}
+                  emissive=${hover ? color : ""}
+                  emissive-intensity=${hover ? 0.9 : 0}
+                ></three-mesh-standard-material>
+              </three-mesh>
+            </three-group>
+          `
+        }
+
+        GameTile.observedAttributes = ["x", "y", "color", "selected"]
+
+        customElements.define("game-tile", component(GameTile))
       })
     </script>
 
