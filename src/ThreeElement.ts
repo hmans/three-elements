@@ -100,6 +100,21 @@ export class ThreeElement<T = any> extends HTMLElement {
     return game
   }
 
+  /**
+   * Returns the instance of ThreeScene that this element is nested under.
+   */
+  get scene(): ThreeScene {
+    return (this._scene ||= this.findScene())
+  }
+  private _scene?: ThreeScene
+
+  protected findScene() {
+    const scene = this.findElementWith(THREE.Scene) as ThreeScene
+    if (!scene) throw "No <three-scene> tag found!"
+    return scene
+  }
+
+  /** Is this element connected to the game's ticker? */
   get ticking() {
     return this._ticking
   }
@@ -124,18 +139,6 @@ export class ThreeElement<T = any> extends HTMLElement {
   }
   private _forwarder = eventForwarder(this)
   private _ticking = false
-
-  /**
-   * Returns the instance of ThreeScene that this element is nested under.
-   */
-  get scene(): ThreeScene {
-    if (!this._scene) {
-      this._scene = this.findElementWith(THREE.Scene) as ThreeScene
-      if (!this._scene) throw "No <three-scene> tag found!"
-    }
-    return this._scene
-  }
-  private _scene?: ThreeScene
 
   /** This element's MutationObserver. */
   private _observer?: MutationObserver
