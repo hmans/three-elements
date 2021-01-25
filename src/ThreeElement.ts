@@ -42,8 +42,8 @@ export class ThreeElement<T = any> extends BaseElement {
     }
   }
 
-  readyCallback() {
-    super.readyCallback()
+  mountedCallback() {
+    super.mountedCallback()
 
     /* Handle attach attribute */
     this.handleAttach()

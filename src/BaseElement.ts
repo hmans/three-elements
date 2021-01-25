@@ -149,7 +149,7 @@ export class BaseElement extends HTMLElement {
    * importantly, this happens in a microtask that is very likely executed after all
    * the other elements in the document have finished running their connectedCallbacks.
    */
-  readyCallback() {}
+  mountedCallback() {}
 
   /**
    * While disconnectedCallback is invoked whenever the element is removed from the DOM
@@ -192,7 +192,7 @@ export class BaseElement extends HTMLElement {
     */
     queueMicrotask(() => {
       /* Invoke mount method */
-      this.readyCallback()
+      this.mountedCallback()
 
       /* Emit ready event */
       this.dispatchEvent(new CustomEvent("ready", { bubbles: true, cancelable: false }))
