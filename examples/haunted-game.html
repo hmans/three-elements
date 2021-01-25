@@ -68,22 +68,29 @@
             }
           }
 
+          const onTick = (dt, { object, scene }) => {
+            const pointer = scene.pointer.position
+            object.rotation.set(pointer.y / 4, pointer.x / -4, 0)
+          }
+
           return html`
-            <three-group position="-4, -4, 0">
-              ${board.board.map((row, y) =>
-                row.map((color, x) => {
-                  return color
-                    ? html`<game-tile
-                        .onclick=${() => selectTile(x, y)}
-                        color=${color}
-                        y=${y}
-                        x=${x}
-                        ?selected=${selectedTile && x == selectedTile[0] && y == selectedTile[1]}
-                      ></game-tile>`
-                    : null
-                })
-              )}
-            </three-group>
+            <three-group .ontick=${onTick}>
+              <three-group position="-4, -4, 0">
+                ${board.board.map((row, y) =>
+                  row.map((color, x) => {
+                    return color
+                      ? html`<game-tile
+                          .onclick=${() => selectTile(x, y)}
+                          color=${color}
+                          y=${y}
+                          x=${x}
+                          ?selected=${selectedTile && x == selectedTile[0] && y == selectedTile[1]}
+                        ></game-tile>`
+                      : null
+                  })
+                )}
+              </three-group></three-group
+            >
           `
         }
 
