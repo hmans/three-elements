@@ -11,18 +11,17 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
 
     const key = camelize(firstKey)
 
-    /* Attempt to parse the value */
-    const parsed = parseJson(value)
-
     /* Skip all ignored keys. */
     if (IGNORED_KEYS.includes(key)) return
 
     /* Skip all data attributes. */
     if (firstKey.startsWith("data-")) return
 
-    /* Handle nested keys, eg. position.x */
-    if (key in object && rest.length > 0)
-      return applyProps(object[key], { [rest.join(".")]: value })
+    /* Recursively handle nested keys, eg. position.x */
+    if (key in object && rest.length > 0) {
+      applyProps(object[key], { [rest.join(".")]: value })
+      return
+    }
 
     /*
     Handle boolean properties. We will check against the only values that we consider falsey here,
@@ -33,6 +32,9 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
       object[key] = ![undefined, null, false, "no", "false"].includes(value)
       return
     }
+
+    /* It is attribute-setting time! Let's try to parse the value. */
+    const parsed = parseJson(value)
 
     /* Handle properties that provide .set methods */
     if (object[key]?.set !== undefined) {
