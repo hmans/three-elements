@@ -12,6 +12,15 @@ export const makeBoard = () => {
   return rows
 }
 
+export const makeBoardWithoutMatches = () => {
+  let board
+  do {
+    board = makeBoard()
+  } while (findMatches(board).length > 0)
+
+  return board
+}
+
 export const pickRandomColor = () => {
   return colors[Math.floor(Math.random() * colors.length)]
 }

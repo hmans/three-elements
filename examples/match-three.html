@@ -39,7 +39,7 @@
         )
 
         const GameBoard = (element) => {
-          const [board, setBoard] = useState(() => Board.makeBoard())
+          const [board, setBoard] = useState(() => Board.makeBoardWithoutMatches())
           const [animations, setAnimations] = useState([])
           const [selectedTile, setSelectedTile] = useState(null)
 
