@@ -1,5 +1,6 @@
 import { IStringIndexable } from "../types"
 import { camelize } from "./camelize"
+import { MathUtils } from "three"
 
 const IGNORED_KEYS = ["id"]
 
@@ -11,10 +12,7 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
     const key = camelize(firstKey)
 
     /* Attempt to parse the value */
-    let parsed = undefined
-    try {
-      parsed = JSON.parse(value)
-    } catch (e) {}
+    const parsed = parseJson(value)
 
     switch (true) {
       /* Skip ignored keys */
@@ -72,4 +70,14 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
         if (key in object) object[key] = parsed !== undefined ? parsed : value
     }
   }
+}
+
+const parseJson = (value: string) => {
+  let parsed = undefined
+
+  try {
+    parsed = JSON.parse(value)
+  } catch (e) {}
+
+  return parsed
 }
