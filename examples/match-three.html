@@ -15,8 +15,8 @@
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
-      import { css, html, LitElement } from "https://jspm.dev/lit-element"
-      import { component, useState } from "https://jspm.dev/haunted"
+      import { html, component, useState } from "https://jspm.dev/haunted"
+      import * as gsap from "https://jspm.dev/gsap"
       import * as Board from "./Board.mjs"
 
       importShim("/dist/index.esm.js").then(() => {
@@ -54,6 +54,8 @@
             if (selectedTile && adjacentToSelectedTile(x, y)) {
               const [sx, sy] = selectedTile
               console.log("start animating")
+              const tile = document.getElementById(`tile-${sx}-${sy}`)
+              console.log(tile)
 
               await sleep(1000)
 
@@ -81,6 +83,7 @@
                   row.map((color, x) => {
                     return color
                       ? html`<game-tile
+                          id="tile-${x}-${y}"
                           .onclick=${() => selectTile(x, y)}
                           color=${color}
                           y=${y}
