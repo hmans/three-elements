@@ -20,7 +20,7 @@
       import * as Board from "./Board.mjs"
 
       importShim("/dist/index.esm.js").then(() => {
-        const animationDuration = 250
+        const animationDuration = 350
 
         const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -53,19 +53,21 @@
           }
 
           const animatedMoveTile = (x, y, fx, fy, tx, ty) => {
-            const tileElement = element.shadowRoot.getElementById(`tile-${x}-${y}`)
-            const tileMeshElement = tileElement.shadowRoot.querySelector("three-group")
-            const mesh = tileMeshElement.object
+            queueMicrotask(() => {
+              const tileElement = element.shadowRoot.getElementById(`tile-${x}-${y}`)
+              const tileMeshElement = tileElement.shadowRoot.firstElementChild
+              const mesh = tileMeshElement.object
 
-            mesh.position.set(fx, fy, 0)
+              mesh.position.set(fx, fy, 0)
 
-            gsap.to(mesh.position, {
-              x: tx,
-              y: ty,
-              duration: animationDuration / 1000,
-              onComplete: () => {
-                mesh.position.set(x, y, 0)
-              }
+              gsap.to(mesh.position, {
+                x: tx,
+                y: ty,
+                duration: animationDuration / 1000,
+                onComplete: () => {
+                  mesh.position.set(x, y, 0)
+                }
+              })
             })
           }
 
@@ -101,19 +103,24 @@
             object.rotation.set(pointer.y / 4, pointer.x / -4, 0)
           }
 
-          // /* We just rendered, omg! Let's check the board for empty spaces. */
-          // useEffect(async () => {
-          //   const [newBoard, updatedTiles] = Board.applyGravity(board)
+          /* Run queued animations */
+          useEffect(async () => {
+            if (animations.length > 0) {
+              playAnimations(animations)
+              await sleep(animationDuration)
+              setAnimations([])
+            }
+          }, [animations])
 
-          //   if (updatedTiles.length > 0) {
-          //     updatedTiles.forEach(([x, y]) => {
-          //       console.log(x, y)
-          //       animatedMoveTile(x, y, x, y - 1)
-          //     })
-          //     await sleep(animationDuration)
-          //     setBoard(newBoard)
-          //   }
-          // }, [board])
+          /* We just rendered, omg! Let's check the board for empty spaces. */
+          useEffect(async () => {
+            const [newBoard, updatedTiles] = Board.applyGravity(board)
+
+            if (updatedTiles.length > 0) {
+              setBoard(newBoard)
+              setAnimations(updatedTiles.map(([x, y]) => [x, y, x, y + 1, x, y]))
+            }
+          }, [board])
 
           return html`
             <three-group .ontick=${onTick}>
