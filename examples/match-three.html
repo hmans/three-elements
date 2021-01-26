@@ -17,7 +17,7 @@
     <script type="module">
       import { css, html, LitElement } from "https://jspm.dev/lit-element"
       import { component, useState } from "https://jspm.dev/haunted"
-      import { Board } from "./Board.mjs"
+      import * as Board from "./Board.mjs"
 
       importShim("/dist/index.esm.js").then(() => {
         customElements.define(
@@ -35,16 +35,8 @@
         )
 
         const GameBoard = () => {
-          const [board] = useState(new Board())
+          const [board, setBoard] = useState(() => Board.makeBoard())
           const [selectedTile, setSelectedTile] = useState(null)
-
-          const swapWithSelectedTile = (x, y) => {
-            if (selectedTile) {
-              const [sx, sy] = selectedTile
-              board.swapTiles(x, y, sx, sy)
-              setSelectedTile(null)
-            }
-          }
 
           const adjacentToSelectedTile = (x, y) => {
             if (selectedTile) {
@@ -58,8 +50,9 @@
           const selectTile = (x, y) => {
             /* If a tile is already selected, swap the two tiles */
             if (selectedTile && adjacentToSelectedTile(x, y)) {
-              swapWithSelectedTile(x, y)
-              board.clearAllMatches()
+              const [sx, sy] = selectedTile
+              setBoard(Board.clearAllMatches(Board.swapTiles(board, x, y, sx, sy)))
+              setSelectedTile(null)
             } else {
               setSelectedTile([x, y])
             }
@@ -73,7 +66,7 @@
           return html`
             <three-group .ontick=${onTick}>
               <three-group position="-4, -4, 0">
-                ${board.board.map((row, y) =>
+                ${board.map((row, y) =>
                   row.map((color, x) => {
                     return color
                       ? html`<game-tile
