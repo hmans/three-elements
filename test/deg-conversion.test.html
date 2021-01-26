@@ -1,0 +1,25 @@
+<html>
+  <body>
+    <three-game id="game" autorender xr>
+      <three-scene id="scene" background-color="#555">
+        <three-mesh id="mesh"> </three-mesh>
+      </three-scene>
+    </three-game>
+
+    <script type="module">
+      import { runTests } from "@web/test-runner-mocha"
+      import { html, fixture, expect } from "@open-wc/testing"
+
+      import * as THREE from "three"
+      import "../src"
+
+      runTests(async () => {
+        describe("using the deg(x) modifier in an attribute value", () => {
+          it("sets the attribute to the corresponding radian value", () => {
+            expect(mesh.object.rotation.x).to.equal(Math.PI / 2)
+          })
+        })
+      })
+    </script>
+  </body>
+</html>
