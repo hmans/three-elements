@@ -86,6 +86,9 @@ export class ThreeGame extends HTMLElement {
 
     /* Update canvas */
     this.renderer.setSize(width, height)
+
+    /* Notify listeners */
+    this.emitter.emit("resize", { width, height })
   }
 
   requestFrame() {

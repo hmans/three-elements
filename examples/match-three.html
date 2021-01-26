@@ -200,10 +200,7 @@
             super.mountedCallback()
             this.setupComposer()
 
-            window.addEventListener("resize", () => {
-              const el = this.game
-              const width = el.clientWidth
-              const height = el.clientHeight
+            this.game.emitter.on("resize", ({ width, height }) => {
               this.passes.ssaaPass.setSize(width, height)
               this.composer.setSize(width, height)
             })
