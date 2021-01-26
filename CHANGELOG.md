@@ -31,6 +31,8 @@ If you've been extending ThreeElement in your own code, please note the followin
 
 - **Breaking Change:** Ticker events are now emitted by the three-game's `emitter`. Since we're no longer using DOM events, this means we also no longer need the `ticking` property/attribute, so it has been removed.
 
+- **Holy crap:** `applyProps` was refactored to use `if` instead of `switch (true)`. All you Senior JavaScript Architects can finally calm down, for I am no longer impeding upon your creed!
+
 ## [0.2.0] - 2021-01-18
 
 - **New:** Elements now emit `connected`, `ready` and `disconnected` lifecycle events that bubble up the DOM tree.
