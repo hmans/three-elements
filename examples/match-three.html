@@ -91,8 +91,23 @@
 
               await sleep(animationDuration)
 
-              let newBoard = Board.swapTiles(board, x, y, sx, sy)
-              setBoard(newBoard)
+              let swappedBoard = Board.swapTiles(board, x, y, sx, sy)
+
+              /* Check for matches */
+              const [matchedBoard, matches] = Board.clearAllMatches(swappedBoard)
+              setBoard(matchedBoard)
+
+              if (matches.length > 0) {
+                /* TODO: play some sort of match animation */
+
+                /* Apply some gravity */
+                const [filledBoard, updatedTiles] = Board.applyGravity(matchedBoard)
+
+                if (updatedTiles.length > 0) {
+                  setAnimations(updatedTiles.map(([x, y]) => [x, y, x, y + 1, x, y]))
+                  setBoard(filledBoard)
+                }
+              }
             } else {
               setSelectedTile([x, y])
             }
@@ -104,29 +119,15 @@
           }
 
           /* Run queued animations */
-          useEffect(async () => {
+          useEffect(() => {
             if (animations.length > 0) {
-              playAnimations(animations)
-              await sleep(animationDuration)
-              setAnimations([])
+              queueMicrotask(async () => {
+                playAnimations(animations)
+                await sleep(animationDuration)
+                setAnimations([])
+              })
             }
           }, [animations])
-
-          /* We just rendered, omg! Let's check the board for matches. */
-          useEffect(async () => {
-            let newBoard = Board.clearAllMatches(board)
-            setBoard(newBoard)
-          }, [board])
-
-          /* Apply gravity */
-          useEffect(async () => {
-            const [newBoard, updatedTiles] = Board.applyGravity(board)
-
-            if (updatedTiles.length > 0) {
-              setBoard(newBoard)
-              setAnimations(updatedTiles.map(([x, y]) => [x, y, x, y + 1, x, y]))
-            }
-          }, [board])
 
           return html`
             <three-group .ontick=${onTick}>
