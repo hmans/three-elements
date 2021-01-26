@@ -2,21 +2,19 @@ import { expect } from "@open-wc/testing"
 import { parseProps, applyProps } from "../../src/util/applyProps"
 
 describe("parseProps", () => {
+  it("leaves strings alone", () => {
+    const string = parseProps("String")
+    expect(string).to.equal("String")
+  })
+
   it("can parse radians to floats", () => {
-    const props = parseProps("3.14")
-    expect(props).to.equal(3.14)
+    const radians = parseProps("3.14")
+    expect(radians).to.equal(3.14)
   })
 
-  it("can parse deg(180) to Pi radians", () => {
-    const prop = parseProps("deg(180)")
-    expect(prop).to.equal(Math.PI)
-  })
-
-  it("can parse [deg(180), deg(20), deg(-20)] to radians", () => {
-    const [x, y, z] = parseProps("[deg(180), deg(20), deg(-20)]") as Number[]
-    expect(x).to.equal(Math.PI)
-    expect(y).to.equal(Math.PI / 9)
-    expect(z).to.equal(-Math.PI / 9)
+  it("can parse deg(180) to π radians", () => {
+    const degrees = parseProps("deg(180)")
+    expect(degrees).to.equal(Math.PI)
   })
 })
 

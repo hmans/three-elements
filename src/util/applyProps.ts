@@ -9,20 +9,25 @@ const DEGREES_REGEX = /deg\((.*?)\)/g
  * Parses and handles conversions for float props
  */
 export const parseProps = (str: string) => {
-  // Checks if props use modifiers, otherwise early return as float
+  const isNumber = !isNaN(parseFloat(str))
   const needsConversion = DEGREES_REGEX.test(str)
+
+  // Ignore non-integers without modifiers
+  if (!isNumber && !needsConversion) return str
+
+  // Skip to parsing for non-modified props
   if (!needsConversion) return parseFloat(str)
 
   // Isolate modified props
-  const groups = str.match(DEGREES_REGEX)
+  const prop = str.match(DEGREES_REGEX)
 
   // Handle degrees modifiers
-  const radians = groups?.map((g: string) =>
-    MathUtils.degToRad(parseFloat(g.replace(/(deg\(|\))/, "")))
-  )
+  const radians = prop
+    ?.map((g: string) => MathUtils.degToRad(parseFloat(g.replace(/(deg\(|\))/, ""))))
+    .shift()
 
   // Finally, return the parsed props as radians
-  return radians?.length === 1 ? radians[0] : radians
+  return radians
 }
 
 const IGNORED_KEYS = ["id"]
