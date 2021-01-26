@@ -168,23 +168,32 @@
             game.requestFrame()
           }
 
+          const waveScale = (dt, { object, game }) => {
+            const scale =
+              1 +
+              Math.pow((Math.cos((performance.now() + y * 200 + x * 200) / 500) + 1) / 2, 3) * 0.2
+            object.scale.setScalar(scale)
+          }
+
           return html`
             <three-group position.x=${x} position.y=${y} scale=${selected ? 1.3 : 1}>
-              <three-mesh
-                scale="0.4"
-                .ontick=${onTick}
-                .onpointerenter=${(e) => setHover(true)}
-                .onpointerleave=${(e) => setHover(false)}
-              >
-                <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-                <three-mesh-standard-material
-                  color=${color}
-                  emissive=${color}
-                  emissive-intensity=${hover ? 10 : 0.2}
-                  metalness="0.3"
-                  roughness="0.7"
-                ></three-mesh-standard-material>
-              </three-mesh>
+              <three-group .ontick=${waveScale}>
+                <three-mesh
+                  scale="0.4"
+                  .ontick=${onTick}
+                  .onpointerenter=${(e) => setHover(true)}
+                  .onpointerleave=${(e) => setHover(false)}
+                >
+                  <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+                  <three-mesh-standard-material
+                    color=${color}
+                    emissive=${color}
+                    emissive-intensity=${hover || selected ? 10 : 0.2}
+                    metalness="0.3"
+                    roughness="0.7"
+                  ></three-mesh-standard-material>
+                </three-mesh>
+              </three-group>
             </three-group>
           `
         }
