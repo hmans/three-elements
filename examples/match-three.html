@@ -64,6 +64,7 @@
                 x: tx,
                 y: ty,
                 duration: animationDuration / 1000,
+                ease: "power4.in",
                 onComplete: () => {
                   mesh.position.set(x, y, 0)
                 }
