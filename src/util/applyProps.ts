@@ -34,7 +34,7 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
     }
 
     /* It is attribute-setting time! Let's try to parse the value. */
-    const parsed = parseJson(value)
+    const parsed = parseJson(value) ?? parseDeg(value)
 
     /* Handle properties that provide .set methods */
     if (object[key]?.set !== undefined) {
@@ -57,7 +57,7 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
       }
 
       /* Otherwise, set the original string value, but split by commas */
-      const list = value.split(",").map((el: string) => parseJson(el) || el)
+      const list = value.split(",").map((el: string) => parseJson(el) ?? parseDeg(el) ?? el)
       object[key].set(...list)
       return
     }
@@ -78,4 +78,9 @@ const parseJson = (value: string) => {
   } catch (e) {}
 
   return parsed
+}
+
+const parseDeg = (value: string) => {
+  const r = value.trim().match(/^deg\(([0-9\.\- ]+)\)$/)
+  if (r) return MathUtils.degToRad(parseFloat(r[1]))
 }
