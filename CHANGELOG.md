@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - unreleased
 
+- **Changed:** By popular request, three-elements will no longer log to the console on startup. Enjoy the quiet!
+
 - **Changed:** The core ticker loop now makes use of `setAnimationLoop` instead of `requestAnimationFrame`, which is a critical prerequisite for making your three-elements project [WebXR-ready](https://three-elements.hmans.co/advanced/webxr.html).
 
 - **New:** `<three-game>` now can receive an `xr` attribute to enable WebXR features.
