@@ -902,6 +902,11 @@
   dependencies:
     "@types/chai" "^4.2.12"
 
+"@import-maps/resolve@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@import-maps/resolve/-/resolve-1.0.1.tgz#1e9fcadcf23aa0822256a329aabca241879d37c9"
+  integrity sha512-tWZNBIS1CoekcwlMuyG2mr0a1Wo5lb5lEHwwWvZo+5GLgr3e9LLDTtmgtCWEwBpXMkxn9D+2W9j2FY6eZQq0tA==
+
 "@mdn/browser-compat-data@^3.0.1":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@mdn/browser-compat-data/-/browser-compat-data-3.0.3.tgz#3e0710887ab3b66d33ed110315a8652777621ae5"
@@ -1278,7 +1283,7 @@
   dependencies:
     semver "^7.3.4"
 
-"@web/dev-server-core@^0.3.2", "@web/dev-server-core@^0.3.3":
+"@web/dev-server-core@^0.3.0", "@web/dev-server-core@^0.3.2", "@web/dev-server-core@^0.3.3":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@web/dev-server-core/-/dev-server-core-0.3.3.tgz#814bc86460c43ab9d66b640f2b3b65d452ce30e0"
   integrity sha512-zj70hj6FBIFAGZfyqrOlDY1bYtqTea5ioTcgGx55tIeHiUmblDCcpbBUIqj4pcw/GjpQPBBFw5oX1WyuiHQNhA==
@@ -1313,6 +1318,18 @@
     parse5 "^6.0.1"
     ua-parser-js "^0.7.23"
 
+"@web/dev-server-import-maps@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@web/dev-server-import-maps/-/dev-server-import-maps-0.0.5.tgz#98f8a8b7af4a60a13f7b6f1ea8e2a4ce0253658d"
+  integrity sha512-aAV+U6db9D3clfk2NmJkB4lPzL00MWmtYbAxrKNiQNrCWUFC0AsCG3EwrSXco2iF0WMdbbU2McLz/I9BHKyWFA==
+  dependencies:
+    "@import-maps/resolve" "^1.0.1"
+    "@types/parse5" "^5.0.3"
+    "@web/dev-server-core" "^0.3.0"
+    "@web/parse5-utils" "^1.1.2"
+    parse5 "^6.0.1"
+    picomatch "^2.2.2"
+
 "@web/dev-server-rollup@^0.3.2":
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/@web/dev-server-rollup/-/dev-server-rollup-0.3.2.tgz#8cf0df70fdca6f92f085f2840472677d29cf5862"
@@ -1345,7 +1362,7 @@
     open "^7.3.0"
     portfinder "^1.0.28"
 
-"@web/parse5-utils@^1.0.0":
+"@web/parse5-utils@^1.0.0", "@web/parse5-utils@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@web/parse5-utils/-/parse5-utils-1.1.2.tgz#b53e7f62679170371da36023517b23bbb1f7c582"
   integrity sha512-/JQHbK53BmYiFK2igr2B+Psl2Ivp2ju75Nx1InZweTbxLQNGG9yUBaudER85aqebIH6smkPkKwVtpdBXBiwy1A==
