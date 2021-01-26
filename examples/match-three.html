@@ -20,6 +20,8 @@
       import * as Board from "./Board.mjs"
 
       importShim("/dist/index.esm.js").then(() => {
+        const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
         customElements.define(
           "scene-lights",
           component(() => {
@@ -47,12 +49,19 @@
             }
           }
 
-          const selectTile = (x, y) => {
+          const selectTile = async (x, y) => {
             /* If a tile is already selected, swap the two tiles */
             if (selectedTile && adjacentToSelectedTile(x, y)) {
               const [sx, sy] = selectedTile
+              console.log("start animating")
+
+              await sleep(1000)
+
+              console.log("done animating")
+
               let newBoard = Board.swapTiles(board, x, y, sx, sy)
-              newBoard = Board.clearAllMatches(newBoard)
+
+              // newBoard = Board.clearAllMatches(newBoard)
               setBoard(newBoard)
               setSelectedTile(null)
             } else {
