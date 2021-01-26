@@ -194,10 +194,19 @@
         customElements.define("game-tile", component(GameTile))
 
         class CustomScene extends ThreeScene {
+          passes = {}
+
           mountedCallback() {
             super.mountedCallback()
-            const scene = this.object
             this.setupComposer()
+
+            window.addEventListener("resize", () => {
+              const el = this.game
+              const width = el.clientWidth
+              const height = el.clientHeight
+              this.passes.ssaaPass.setSize(width, height)
+              this.composer.setSize(width, height)
+            })
           }
 
           setupComposer() {
@@ -208,18 +217,18 @@
             this.composer = new EffectComposer(renderer)
 
             /* Add AA render pass */
-            const ssaaPass = new SSAARenderPass(scene, camera, "white", 0)
-            ssaaPass.unbiased = false
-            ssaaPass.sampleLevel = 2
-            this.composer.addPass(ssaaPass)
+            this.passes.ssaaPass = new SSAARenderPass(scene, camera, "white", 0)
+            this.passes.ssaaPass.unbiased = false
+            this.passes.ssaaPass.sampleLevel = 2
+            this.composer.addPass(this.passes.ssaaPass)
 
             /* Add bloom pass */
-            const bloom = new UnrealBloomPass(new THREE.Vector2(width, height), 1, 0, 0.8)
-            this.composer.addPass(bloom)
+            this.passes.bloom = new UnrealBloomPass(new THREE.Vector2(width, height), 1, 0, 0.8)
+            this.composer.addPass(this.passes.bloom)
 
             /* Vignette */
-            const vignette = new ShaderPass(VignetteShader)
-            this.composer.addPass(vignette)
+            this.passes.vignette = new ShaderPass(VignetteShader)
+            this.composer.addPass(this.passes.vignette)
           }
 
           render() {
