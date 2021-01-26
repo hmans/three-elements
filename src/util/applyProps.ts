@@ -57,7 +57,7 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
       }
 
       /* Otherwise, set the original string value, but split by commas */
-      const list = value.split(",").map((el: string) => parseFloat(el) || el)
+      const list = value.split(",").map((el: string) => parseJson(el) || el)
       object[key].set(...list)
       return
     }
