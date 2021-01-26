@@ -1,5 +1,24 @@
 import { expect } from "@open-wc/testing"
-import { applyProps } from "../../src/util/applyProps"
+import { parseProps, applyProps } from "../../src/util/applyProps"
+
+describe("parseProps", () => {
+  it("can parse radians to floats", () => {
+    const props = parseProps("3.14")
+    expect(props).to.equal(3.14)
+  })
+
+  it("can parse deg(180) to Pi radians", () => {
+    const prop = parseProps("deg(180)")
+    expect(prop).to.equal(Math.PI)
+  })
+
+  it("can parse [deg(180), deg(20), deg(-20)] to radians", () => {
+    const [x, y, z] = parseProps("[deg(180), deg(20), deg(-20)]") as Number[]
+    expect(x).to.equal(Math.PI)
+    expect(y).to.equal(Math.PI / 9)
+    expect(z).to.equal(-Math.PI / 9)
+  })
+})
 
 describe("applyProps", () => {
   it("can directly assign root-level properties", () => {
