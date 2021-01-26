@@ -92,7 +92,6 @@
               await sleep(animationDuration)
 
               let newBoard = Board.swapTiles(board, x, y, sx, sy)
-              newBoard = Board.clearAllMatches(newBoard)
               setBoard(newBoard)
             } else {
               setSelectedTile([x, y])
@@ -113,7 +112,13 @@
             }
           }, [animations])
 
-          /* We just rendered, omg! Let's check the board for empty spaces. */
+          /* We just rendered, omg! Let's check the board for matches. */
+          useEffect(async () => {
+            let newBoard = Board.clearAllMatches(board)
+            setBoard(newBoard)
+          }, [board])
+
+          /* Apply gravity */
           useEffect(async () => {
             const [newBoard, updatedTiles] = Board.applyGravity(board)
 
