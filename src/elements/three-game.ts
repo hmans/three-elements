@@ -1,5 +1,5 @@
-import EventEmitter from "eventemitter3"
 import * as THREE from "three"
+import { EventEmitter } from "../util/EventEmitter"
 import { registerElement } from "../util/registerElement"
 
 export type TickerFunction = (dt: number, el: HTMLElement) => any
