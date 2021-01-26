@@ -89,27 +89,29 @@ export const clearAllMatches = (board) => {
     for (const match of matches) {
       board = clearMatch(board, match)
     }
-
-    board = applyGravity(board)
   } while (matches.length > 0)
 
   return board
 }
 
 export const applyGravity = (board) => {
+  const updatedTiles = []
+
   for (let y = 0; y < 8; y++) {
     for (let x = 0; x < 8; x++) {
       while (getTile(board, x, y) === null) {
         /* Shift everything else down */
         for (let sy = y; sy < 7; sy++) {
           board = swapTiles(board, x, sy, x, sy + 1)
+          updatedTiles.push([x, sy])
         }
 
         /* Create a new tile at the top */
         board = setTile(board, x, 7, pickRandomColor())
+        updatedTiles.push([x, 7])
       }
     }
   }
 
-  return board
+  return [board, updatedTiles]
 }

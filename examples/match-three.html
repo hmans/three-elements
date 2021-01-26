@@ -15,7 +15,7 @@
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
-      import { html, component, useState } from "https://jspm.dev/haunted"
+      import { html, component, useState, useEffect } from "https://jspm.dev/haunted"
       import { gsap } from "https://jspm.dev/gsap"
       import * as Board from "./Board.mjs"
 
@@ -40,6 +40,7 @@
 
         const GameBoard = (element) => {
           const [board, setBoard] = useState(() => Board.makeBoard())
+          const [animations, setAnimations] = useState([])
           const [selectedTile, setSelectedTile] = useState(null)
 
           const adjacentToSelectedTile = (x, y) => {
@@ -51,10 +52,12 @@
             }
           }
 
-          const animatedMoveTile = (x, y, tx, ty) => {
+          const animatedMoveTile = (x, y, fx, fy, tx, ty) => {
             const tileElement = element.shadowRoot.getElementById(`tile-${x}-${y}`)
             const tileMeshElement = tileElement.shadowRoot.querySelector("three-group")
             const mesh = tileMeshElement.object
+
+            mesh.position.set(fx, fy, 0)
 
             gsap.to(mesh.position, {
               x: tx,
@@ -66,19 +69,28 @@
             })
           }
 
+          const playAnimations = (animations) => {
+            for (const animation of animations) {
+              animatedMoveTile(...animation)
+            }
+          }
+
           const selectTile = async (x, y) => {
             /* If a tile is already selected, swap the two tiles */
             if (selectedTile && adjacentToSelectedTile(x, y)) {
+              setSelectedTile(null)
               const [sx, sy] = selectedTile
-              animatedMoveTile(x, y, sx, sy)
-              animatedMoveTile(sx, sy, x, y)
+
+              playAnimations([
+                [x, y, x, y, sx, sy],
+                [sx, sy, sx, sy, x, y]
+              ])
 
               await sleep(animationDuration)
 
               let newBoard = Board.swapTiles(board, x, y, sx, sy)
               newBoard = Board.clearAllMatches(newBoard)
               setBoard(newBoard)
-              setSelectedTile(null)
             } else {
               setSelectedTile([x, y])
             }
@@ -88,6 +100,20 @@
             const pointer = scene.pointer.position
             object.rotation.set(pointer.y / 4, pointer.x / -4, 0)
           }
+
+          // /* We just rendered, omg! Let's check the board for empty spaces. */
+          // useEffect(async () => {
+          //   const [newBoard, updatedTiles] = Board.applyGravity(board)
+
+          //   if (updatedTiles.length > 0) {
+          //     updatedTiles.forEach(([x, y]) => {
+          //       console.log(x, y)
+          //       animatedMoveTile(x, y, x, y - 1)
+          //     })
+          //     await sleep(animationDuration)
+          //     setBoard(newBoard)
+          //   }
+          // }, [board])
 
           return html`
             <three-group .ontick=${onTick}>
