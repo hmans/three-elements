@@ -20,6 +20,7 @@
       import * as Board from "./Board.mjs"
       import * as THREE from "https://jspm.dev/three"
       import { EffectComposer } from "https://jspm.dev/three/examples/jsm/postprocessing/EffectComposer"
+      import { SSAARenderPass } from "https://jspm.dev/three/examples/jsm/postprocessing/SSAARenderPass"
       import { RenderPass } from "https://jspm.dev/three/examples/jsm/postprocessing/RenderPass"
       import { UnrealBloomPass } from "https://jspm.dev/three/examples/jsm/postprocessing/UnrealBloomPass"
       import { ShaderPass } from "https://jspm.dev/three/examples/jsm/postprocessing/ShaderPass"
@@ -206,10 +207,11 @@
 
             this.composer = new EffectComposer(renderer)
 
-            /* Add normal render pass */
-            const renderPass = new RenderPass(scene, camera)
-            renderPass.enabled = true
-            this.composer.addPass(renderPass)
+            /* Add AA render pass */
+            const ssaaPass = new SSAARenderPass(scene, camera, "white", 0)
+            ssaaPass.unbiased = false
+            ssaaPass.sampleLevel = 2
+            this.composer.addPass(ssaaPass)
 
             /* Add bloom pass */
             const bloom = new UnrealBloomPass(new THREE.Vector2(width, height), 1, 0, 0.8)
