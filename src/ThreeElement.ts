@@ -9,9 +9,6 @@ export class ThreeElement<T = any> extends BaseElement {
 
   /** The THREE.* object managed by this element. */
   get object() {
-    if (!this.isConnected)
-      throw "Something is accessing my .game property while I'm not connected. This shouldn't happen! 😭"
-
     return (this._object ||= this.constructWrappedObject())
   }
 
@@ -60,9 +57,6 @@ export class ThreeElement<T = any> extends BaseElement {
 
     /* Queue a frame, because very likely something just changed in the scene :) */
     this.game.requestFrame()
-
-    /* Stop listening to the game's ticker events */
-    this.ticking = false
 
     /* If the wrapped object is parented, remove it from its parent */
     if (this.object instanceof THREE.Object3D && this.object.parent) {

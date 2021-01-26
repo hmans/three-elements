@@ -39,7 +39,7 @@
     "watch": "yarn clean && microbundle watch --globals three=THREE",
     "build": "yarn clean && microbundle --globals three=THREE",
     "test": "web-test-runner --puppeteer",
-    "examples": "live-server examples",
+    "examples": "serve -S examples",
     "prepublishOnly": "yarn build && yarn test",
     "site:dev": "cd site && yarn dev",
     "site:build": "cd site && yarn build"
@@ -47,21 +47,24 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
     "@open-wc/testing": "^2.5.32",
+    "@web/dev-server": "^0.1.5",
     "@web/dev-server-esbuild": "^0.2.11",
+    "@web/dev-server-import-maps": "^0.0.5",
     "@web/test-runner": "^0.12.2",
     "@web/test-runner-puppeteer": "^0.9.0",
     "concurrently": "^5.3.0",
     "lit-element": "^2.4.0",
-    "live-server": "^1.2.1",
     "microbundle": "^0.13.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.36.1",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.29.0",
+    "serve": "^11.3.2",
     "three": "^0.124.0",
     "typescript": "^4.1.3"
   },
   "peerDependencies": {
     "three": ">=0.121.0"
-  }
+  },
+  "dependencies": {}
 }

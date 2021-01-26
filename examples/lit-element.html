@@ -20,65 +20,65 @@
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
-      importShim("/dist/index.esm.js")
-
       import { css, html, LitElement } from "https://jspm.dev/lit-element"
 
-      export class LitDodecahedron extends LitElement {
-        static get properties() {
-          return {
-            speed: { type: Number },
-            scale: { type: Number }
+      importShim("/dist/index.esm.js").then(() => {
+        class LitDodecahedron extends LitElement {
+          static get properties() {
+            return {
+              speed: { type: Number },
+              scale: { type: Number }
+            }
           }
-        }
 
-        constructor() {
-          super()
-          this.speed = 1
-          this.scale = 1
-        }
+          constructor() {
+            super()
+            this.speed = 1
+            this.scale = 1
+          }
 
-        render() {
-          const onTick = (e) => {
-            /* Directly mutate the Three object. */
-            const { object, game } = e.target
-            object.rotation.x = object.rotation.y += this.speed * game.deltaTime
+          render() {
+            const onTick = (dt, { object, game }) => {
+              /* Directly mutate the Three object. */
+              object.rotation.x = object.rotation.y += this.speed * game.deltaTime
+
+              /*
+              Just for fun, update one of this element's reactive properties. This will
+              automatically update the rendered output, too (but if you look at the devtools in
+              your browser, you will see that only the affected attribute is being updated. Nice!)
+              */
+              this.scale = 5 + Math.cos(Date.now() / 300) * 1.5
+
+              game.requestFrame()
+            }
 
             /*
-            Just for fun, update one of this element's reactive properties. This will
-            automatically update the rendered output, too (but if you look at the devtools in
-            your browser, you will see that only the affected attribute is being updated. Nice!)
+            Render some three-elements stuff. Note that we can directly bind functions as event
+            handlers, and not just to normal DOM events, but also to three-elements' own ticker events
+            (but don't forget to register this element with the ticker by setting the "ticking" attribute!)
             */
-            this.scale = 5 + Math.cos(Date.now() / 300) * 1.5
+            const output = html`
+              <three-mesh
+                scale=${this.scale}
+                .ontick=${onTick}
+                .onclick=${(e) => {
+                  e.target.object.material.color.setHSL(
+                    Math.random(),
+                    Math.random(),
+                    Math.random() * 0.5 + 0.5
+                  )
+                }}
+              >
+                <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+                <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
+              </three-mesh>
+            `
+            return output
           }
-
-          /*
-          Render some three-elements stuff. Note that we can directly bind functions as event
-          handlers, and not just to normal DOM events, but also to three-elements' own ticker events
-          (but don't forget to register this element with the ticker by setting the "ticking" attribute!)
-          */
-          const output = html`
-            <three-mesh
-              scale=${this.scale}
-              ticking
-              @tick=${onTick}
-              @click=${(e) => {
-                e.target.object.material.color.setHSL(
-                  Math.random(),
-                  Math.random(),
-                  Math.random() * 0.5 + 0.5
-                )
-              }}
-            >
-              <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-              <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
-            </three-mesh>
-          `
-          return output
         }
-      }
 
-      customElements.define("lit-dodecahedron", LitDodecahedron)
+        customElements.define("lit-dodecahedron", LitDodecahedron)
+      })
     </script>
 
     <script type="importmap-shim">
