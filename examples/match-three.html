@@ -40,11 +40,7 @@
           const swapWithSelectedTile = (x, y) => {
             if (selectedTile) {
               const [sx, sy] = selectedTile
-              const selectedColor = board.getTile(sx, sy)
-              const otherColor = board.getTile(x, y)
-              board.setTile(sx, sy, otherColor)
-              board.setTile(x, y, selectedColor)
-
+              board.swapTiles(x, y, sx, sy)
               setSelectedTile(null)
             }
           }
