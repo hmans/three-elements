@@ -1,4 +1,4 @@
-export const colors = ["#2f2", "white", "#22f", "#f22"]
+export const colors = ["#2f2", "#ddd", "#66f", "#f66"]
 
 export const makeBoard = () => {
   const makeRow = () => {

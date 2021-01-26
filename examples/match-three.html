@@ -7,10 +7,10 @@
   <body>
     <!-- Here's a simple Three.js scene. -->
     <three-game id="game" autorender>
-      <three-scene background-color="#222">
+      <custom-scene background-color="#534">
         <scene-lights></scene-lights>
         <game-board></game-board>
-      </three-scene>
+      </custom-scene>
     </three-game>
 
     <!-- Import dependencies via ESM. The future is now! -->
@@ -18,8 +18,14 @@
       import { html, component, useState, useEffect } from "https://jspm.dev/haunted"
       import { gsap } from "https://jspm.dev/gsap"
       import * as Board from "./Board.mjs"
+      import * as THREE from "https://jspm.dev/three"
+      import { EffectComposer } from "https://jspm.dev/three/examples/jsm/postprocessing/EffectComposer"
+      import { RenderPass } from "https://jspm.dev/three/examples/jsm/postprocessing/RenderPass"
+      import { UnrealBloomPass } from "https://jspm.dev/three/examples/jsm/postprocessing/UnrealBloomPass"
+      import { ShaderPass } from "https://jspm.dev/three/examples/jsm/postprocessing/ShaderPass"
+      import { VignetteShader } from "https://jspm.dev/three/examples/jsm/shaders/VignetteShader"
 
-      importShim("/dist/index.esm.js").then(() => {
+      importShim("/dist/index.esm.js").then(({ ThreeScene }) => {
         const animationDuration = 350
 
         const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -28,11 +34,11 @@
           "scene-lights",
           component(() => {
             return html`
-              <three-fog near="6" far="16" color="#222"></three-fog>
-              <three-ambient-light intensity="0.2"></three-ambient-light>
+              <three-fog near="8" far="32" color="#222"></three-fog>
+              <three-ambient-light intensity="0.4"></three-ambient-light>
               <three-directional-light
                 position="10, 10, 40"
-                intensity="0.8"
+                intensity="0.6"
               ></three-directional-light>
             `
           })
@@ -172,8 +178,10 @@
                 <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
                 <three-mesh-standard-material
                   color=${color}
-                  emissive=${hover ? color : ""}
-                  emissive-intensity=${hover ? 0.9 : 0}
+                  emissive=${color}
+                  emissive-intensity=${hover ? 10 : 0.2}
+                  metalness="0.3"
+                  roughness="0.7"
                 ></three-mesh-standard-material>
               </three-mesh>
             </three-group>
@@ -183,6 +191,41 @@
         GameTile.observedAttributes = ["x", "y", "color", "selected"]
 
         customElements.define("game-tile", component(GameTile))
+
+        class CustomScene extends ThreeScene {
+          mountedCallback() {
+            super.mountedCallback()
+            const scene = this.object
+            this.setupComposer()
+          }
+
+          setupComposer() {
+            const { game, camera } = this
+            const { renderer, width, height } = game
+            const scene = this.object
+
+            this.composer = new EffectComposer(renderer)
+
+            /* Add normal render pass */
+            const renderPass = new RenderPass(scene, camera)
+            renderPass.enabled = true
+            this.composer.addPass(renderPass)
+
+            /* Add bloom pass */
+            const bloom = new UnrealBloomPass(new THREE.Vector2(width, height), 1, 0, 0.8)
+            this.composer.addPass(bloom)
+
+            /* Vignette */
+            const vignette = new ShaderPass(VignetteShader)
+            this.composer.addPass(vignette)
+          }
+
+          render() {
+            this.composer && this.composer.render()
+          }
+        }
+
+        customElements.define("custom-scene", CustomScene)
       })
     </script>
 
