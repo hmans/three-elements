@@ -35,6 +35,8 @@ If you've been extending ThreeElement in your own code, or hacking on the codeba
 
 - **Breaking Change:** Ticker events are now emitted by the three-game's `emitter`. Since we're no longer using DOM events, this means we also no longer need the `ticking` property/attribute, so it has been removed.
 
+- **Changed:** Instead of using a MutationObserver instance to monitor the element for updated attributes (we can't feasibly make use of `observedAttributes`, remember?), we now simply hook into `setAttribute` to react on attribute changes.
+
 - **Changed:** `yarn dev` now makes use of the excellent [@web/dev-server](https://modern-web.dev/docs/dev-server/overview/). This allows us to get rid of the importmap shim we had been using so far, load additional dependencies straight from our own `node_modules`, and greatly increase iteration speed during development.
 
 ## [0.2.1] - 2021-01-27
