@@ -16,10 +16,12 @@
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
       import { html, component, useState } from "https://jspm.dev/haunted"
-      import * as gsap from "https://jspm.dev/gsap"
+      import { gsap } from "https://jspm.dev/gsap"
       import * as Board from "./Board.mjs"
 
       importShim("/dist/index.esm.js").then(() => {
+        const animationDuration = 250
+
         const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
         customElements.define(
@@ -36,7 +38,7 @@
           })
         )
 
-        const GameBoard = () => {
+        const GameBoard = (element) => {
           const [board, setBoard] = useState(() => Board.makeBoard())
           const [selectedTile, setSelectedTile] = useState(null)
 
@@ -49,21 +51,32 @@
             }
           }
 
+          const animatedMoveTile = (x, y, tx, ty) => {
+            const tileElement = element.shadowRoot.getElementById(`tile-${x}-${y}`)
+            const tileMeshElement = tileElement.shadowRoot.querySelector("three-group")
+            const mesh = tileMeshElement.object
+
+            gsap.to(mesh.position, {
+              x: tx,
+              y: ty,
+              duration: animationDuration / 1000,
+              onComplete: () => {
+                mesh.position.set(x, y, 0)
+              }
+            })
+          }
+
           const selectTile = async (x, y) => {
             /* If a tile is already selected, swap the two tiles */
             if (selectedTile && adjacentToSelectedTile(x, y)) {
               const [sx, sy] = selectedTile
-              console.log("start animating")
-              const tile = document.getElementById(`tile-${sx}-${sy}`)
-              console.log(tile)
+              animatedMoveTile(x, y, sx, sy)
+              animatedMoveTile(sx, sy, x, y)
 
-              await sleep(1000)
-
-              console.log("done animating")
+              await sleep(animationDuration)
 
               let newBoard = Board.swapTiles(board, x, y, sx, sy)
-
-              // newBoard = Board.clearAllMatches(newBoard)
+              newBoard = Board.clearAllMatches(newBoard)
               setBoard(newBoard)
               setSelectedTile(null)
             } else {
