@@ -8,6 +8,12 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
   },
+  "typedocOptions": {
+    "entryPoints": ["src/index.ts"],
+    "out": "docs",
+    "includeVersion": true,
+    "excludeExternals": true
+  },
   "include": ["src/**/*"],
   "exclude": ["src/**/*.test.ts", "node_modules", "dist"]
 }

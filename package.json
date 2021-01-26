@@ -36,7 +36,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "dev": "concurrently 'yarn watch -f esm' 'yarn examples' -p '{time} [{pid}]'",
-    "docs": "typedoc src/index.ts",
+    "docs": "typedoc",
     "watch": "yarn clean && microbundle watch --globals three=THREE",
     "build": "yarn clean && microbundle --globals three=THREE",
     "test": "web-test-runner --puppeteer",

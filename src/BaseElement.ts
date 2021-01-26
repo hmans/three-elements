@@ -4,6 +4,13 @@ import { ThreeScene } from "./elements/three-scene"
 import { IConstructable } from "./types"
 import { observeAttributeChange } from "./util/observeAttributeChange"
 
+/**
+ * The `BaseElement` class extends the built-in HTMLElement class with a bit of convenience
+ * functionality, first and foremost in the addition of the `mountedCallback` and `removedCallback` hooks.
+ * `BaseElement` knows how to hook into a scene and/or a game powered by three-elements, but otherwise doesn't
+ * interact with Three.js in any way. You can use it as a base class for logic-only custom components that
+ * need access to the game's ticker or renderer.
+ */
 export class BaseElement extends HTMLElement {
   /**
    * Returns the instance of ThreeGame that this element is nested under.
@@ -13,7 +20,7 @@ export class BaseElement extends HTMLElement {
   }
   private _game?: ThreeGame
 
-  protected findGame() {
+  private findGame() {
     if (!this.isConnected)
       throw "Something is accessing my .game property while I'm not connected. This shouldn't happen! 😭"
 
@@ -30,7 +37,7 @@ export class BaseElement extends HTMLElement {
   }
   private _scene?: ThreeScene
 
-  protected findScene() {
+  private findScene() {
     if (!this.isConnected)
       throw "Something is accessing my .scene property while I'm not connected. This shouldn't happen! 😭"
 
@@ -74,6 +81,12 @@ export class BaseElement extends HTMLElement {
     this.setCallback("onrendertick", fn)
   }
 
+  /**
+   * Configures one of the available ticker callbacks.
+   *
+   * @param propName Name of the callback property (eg. `ontick`)
+   * @param fn Callback function or string
+   */
   protected setCallback(propName: string, fn?: TickerFunction | string) {
     const eventName = propName.replace(/^on/, "") as any
 
