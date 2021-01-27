@@ -29,85 +29,11 @@
 
       runTests(async () => {
         describe("three-mesh", () => {
-          it("wraps a Three.js Mesh instance", () => {
-            expect(mesh.object).to.be.instanceof(THREE.Mesh)
-          })
-
           it("is clickable", () => {
             expect(mesh.object.material).to.be.instanceof(THREE.MeshStandardMaterial)
             expect(mesh.object.material.color.getHexString()).to.equal("ff69b4")
             mesh.click()
             expect(mesh.object.material.color.getHexString()).to.equal("ff0000")
-          })
-        })
-
-        describe("attribute assignment", () => {
-          it("sets the wrapped object's property of the same name", (done) => {
-            expect(mesh.object.name).to.equal("")
-            mesh.setAttribute("name", "A good mesh")
-
-            /*
-            Need to use setTimeout because the property will only be applied after the
-            MutationObserver runs.
-            */
-            setTimeout(() => {
-              expect(mesh.object.name).to.equal("A good mesh")
-              done()
-            })
-          })
-
-          it("supports dotty attributes (position.x)", (done) => {
-            mesh.object.position.x = 0
-            expect(mesh.object.position.x).to.equal(0)
-            mesh.setAttribute("position.x", "1")
-
-            setTimeout(() => {
-              expect(mesh.object.position.x).to.equal(1)
-              done()
-            })
-          })
-
-          it("supports colon attributes (position:x)", (done) => {
-            mesh.object.position.x = 0
-            expect(mesh.object.position.x).to.equal(0)
-            mesh.setAttribute("position:x", "1")
-
-            setTimeout(() => {
-              expect(mesh.object.position.x).to.equal(1)
-              done()
-            })
-          })
-
-          it("supports settable Vector3 attributes", (done) => {
-            mesh.object.position.set(0, 0, 0)
-            expect(mesh.object.position.x).to.equal(0)
-            expect(mesh.object.position.y).to.equal(0)
-            expect(mesh.object.position.z).to.equal(0)
-
-            mesh.setAttribute("position", "1, 2, 3")
-
-            setTimeout(() => {
-              expect(mesh.object.position.x).to.equal(1)
-              expect(mesh.object.position.y).to.equal(2)
-              expect(mesh.object.position.z).to.equal(3)
-              done()
-            })
-          })
-
-          it("supports .setScalar attributes", (done) => {
-            mesh.object.scale.set(0, 0, 0)
-            expect(mesh.object.scale.x).to.equal(0)
-            expect(mesh.object.scale.y).to.equal(0)
-            expect(mesh.object.scale.z).to.equal(0)
-
-            mesh.setAttribute("scale", "1")
-
-            setTimeout(() => {
-              expect(mesh.object.scale.x).to.equal(1)
-              expect(mesh.object.scale.y).to.equal(1)
-              expect(mesh.object.scale.z).to.equal(1)
-              done()
-            })
           })
         })
       })
