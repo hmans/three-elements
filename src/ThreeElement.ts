@@ -97,14 +97,11 @@ export class ThreeElement<T = any> extends BaseElement {
     let attach = this.getAttribute("attach")
 
     if (attach === null) {
-      if (this.object instanceof THREE.Material) {
+      if ((this.object as any).isMaterial) {
         attach = "material"
-      } else if (
-        this.object instanceof THREE.Geometry ||
-        this.object instanceof THREE.BufferGeometry
-      ) {
+      } else if ((this.object as any).isGeometry || (this.object as any).isBufferGeometry) {
         attach = "geometry"
-      } else if (this.object instanceof THREE.Fog) {
+      } else if ((this.object as any).isFog) {
         attach = "fog"
       }
     }
