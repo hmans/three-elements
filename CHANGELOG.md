@@ -33,6 +33,10 @@ If you've been extending ThreeElement in your own code, please note the followin
 
 - **Breaking Change:** Ticker events are now emitted by the three-game's `emitter`. Since we're no longer using DOM events, this means we also no longer need the `ticking` property/attribute, so it has been removed.
 
+## [0.2.1] - 2021-01-27
+
+- **Fixed:** Compatibility with recently released [Three.js r125](https://github.com/mrdoob/three.js/releases/tag/r125)!
+
 ## [0.2.0] - 2021-01-18
 
 - **New:** Elements now emit `connected`, `ready` and `disconnected` lifecycle events that bubble up the DOM tree.
