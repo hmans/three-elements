@@ -1,20 +1,12 @@
-import { expect, fixture, html, nextFrame } from "@open-wc/testing"
-import { TemplateResult } from "lit-html"
+import { expect, html, nextFrame } from "@open-wc/testing"
 import * as THREE from "three"
 import "../src"
 import { ThreeElement } from "../src/ThreeElement"
+import { renderWithinGame } from "./helpers"
 
 describe("<three-*> powered by ThreeElement", () => {
-  /*
-  Renders the given snippet in a three-game scaffolding and returns a reference
-  to the inner element.
-  */
-  const render = async <T extends Element = HTMLElement>(inner: TemplateResult) => {
-    const result = await fixture(html`<three-game><three-scene>${inner}</three-scene></three-game>`)
-    return result.querySelector("three-scene > :first-child") as T
-  }
-
-  const renderMeshElement = () => render<ThreeElement<THREE.Mesh>>(html`<three-mesh></three-mesh>`)
+  const renderMeshElement = () =>
+    renderWithinGame<ThreeElement<THREE.Mesh>>(html`<three-mesh></three-mesh>`)
 
   it("is backed by ThreeElement", async () => {
     const el = await renderMeshElement()
