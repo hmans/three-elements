@@ -1441,9 +1441,9 @@
     puppeteer "^5.5.0"
 
 "@web/test-runner@^0.12.6":
-  version "0.12.6"
-  resolved "https://registry.yarnpkg.com/@web/test-runner/-/test-runner-0.12.6.tgz#45c125b8a22f9350040aa76830d4676f8d77bbe9"
-  integrity sha512-Yw57H7FvvRf9E1K441wFofRAD0DSvwMCpjzX6Z30/hKDQPXV2UsLUl9QW5xLoXIHpLfs3eiEivlJyKzUS8sA2A==
+  version "0.12.7"
+  resolved "https://registry.yarnpkg.com/@web/test-runner/-/test-runner-0.12.7.tgz#32dbf68fa55214602008056af5fcb5d9f8dde468"
+  integrity sha512-z+uQ7ELj8gs9byWI7N85Pg+2IrpDDarjq1tmbG+QxAkgBWDTUjHF46a2AtfOUhBpI2zR7NYj6JaUz2KJt1pKdw==
   dependencies:
     "@web/browser-logs" "^0.2.0"
     "@web/config-loader" "^0.1.3"
