@@ -6,7 +6,12 @@ import { renderWithinGame } from "./helpers"
 
 describe("<three-*> powered by ThreeElement", () => {
   const renderMeshElement = () =>
-    renderWithinGame<ThreeElement<THREE.Mesh>>(html`<three-mesh></three-mesh>`)
+    renderWithinGame<ThreeElement<THREE.Mesh>>(html`
+      <three-mesh onclick="this.object.material.color.set('red')">
+        <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+        <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
+      </three-mesh>
+    `)
 
   it("is backed by ThreeElement", async () => {
     const el = await renderMeshElement()
@@ -84,6 +89,21 @@ describe("<three-*> powered by ThreeElement", () => {
       expect(el.object.scale.x).to.equal(1)
       expect(el.object.scale.y).to.equal(1)
       expect(el.object.scale.z).to.equal(1)
+    })
+  })
+
+  describe("the `attach` attribute", () => {
+    it("materials and geometries are automatically attaches even without an explicit `attach` attribute", async () => {
+      const el = await renderMeshElement()
+      const geometryElement = el.querySelector(
+        "three-dodecahedron-buffer-geometry"
+      ) as ThreeElement<THREE.Geometry>
+      const materialElement = el.querySelector(
+        "three-mesh-standard-material"
+      ) as ThreeElement<THREE.Material>
+
+      expect(geometryElement.object).to.equal(el.object.geometry)
+      expect(materialElement.object).to.equal(el.object.material)
     })
   })
 })
