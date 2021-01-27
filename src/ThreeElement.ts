@@ -93,6 +93,8 @@ export class ThreeElement<T = any> extends BaseElement {
   }
 
   protected handleAttach() {
+    if (!this.object) return
+
     /* Use provided attach, or auto-set it based on the tag name. */
     let attach = this.getAttribute("attach")
 
