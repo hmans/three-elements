@@ -28,18 +28,6 @@
       import "../src"
 
       runTests(async () => {
-        describe("three-game autorender attribute", () => {
-          it("sets the ThreeGame.autorender property to true", () => {
-            expect(game.autorender).to.equal(true)
-          })
-        })
-
-        describe("three-game renderer xr attribute", () => {
-          it("enables WebXR features on ThreeGame.renderer", () => {
-            expect(game.renderer.xr.enabled).to.equal(true)
-          })
-        })
-
         describe("three-mesh", () => {
           it("wraps a Three.js Mesh instance", () => {
             expect(mesh.object).to.be.instanceof(THREE.Mesh)
@@ -123,16 +111,6 @@
           })
         })
       })
-    </script>
-
-    <script type="importmap">
-      {
-        "imports": {
-          "three-elements": "/dist/index.modern.js",
-          "three": "https://jspm.dev/three",
-          "three/": "https://jspm.dev/three/"
-        }
-      }
     </script>
   </body>
 </html>
