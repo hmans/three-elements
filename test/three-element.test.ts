@@ -95,9 +95,11 @@ describe("<three-*> powered by ThreeElement", () => {
   describe("the `attach` attribute", () => {
     it("materials and geometries are automatically attaches even without an explicit `attach` attribute", async () => {
       const el = await renderMeshElement()
+
       const geometryElement = el.querySelector(
         "three-dodecahedron-buffer-geometry"
       ) as ThreeElement<THREE.Geometry>
+
       const materialElement = el.querySelector(
         "three-mesh-standard-material"
       ) as ThreeElement<THREE.Material>
