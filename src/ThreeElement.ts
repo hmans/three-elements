@@ -12,6 +12,10 @@ export class ThreeElement<T = any> extends BaseElement {
     return (this._object ||= this.constructWrappedObject())
   }
 
+  set object(v: T | undefined) {
+    this._object = v
+  }
+
   private _object?: T
 
   protected constructWrappedObject() {
