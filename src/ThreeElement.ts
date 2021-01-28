@@ -35,6 +35,34 @@ export class ThreeElement<T = any> extends BaseElement {
         object.userData.threeElement = this
       }
 
+      /*
+      EXPERIMENT ALERT! 💥
+
+      We're going to reflect all of the object's properties that are not functions
+      as properties on this element. This would allow us to achieve parity between
+      properties and attributes of elements. BUT AT WHAT COST?! 🤔
+      */
+      for (const prop in object) {
+        if (!(prop in this) && typeof object[prop] !== "function") {
+          /*
+          We'll define the property directly on this class' prototype. Will it
+          work? Who knows! It looks like it does! I have no idea what I'm doing!
+          But we'll use functions for the getters and the setters because those
+          will actually run in the individual instance's scope. Thanks to purely
+          accidental cool, this *should* mean that we're only ever registering
+          these properties once per ThreeElement-derived class. Aaaaaaaaahhhh
+          */
+          Object.defineProperty(this.constructor.prototype, prop, {
+            get: function () {
+              return this.object[prop]
+            },
+            set: function (v: any) {
+              this.object[prop] = v
+            }
+          })
+        }
+      }
+
       return object
     }
   }
