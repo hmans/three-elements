@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Fixed:** When using the `attach` attribute, a valid candidate element to attach to is now searched for across the boundaries of Shadow DOMs. If this sentence makes any sense to you, I bow to you, for we are united in this madness.
 
+- **New:** `<three-game>` now dispatches a `ready` event you can hook your game's initialization code into.
+
 ### Internals
 
 If you've been extending ThreeElement in your own code, or hacking on the codebase itself, please note the following changes:
