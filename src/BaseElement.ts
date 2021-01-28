@@ -145,12 +145,6 @@ export class BaseElement extends HTMLElement {
   connectedCallback() {
     this.debug("connectedCallback")
 
-    /* Apply props */
-    const attributes = this.getAllAttributes()
-    for (const key in attributes) {
-      this.attributeChangedCallback(key, "", attributes[key])
-    }
-
     /*
     When one of this element's attributes changes, apply it to the object. Custom Elements have a built-in
     mechanism for this (attributeChangedCallback and observedAttributes, but unfortunately we can't use it,
@@ -175,12 +169,22 @@ export class BaseElement extends HTMLElement {
     https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide
     */
     queueMicrotask(() => {
+      /* Apply all attributes */
+      this.applyAllAttributes()
+
       /* Invoke mount method */
       this.mountedCallback()
 
       /* Emit ready event */
       this.dispatchEvent(new CustomEvent("ready", { bubbles: true, cancelable: false }))
     })
+  }
+
+  applyAllAttributes() {
+    const attributes = this.getAllAttributes()
+    for (const key in attributes) {
+      this.attributeChangedCallback(key, "", attributes[key])
+    }
   }
 
   disconnectedCallback() {
