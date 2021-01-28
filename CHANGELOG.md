@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - unreleased
 
+- **New:** We now publish a full [API Reference](https://api.three-elements.hmans.co/). Enjoy!
+
+- **Changed:** By popular request, three-elements will no longer log to the console on startup. Enjoy the quiet!
+
 - **New:** When working with plain string attributes, you can now use the `deg(v)` shortcode to convert the specified value into radians. This is very useful in 100% HTML-based projects where you don't have access to JavaScript's `Math.PI`:
 
 ```html
@@ -27,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Internals
 
-If you've been extending ThreeElement in your own code, please note the following changes:
+If you've been extending ThreeElement in your own code, or hacking on the codebase itself, please note the following changes:
 
 - **New:** All element logic that does not deal with managing a wrapped Three.js object has been moved to a new base class called `BaseElement` that `ThreeElement` now extends. `BaseElement` performs lifecycle management, ticker event handling and other base functionality.
 
@@ -38,6 +42,12 @@ If you've been extending ThreeElement in your own code, please note the followin
 - **Breaking Change:** Ticker events are now emitted by the three-game's `emitter`. Since we're no longer using DOM events, this means we also no longer need the `ticking` property/attribute, so it has been removed.
 
 - **Holy crap:** `applyProps` was refactored to use `if` instead of `switch (true)`. All you Senior JavaScript Architects can finally calm down, for I am no longer impeding upon your creed!
+
+- **Changed:** `yarn dev` now makes use of the excellent [@web/dev-server](https://modern-web.dev/docs/dev-server/overview/). This allows us to get rid of the importmap shim we had been using so far, load additional dependencies straight from our own `node_modules`, and greatly increase iteration speed during development.
+
+## [0.2.1] - 2021-01-27
+
+- **Fixed:** Compatibility with recently released [Three.js r125](https://github.com/mrdoob/three.js/releases/tag/r125)!
 
 ## [0.2.0] - 2021-01-18
 

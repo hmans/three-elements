@@ -1,8 +1,7 @@
 <html>
   <head>
     <title>Ticker Events</title>
-    <link rel="stylesheet" href="/styles.css" />
-    <script type="module" src="https://jspm.dev/es-module-shims"></script>
+    <link rel="stylesheet" href="styles.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
@@ -30,16 +29,7 @@
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
-      importShim("/dist/index.esm.js")
-    </script>
-    <script type="importmap-shim">
-      {
-        "imports": {
-          "eventemitter3": "https://jspm.dev/eventemitter3",
-          "three": "https://jspm.dev/three",
-          "three/": "https://jspm.dev/three/"
-        }
-      }
+      import "three-elements"
     </script>
   </body>
 </html>

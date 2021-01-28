@@ -1,8 +1,7 @@
 <html>
   <head>
     <title>VR</title>
-    <link rel="stylesheet" href="/styles.css" />
-    <script type="module" src="https://jspm.dev/es-module-shims"></script>
+    <link rel="stylesheet" href="styles.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
@@ -34,58 +33,48 @@
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
-      import { VRButton } from "https://cdn.skypack.dev/three/examples/jsm/webxr/VRButton.js"
-      import { XRControllerModelFactory } from "https://cdn.skypack.dev/three/examples/jsm/webxr/XRControllerModelFactory.js"
-      import { XRHandModelFactory } from "https://cdn.skypack.dev/three/examples/jsm/webxr/XRHandModelFactory.js"
+      import { VRButton } from "three/examples/jsm/webxr/VRButton.js"
+      import { XRControllerModelFactory } from "three/examples/jsm/webxr/XRControllerModelFactory.js"
+      import { XRHandModelFactory } from "three/examples/jsm/webxr/XRHandModelFactory.js"
+      import "three-elements"
 
-      importShim("/dist/index.esm.js").then(() => {
-        /* Fetch renderer and scene */
-        const renderer = game.renderer
-        const scene = mainScene.object
+      /* Fetch renderer and scene */
+      const renderer = game.renderer
+      const scene = mainScene.object
 
-        /* Move camera way back */
-        mainScene.camera.position.set(0, 0, 50)
+      /* Move camera way back */
+      mainScene.camera.position.set(0, 0, 50)
 
-        /* Add the VR button */
-        document.body.appendChild(VRButton.createButton(game.renderer))
+      /* Add the VR button */
+      document.body.appendChild(VRButton.createButton(game.renderer))
 
-        /* Add controllers */
-        const controller1 = renderer.xr.getController(0)
-        scene.add(controller1)
-        const controller2 = renderer.xr.getController(1)
-        scene.add(controller2)
+      /* Add controllers */
+      const controller1 = renderer.xr.getController(0)
+      scene.add(controller1)
+      const controller2 = renderer.xr.getController(1)
+      scene.add(controller2)
 
-        /* Create controller and hand models */
-        const controllerModelFactory = new XRControllerModelFactory()
-        const handModelFactory = new XRHandModelFactory()
+      /* Create controller and hand models */
+      const controllerModelFactory = new XRControllerModelFactory()
+      const handModelFactory = new XRHandModelFactory()
 
-        /* Add Joysticks */
-        const controllerGrip1 = renderer.xr.getControllerGrip(0)
-        controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1))
-        scene.add(controllerGrip1)
+      /* Add Joysticks */
+      const controllerGrip1 = renderer.xr.getControllerGrip(0)
+      controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1))
+      scene.add(controllerGrip1)
 
-        const controllerGrip2 = renderer.xr.getControllerGrip(1)
-        controllerGrip2.add(controllerModelFactory.createControllerModel(controllerGrip2))
-        scene.add(controllerGrip2)
+      const controllerGrip2 = renderer.xr.getControllerGrip(1)
+      controllerGrip2.add(controllerModelFactory.createControllerModel(controllerGrip2))
+      scene.add(controllerGrip2)
 
-        /* Add hands */
-        const hand1 = renderer.xr.getHand(0)
-        hand1.add(handModelFactory.createHandModel(hand1))
-        scene.add(hand1)
+      /* Add hands */
+      const hand1 = renderer.xr.getHand(0)
+      hand1.add(handModelFactory.createHandModel(hand1))
+      scene.add(hand1)
 
-        const hand2 = renderer.xr.getHand(1)
-        hand2.add(handModelFactory.createHandModel(hand2))
-        scene.add(hand2)
-      })
-    </script>
-    <script type="importmap-shim">
-      {
-        "imports": {
-          "eventemitter3": "https://cdn.skypack.dev/eventemitter3",
-          "three": "https://cdn.skypack.dev/three",
-          "three/": "https://cdn.skypack.dev/three/"
-        }
-      }
+      const hand2 = renderer.xr.getHand(1)
+      hand2.add(handModelFactory.createHandModel(hand2))
+      scene.add(hand2)
     </script>
   </body>
 </html>

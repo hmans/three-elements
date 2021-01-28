@@ -1,8 +1,7 @@
 <html>
   <head>
     <title>Reusable Components</title>
-    <link rel="stylesheet" href="/styles.css" />
-    <script type="module" src="https://jspm.dev/es-module-shims"></script>
+    <link rel="stylesheet" href="styles.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
@@ -23,43 +22,32 @@
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
-      import * as THREE from "https://jspm.dev/three"
+      import * as THREE from "three"
+      import { ThreeElement } from "three-elements"
 
-      importShim("/dist/index.esm.js").then(({ ThreeElement }) => {
-        class RotatingThingy extends ThreeElement.for(THREE.Mesh) {
-          mountedCallback() {
-            super.mountedCallback()
+      class RotatingThingy extends ThreeElement.for(THREE.Mesh) {
+        mountedCallback() {
+          super.mountedCallback()
 
-            this.speed = this.getAttribute("speed")
+          this.speed = this.getAttribute("speed")
 
-            const geometry = document.createElement("three-dodecahedron-buffer-geometry")
-            const material = document.createElement("three-mesh-standard-material")
-            material.setAttribute("color", "red")
+          const geometry = document.createElement("three-dodecahedron-buffer-geometry")
+          const material = document.createElement("three-mesh-standard-material")
+          material.setAttribute("color", "red")
 
-            this.appendChild(geometry)
-            this.appendChild(material)
+          this.appendChild(geometry)
+          this.appendChild(material)
 
-            this.ontick = () => {
-              this.object.rotation.x = 1.4 * (this.object.rotation.y += this.speed * game.deltaTime)
+          this.ontick = () => {
+            this.object.rotation.x = 1.4 * (this.object.rotation.y += this.speed * game.deltaTime)
 
-              /* Make sure a frame is queued the next tick */
-              this.game.requestFrame()
-            }
+            /* Make sure a frame is queued the next tick */
+            this.game.requestFrame()
           }
         }
-
-        customElements.define("rotating-thingy", RotatingThingy)
-      })
-    </script>
-
-    <script type="importmap-shim">
-      {
-        "imports": {
-          "eventemitter3": "https://jspm.dev/eventemitter3",
-          "three": "https://jspm.dev/three",
-          "three/": "https://jspm.dev/three/"
-        }
       }
+
+      customElements.define("rotating-thingy", RotatingThingy)
     </script>
   </body>
 </html>

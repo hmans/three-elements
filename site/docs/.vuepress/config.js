@@ -60,6 +60,10 @@ module.exports = {
         link: "/guide/"
       },
       {
+        text: "API",
+        link: "https://api.three-elements.hmans.co/"
+      },
+      {
         text: "Discord",
         link: "https://discord.gg/ybuUjFM"
       }
@@ -95,6 +99,13 @@ module.exports = {
           "/advanced/frameworks",
           "/advanced/webxr"
         ]
+      },
+
+      {
+        type: "group",
+        title: "Further Reading",
+        collapsable: false,
+        children: [["https://api.three-elements.hmans.co/", "API Reference"]]
       }
     ]
   }

@@ -7,11 +7,6 @@ export * from "./elements"
 export { BaseElement } from "./BaseElement"
 export { registerElement, ThreeElement }
 
-const banner = () =>
-  console.warn(
-    `🎉 three-elements firing up! Please remember that this is an experimental library. Expect breakage! If you find problems, please open an issue over at <https://github.com/hmans/three-elements/issues/new>. Thank you!`
-  )
-
 const defineThreeElements = () => {
   /* Custom elements we want to set up manually in order to get the naming right */
   registerElement("three-object3d", ThreeElement.for(THREE.Object3D))
@@ -31,5 +26,4 @@ const defineThreeElements = () => {
 }
 
 /* Let's gooo! */
-banner()
 defineThreeElements()

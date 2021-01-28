@@ -1,8 +1,7 @@
 <html>
   <head>
     <title>Match 3 Game</title>
-    <link rel="stylesheet" href="/styles.css" />
-    <script type="module" src="https://jspm.dev/es-module-shims"></script>
+    <link rel="stylesheet" href="styles.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
@@ -22,242 +21,231 @@
       import { html, component, useState, useEffect } from "https://jspm.dev/haunted"
       import { gsap } from "https://jspm.dev/gsap"
       import * as Board from "./match-three/Board.mjs"
-      import * as THREE from "https://jspm.dev/three"
-      import { EffectComposer } from "https://jspm.dev/three/examples/jsm/postprocessing/EffectComposer"
-      import { SSAARenderPass } from "https://jspm.dev/three/examples/jsm/postprocessing/SSAARenderPass"
-      import { RenderPass } from "https://jspm.dev/three/examples/jsm/postprocessing/RenderPass"
-      import { UnrealBloomPass } from "https://jspm.dev/three/examples/jsm/postprocessing/UnrealBloomPass"
-      import { ShaderPass } from "https://jspm.dev/three/examples/jsm/postprocessing/ShaderPass"
-      import { VignetteShader } from "https://jspm.dev/three/examples/jsm/shaders/VignetteShader"
+      import * as THREE from "three"
+      import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer"
+      import { SSAARenderPass } from "three/examples/jsm/postprocessing/SSAARenderPass"
+      import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass"
+      import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass"
+      import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass"
+      import { VignetteShader } from "three/examples/jsm/shaders/VignetteShader"
 
-      importShim("/dist/index.esm.js").then(({ ThreeScene }) => {
-        const animationDuration = 350
+      import { ThreeScene } from "three-elements"
 
-        const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+      const animationDuration = 350
 
-        customElements.define(
-          "scene-lights",
-          component(() => {
-            return html`
-              <three-fog near="8" far="32" color="#222"></three-fog>
-              <three-ambient-light intensity="0.4"></three-ambient-light>
-              <three-directional-light
-                position="10, 10, 40"
-                intensity="0.6"
-              ></three-directional-light>
-            `
-          })
-        )
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-        const GameBoard = (element) => {
-          const [board, setBoard] = useState(() => Board.makeBoardWithoutMatches())
-          const [animations, setAnimations] = useState([])
-          const [selectedTile, setSelectedTile] = useState(null)
+      customElements.define(
+        "scene-lights",
+        component(() => {
+          return html`
+            <three-fog near="8" far="32" color="#222"></three-fog>
+            <three-ambient-light intensity="0.4"></three-ambient-light>
+            <three-directional-light
+              position="10, 10, 40"
+              intensity="0.6"
+            ></three-directional-light>
+          `
+        })
+      )
 
-          const adjacentToSelectedTile = (x, y) => {
-            if (selectedTile) {
-              const [sx, sy] = selectedTile
-              return (
-                (x >= sx - 1 && x <= sx + 1 && y == sy) || (y >= sy - 1 && y <= sy + 1 && x == sx)
-              )
-            }
+      const GameBoard = (element) => {
+        const [board, setBoard] = useState(() => Board.makeBoardWithoutMatches())
+        const [animations, setAnimations] = useState([])
+        const [selectedTile, setSelectedTile] = useState(null)
+
+        const adjacentToSelectedTile = (x, y) => {
+          if (selectedTile) {
+            const [sx, sy] = selectedTile
+            return (
+              (x >= sx - 1 && x <= sx + 1 && y == sy) || (y >= sy - 1 && y <= sy + 1 && x == sx)
+            )
           }
+        }
 
-          const animatedMoveTile = (x, y, fx, fy, tx, ty) => {
-            queueMicrotask(() => {
-              const tileElement = element.shadowRoot.getElementById(`tile-${x}-${y}`)
-              const tileMeshElement = tileElement.shadowRoot.firstElementChild
-              const mesh = tileMeshElement.object
+        const animatedMoveTile = (x, y, fx, fy, tx, ty) => {
+          queueMicrotask(() => {
+            const tileElement = element.shadowRoot.getElementById(`tile-${x}-${y}`)
+            const tileMeshElement = tileElement.shadowRoot.firstElementChild
+            const mesh = tileMeshElement.object
 
-              mesh.position.set(fx, fy, 0)
+            mesh.position.set(fx, fy, 0)
 
-              gsap.to(mesh.position, {
-                x: tx,
-                y: ty,
-                duration: animationDuration / 1000,
-                ease: "power4.in",
-                onComplete: () => {
-                  mesh.position.set(x, y, 0)
-                }
-              })
-            })
-          }
-
-          const playAnimations = (animations) => {
-            for (const animation of animations) {
-              animatedMoveTile(...animation)
-            }
-          }
-
-          const selectTile = async (x, y) => {
-            /* If a tile is already selected, swap the two tiles */
-            if (selectedTile && adjacentToSelectedTile(x, y)) {
-              setSelectedTile(null)
-              const [sx, sy] = selectedTile
-
-              playAnimations([
-                [x, y, x, y, sx, sy],
-                [sx, sy, sx, sy, x, y]
-              ])
-
-              await sleep(animationDuration)
-
-              let swappedBoard = Board.swapTiles(board, x, y, sx, sy)
-
-              /* Check for matches */
-              const [matchedBoard, matches] = Board.clearAllMatches(swappedBoard)
-              setBoard(matchedBoard)
-
-              if (matches.length > 0) {
-                /* TODO: play some sort of match animation */
-
-                /* Apply some gravity */
-                const [filledBoard, updatedTiles] = Board.applyGravity(matchedBoard)
-
-                if (updatedTiles.length > 0) {
-                  setAnimations(updatedTiles.map(([x, y]) => [x, y, x, y + 1, x, y]))
-                  setBoard(filledBoard)
-                }
+            gsap.to(mesh.position, {
+              x: tx,
+              y: ty,
+              duration: animationDuration / 1000,
+              ease: "power4.in",
+              onComplete: () => {
+                mesh.position.set(x, y, 0)
               }
-            } else {
-              setSelectedTile([x, y])
-            }
-          }
-
-          const onTick = (dt, { object, scene }) => {
-            const pointer = scene.pointer.position
-            object.rotation.set(pointer.y / 4, pointer.x / -4, 0)
-          }
-
-          /* Run queued animations */
-          useEffect(() => {
-            if (animations.length > 0) {
-              queueMicrotask(async () => {
-                playAnimations(animations)
-                await sleep(animationDuration)
-                setAnimations([])
-              })
-            }
-          }, [animations])
-
-          return html`
-            <three-group .ontick=${onTick}>
-              <three-group position="-4, -4, 0">
-                ${board.map((row, y) =>
-                  row.map((color, x) => {
-                    return color
-                      ? html`<game-tile
-                          id="tile-${x}-${y}"
-                          .onclick=${() => selectTile(x, y)}
-                          color=${color}
-                          y=${y}
-                          x=${x}
-                          ?selected=${selectedTile && x == selectedTile[0] && y == selectedTile[1]}
-                        ></game-tile>`
-                      : null
-                  })
-                )}
-              </three-group></three-group
-            >
-          `
+            })
+          })
         }
 
-        customElements.define("game-board", component(GameBoard))
-
-        const GameTile = ({ x, y, selected, color }) => {
-          const [hover, setHover] = useState(false)
-
-          const onTick = (dt, { object, game }) => {
-            object.rotation.x = object.rotation.y += (hover ? 1.5 : 0.5) * dt
-            game.requestFrame()
+        const playAnimations = (animations) => {
+          for (const animation of animations) {
+            animatedMoveTile(...animation)
           }
-
-          const waveScale = (dt, { object, game }) => {
-            const scale =
-              1 +
-              Math.pow((Math.cos((performance.now() + y * 200 + x * 200) / 500) + 1) / 2, 3) * 0.2
-            object.scale.setScalar(scale)
-          }
-
-          return html`
-            <three-group position.x=${x} position.y=${y} scale=${selected ? 1.3 : 1}>
-              <three-group .ontick=${waveScale}>
-                <three-mesh
-                  scale="0.4"
-                  .ontick=${onTick}
-                  .onpointerenter=${(e) => setHover(true)}
-                  .onpointerleave=${(e) => setHover(false)}
-                >
-                  <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
-                  <three-mesh-standard-material
-                    color=${color}
-                    emissive=${color}
-                    emissive-intensity=${hover || selected ? 10 : 0.2}
-                    metalness="0.3"
-                    roughness="0.7"
-                  ></three-mesh-standard-material>
-                </three-mesh>
-              </three-group>
-            </three-group>
-          `
         }
 
-        GameTile.observedAttributes = ["x", "y", "color", "selected"]
+        const selectTile = async (x, y) => {
+          /* If a tile is already selected, swap the two tiles */
+          if (selectedTile && adjacentToSelectedTile(x, y)) {
+            setSelectedTile(null)
+            const [sx, sy] = selectedTile
 
-        customElements.define("game-tile", component(GameTile))
+            playAnimations([
+              [x, y, x, y, sx, sy],
+              [sx, sy, sx, sy, x, y]
+            ])
 
-        class CustomScene extends ThreeScene {
-          passes = {}
+            await sleep(animationDuration)
 
-          mountedCallback() {
-            super.mountedCallback()
-            this.setupComposer()
+            let swappedBoard = Board.swapTiles(board, x, y, sx, sy)
 
-            this.game.emitter.on("resize", ({ width, height }) => {
-              this.passes.ssaaPass.setSize(width, height)
-              this.composer.setSize(width, height)
+            /* Check for matches */
+            const [matchedBoard, matches] = Board.clearAllMatches(swappedBoard)
+            setBoard(matchedBoard)
+
+            if (matches.length > 0) {
+              /* TODO: play some sort of match animation */
+
+              /* Apply some gravity */
+              const [filledBoard, updatedTiles] = Board.applyGravity(matchedBoard)
+
+              if (updatedTiles.length > 0) {
+                setAnimations(updatedTiles.map(([x, y]) => [x, y, x, y + 1, x, y]))
+                setBoard(filledBoard)
+              }
+            }
+          } else {
+            setSelectedTile([x, y])
+          }
+        }
+
+        const onTick = (dt, { object, scene }) => {
+          const pointer = scene.pointer.position
+          object.rotation.set(pointer.y / 4, pointer.x / -4, 0)
+        }
+
+        /* Run queued animations */
+        useEffect(() => {
+          if (animations.length > 0) {
+            queueMicrotask(async () => {
+              playAnimations(animations)
+              await sleep(animationDuration)
+              setAnimations([])
             })
           }
+        }, [animations])
 
-          setupComposer() {
-            const { game, camera } = this
-            const { renderer, width, height } = game
-            const scene = this.object
+        return html`
+          <three-group .ontick=${onTick}>
+            <three-group position="-4, -4, 0">
+              ${board.map((row, y) =>
+                row.map((color, x) => {
+                  return color
+                    ? html`<game-tile
+                        id="tile-${x}-${y}"
+                        .onclick=${() => selectTile(x, y)}
+                        color=${color}
+                        y=${y}
+                        x=${x}
+                        ?selected=${selectedTile && x == selectedTile[0] && y == selectedTile[1]}
+                      ></game-tile>`
+                    : null
+                })
+              )}
+            </three-group></three-group
+          >
+        `
+      }
 
-            this.composer = new EffectComposer(renderer)
+      customElements.define("game-board", component(GameBoard))
 
-            /* Add AA render pass */
-            this.passes.ssaaPass = new SSAARenderPass(scene, camera, "white", 0)
-            this.passes.ssaaPass.unbiased = false
-            this.passes.ssaaPass.sampleLevel = 2
-            this.composer.addPass(this.passes.ssaaPass)
+      const GameTile = ({ x, y, selected, color }) => {
+        const [hover, setHover] = useState(false)
 
-            /* Add bloom pass */
-            this.passes.bloom = new UnrealBloomPass(new THREE.Vector2(width, height), 1, 0, 0.8)
-            this.composer.addPass(this.passes.bloom)
-
-            /* Vignette */
-            this.passes.vignette = new ShaderPass(VignetteShader)
-            this.composer.addPass(this.passes.vignette)
-          }
-
-          render() {
-            this.composer && this.composer.render()
-          }
+        const onTick = (dt, { object, game }) => {
+          object.rotation.x = object.rotation.y += (hover ? 1.5 : 0.5) * dt
+          game.requestFrame()
         }
 
-        customElements.define("custom-scene", CustomScene)
-      })
-    </script>
+        const waveScale = (dt, { object, game }) => {
+          const scale =
+            1 + Math.pow((Math.cos((performance.now() + y * 200 + x * 200) / 500) + 1) / 2, 3) * 0.2
+          object.scale.setScalar(scale)
+        }
 
-    <script type="importmap-shim">
-      {
-        "imports": {
-          "eventemitter3": "https://jspm.dev/eventemitter3",
-          "three": "https://jspm.dev/three",
-          "three/": "https://jspm.dev/three/"
+        return html`
+          <three-group position.x=${x} position.y=${y} scale=${selected ? 1.3 : 1}>
+            <three-group .ontick=${waveScale}>
+              <three-mesh
+                scale="0.4"
+                .ontick=${onTick}
+                .onpointerenter=${(e) => setHover(true)}
+                .onpointerleave=${(e) => setHover(false)}
+              >
+                <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+                <three-mesh-standard-material
+                  color=${color}
+                  emissive=${color}
+                  emissive-intensity=${hover || selected ? 10 : 0.2}
+                  metalness="0.3"
+                  roughness="0.7"
+                ></three-mesh-standard-material>
+              </three-mesh>
+            </three-group>
+          </three-group>
+        `
+      }
+
+      GameTile.observedAttributes = ["x", "y", "color", "selected"]
+
+      customElements.define("game-tile", component(GameTile))
+
+      class CustomScene extends ThreeScene {
+        passes = {}
+
+        mountedCallback() {
+          super.mountedCallback()
+          this.setupComposer()
+
+          this.game.emitter.on("resize", ({ width, height }) => {
+            this.passes.ssaaPass.setSize(width, height)
+            this.composer.setSize(width, height)
+          })
+        }
+
+        setupComposer() {
+          const { game, camera } = this
+          const { renderer, width, height } = game
+          const scene = this.object
+
+          this.composer = new EffectComposer(renderer)
+
+          /* Add AA render pass */
+          this.passes.ssaaPass = new SSAARenderPass(scene, camera, "white", 0)
+          this.passes.ssaaPass.unbiased = false
+          this.passes.ssaaPass.sampleLevel = 2
+          this.composer.addPass(this.passes.ssaaPass)
+
+          /* Add bloom pass */
+          this.passes.bloom = new UnrealBloomPass(new THREE.Vector2(width, height), 1, 0, 0.8)
+          this.composer.addPass(this.passes.bloom)
+
+          /* Vignette */
+          this.passes.vignette = new ShaderPass(VignetteShader)
+          this.composer.addPass(this.passes.vignette)
+        }
+
+        render() {
+          this.composer && this.composer.render()
         }
       }
+
+      customElements.define("custom-scene", CustomScene)
     </script>
   </body>
 </html>
