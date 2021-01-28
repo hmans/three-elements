@@ -11,6 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Changed:** By popular request, three-elements will no longer log to the console on startup. Enjoy the quiet!
 
+- **New:** When assigning to an object property via an attribute, you can now set the attribute to a CSS selector to reference another object. This can, for example, be used to re-use geometries, materials and other potentially expensive resources:
+
+```html
+<!-- Resources -->
+<three-box-buffer-geometry id="geometry"></three-box-buffer-geometry>
+<three-mesh-standard-material id="material" color="#555"></three-mesh-standard-material>
+
+<!-- Scene Contents -->
+<three-mesh position="-2, 0, 0" geometry="#geometry" material="#material"></three-mesh>
+<three-mesh position="0, 0, 0" geometry="#geometry" material="#material"></three-mesh>
+<three-mesh position="2, 0, 0" geometry="#geometry" material="#material"></three-mesh>
+```
+
 - **New:** When working with plain string attributes, you can now use the `deg` suffix to convert the specified value into radians. This is very useful in 100% HTML-based projects where you don't have access to JavaScript's `Math.PI`:
 
 ```html

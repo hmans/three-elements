@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <title>Reusing Materials and Geometires</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+  </head>
+  <body>
+    <three-game autorender>
+      <three-scene background-color="#222" ontick="this.object.rotateY(0.01)">
+        <!-- Lights -->
+        <three-ambient-light intensity="0.2"></three-ambient-light>
+        <three-directional-light
+          intensity="0.8"
+          position="10, 40, 50"
+          cast-shadow
+        ></three-directional-light>
+
+        <!-- resources we'll reuse -->
+        <three-box-buffer-geometry id="geometry"></three-box-buffer-geometry>
+        <three-mesh-standard-material id="material" color="#555"></three-mesh-standard-material>
+
+        <!-- Scene Contents -->
+        <three-mesh position="-2, 0, 0" geometry="#geometry" material="#material"></three-mesh>
+        <three-mesh position="0, 0, 0" geometry="#geometry" material="#material"></three-mesh>
+        <three-mesh position="2, 0, 0" geometry="#geometry" material="#material"></three-mesh>
+
+        <three-orbit-controls></three-orbit-controls>
+      </three-scene>
+    </three-game>
+
+    <script type="module">
+      import "three-elements"
+    </script>
+  </body>
+</html>

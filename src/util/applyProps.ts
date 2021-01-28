@@ -1,6 +1,7 @@
 import { IStringIndexable } from "../types"
 import { camelize } from "./camelize"
 import { MathUtils } from "three"
+import { getThreeObjectBySelector } from "./getThreeObjectBySelector"
 
 const IGNORED_KEYS = ["id"]
 
@@ -59,6 +60,22 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
       /* Otherwise, set the original string value, but split by commas */
       const list = value.split(",").map((el: string) => parseJson(el) ?? parseDeg(el) ?? el)
       object[key].set(...list)
+      return
+    }
+
+    /*
+    Is the property an object? In that case, we'll assume that the string value of the attribute
+    contains a DOM selector that references another object that we should assign here.
+    */
+    if (typeof object[key] === "object") {
+      const referencedObject = getThreeObjectBySelector(value)
+
+      if (referencedObject) {
+        object[key] = referencedObject
+      } else {
+        console.error(`No element was found for selector "${value}". 😭`)
+      }
+
       return
     }
 
