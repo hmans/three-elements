@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Internals
 
-If you've been extending ThreeElement in your own code, please note the following changes:
+If you've been extending ThreeElement in your own code, or hacking on the codebase itself, please note the following changes:
 
 - **New:** All element logic that does not deal with managing a wrapped Three.js object has been moved to a new base class called `BaseElement` that `ThreeElement` now extends. `BaseElement` performs lifecycle management, ticker event handling and other base functionality.
 
@@ -34,6 +34,8 @@ If you've been extending ThreeElement in your own code, please note the followin
 - **New:** The `BaseElement` class now also provides a `removedCallback` method that will be invoked when we know the element is being _removed_ from the DOM entirely, not just _moved_ to a new parent (as is often the case when pairing three-element with a web application framework.)
 
 - **Breaking Change:** Ticker events are now emitted by the three-game's `emitter`. Since we're no longer using DOM events, this means we also no longer need the `ticking` property/attribute, so it has been removed.
+
+- **Changed:** `yarn dev` now makes use of the excellent [@web/dev-server](https://modern-web.dev/docs/dev-server/overview/). This allows us to get rid of the importmap shim we had been using so far, load additional dependencies straight from our own `node_modules`, and greatly increase iteration speed during development.
 
 ## [0.2.1] - 2021-01-27
 

@@ -1,4 +1,32 @@
 body {
+  background-color: #222;
+  color: #ddd;
   margin: 0;
   overflow: hidden;
+  font: 16px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+main {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font: inherit;
+  font-weight: bold;
+}
+
+a {
+  color: hotpink;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }

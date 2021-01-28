@@ -1,8 +1,7 @@
 <html>
   <head>
     <title>With Vue</title>
-    <link rel="stylesheet" href="/styles.css" />
-    <script type="module" src="https://jspm.dev/es-module-shims"></script>
+    <link rel="stylesheet" href="styles.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
@@ -37,47 +36,32 @@
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
       import Vue from "https://jspm.dev/vue@3"
+      import "three-elements"
 
-      /*
-      We need to ensure that three-elements is fully loaded before we start the app.
-      And we only need to do it here because we're loading it through importShim.
-      */
-      importShim("/dist/index.esm.js").then(() => {
-        const app = Vue.createApp({})
+      const app = Vue.createApp({})
 
-        /* Stop Vue from complaining about our beautiful custom elements. */
-        app.config.isCustomElement = (tag) => tag.startsWith("three-")
+      /* Stop Vue from complaining about our beautiful custom elements. */
+      app.config.isCustomElement = (tag) => tag.startsWith("three-")
 
-        app.component("game", {
-          template: "#game-template"
-        })
-
-        app.component("rotating-dodecahedron", {
-          template: "#rotating-dodecahedron-template",
-
-          mounted() {
-            const { object, game } = this.$el
-
-            this.$el.ontick = () => {
-              object.rotation.z = object.rotation.x += 3 * game.deltaTime
-              object.scale.setScalar(4 + Math.cos(Date.now() / 200) * 0.8)
-              game.requestFrame()
-            }
-          }
-        })
-
-        app.mount("#game")
+      app.component("game", {
+        template: "#game-template"
       })
-    </script>
 
-    <script type="importmap-shim">
-      {
-        "imports": {
-          "eventemitter3": "https://jspm.dev/eventemitter3",
-          "three": "https://jspm.dev/three",
-          "three/": "https://jspm.dev/three/"
+      app.component("rotating-dodecahedron", {
+        template: "#rotating-dodecahedron-template",
+
+        mounted() {
+          const { object, game } = this.$el
+
+          this.$el.ontick = () => {
+            object.rotation.z = object.rotation.x += 3 * game.deltaTime
+            object.scale.setScalar(4 + Math.cos(Date.now() / 200) * 0.8)
+            game.requestFrame()
+          }
         }
-      }
+      })
+
+      app.mount("#game")
     </script>
   </body>
 </html>
