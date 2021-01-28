@@ -37,19 +37,19 @@ describe("applyProps", () => {
     expect(object.foo).to.equal(0)
   })
 
-  it("parses 'deg(...)' to the corresponding radian value", () => {
+  it("parses '123deg' to the corresponding radian value", () => {
     const object = {
       foo: 0
     }
-    applyProps(object, { foo: "deg(90)" })
+    applyProps(object, { foo: "90deg" })
     expect(object.foo).to.equal(Math.PI / 2)
   })
 
-  it("handles a list of 'deg(...)' values correctly if the assigned property has a .set method", () => {
+  it("handles a list of '...deg' values correctly if the assigned property has a .set method", () => {
     const object = {
       foo: new THREE.Vector3()
     }
-    applyProps(object, { foo: "deg(90), 1.23, deg(-90)" })
+    applyProps(object, { foo: "90deg, 1.23, -90deg" })
     expect(object.foo.x).to.equal(Math.PI / 2)
     expect(object.foo.y).to.equal(1.23)
     expect(object.foo.z).to.equal(Math.PI / -2)

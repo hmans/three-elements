@@ -11,10 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Changed:** By popular request, three-elements will no longer log to the console on startup. Enjoy the quiet!
 
-- **New:** When working with plain string attributes, you can now use the `deg(v)` shortcode to convert the specified value into radians. This is very useful in 100% HTML-based projects where you don't have access to JavaScript's `Math.PI`:
+- **New:** When working with plain string attributes, you can now use the `deg` suffix to convert the specified value into radians. This is very useful in 100% HTML-based projects where you don't have access to JavaScript's `Math.PI`:
 
 ```html
-<three-mesh rotation.x="deg(-90)">...</three-mesh>
+<three-mesh rotation.x="-90deg">...</three-mesh>
 ```
 
 - **Changed:** The core ticker loop now makes use of `setAnimationLoop` instead of `requestAnimationFrame`, which is a critical prerequisite for making your three-elements project [WebXR-ready](https://three-elements.hmans.co/advanced/webxr.html).

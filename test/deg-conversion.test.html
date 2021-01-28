@@ -2,8 +2,8 @@
   <body>
     <three-game id="game" autorender xr>
       <three-scene id="scene" background-color="#555">
-        <three-mesh id="meshA" rotation.x="deg(90)"> </three-mesh>
-        <three-mesh id="meshB" rotation="deg(90), 0, deg(-90)"> </three-mesh>
+        <three-mesh id="meshA" rotation.x="90deg"> </three-mesh>
+        <three-mesh id="meshB" rotation="90deg, 0, -90deg"> </three-mesh>
       </three-scene>
     </three-game>
 
@@ -15,7 +15,7 @@
       import "../src"
 
       runTests(async () => {
-        describe("using the deg(x) modifier in an attribute value", () => {
+        describe("using the deg suffix in an attribute value", () => {
           it("sets the attribute to the corresponding radian value", () => {
             expect(meshA.object.rotation.x).to.equal(Math.PI / 2)
             expect(meshB.object.rotation.x).to.equal(Math.PI / 2)

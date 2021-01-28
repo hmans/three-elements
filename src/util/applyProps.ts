@@ -81,6 +81,6 @@ const parseJson = (value: string) => {
 }
 
 const parseDeg = (value: string) => {
-  const r = value.trim().match(/^deg\(([0-9\.\- ]+)\)$/)
+  const r = value.trim().match(/^([0-9\.\- ]+)deg$/)
   if (r) return MathUtils.degToRad(parseFloat(r[1]))
 }
