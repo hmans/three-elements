@@ -1,5 +1,6 @@
 import { expect } from "@open-wc/testing"
 import { applyProps } from "../../src/util/applyProps"
+import * as THREE from "three"
 
 describe("applyProps", () => {
   it("can directly assign root-level properties", () => {
@@ -20,7 +21,7 @@ describe("applyProps", () => {
     expect(object.foo.bar).to.equal(1)
   })
 
-  it("can parses numerical values as floats", () => {
+  it("parses numerical values as floats", () => {
     const object = {
       foo: 0
     }
@@ -28,11 +29,29 @@ describe("applyProps", () => {
     expect(object.foo).to.equal(1.5)
   })
 
-  it("can correctly parses '0' to a 0", () => {
+  it("parses '0' as 0", () => {
     const object = {
       foo: 1
     }
     applyProps(object, { foo: "0" })
     expect(object.foo).to.equal(0)
+  })
+
+  it("parses '123deg' to the corresponding radian value", () => {
+    const object = {
+      foo: 0
+    }
+    applyProps(object, { foo: "90deg" })
+    expect(object.foo).to.equal(Math.PI / 2)
+  })
+
+  it("handles a list of '...deg' values correctly if the assigned property has a .set method", () => {
+    const object = {
+      foo: new THREE.Vector3()
+    }
+    applyProps(object, { foo: "90deg, 1.23, -90deg" })
+    expect(object.foo.x).to.equal(Math.PI / 2)
+    expect(object.foo.y).to.equal(1.23)
+    expect(object.foo.z).to.equal(Math.PI / -2)
   })
 })

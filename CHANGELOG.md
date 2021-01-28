@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Changed:** By popular request, three-elements will no longer log to the console on startup. Enjoy the quiet!
 
+- **New:** When working with plain string attributes, you can now use the `deg` suffix to convert the specified value into radians. This is very useful in 100% HTML-based projects where you don't have access to JavaScript's `Math.PI`:
+
+```html
+<three-mesh rotation.x="-90deg">...</three-mesh>
+```
+
 - **Changed:** The core ticker loop now makes use of `setAnimationLoop` instead of `requestAnimationFrame`, which is a critical prerequisite for making your three-elements project [WebXR-ready](https://three-elements.hmans.co/advanced/webxr.html).
 
 - **New:** `<three-game>` now can receive an `xr` attribute to enable WebXR features.
@@ -34,6 +40,8 @@ If you've been extending ThreeElement in your own code, or hacking on the codeba
 - **New:** The `BaseElement` class now also provides a `removedCallback` method that will be invoked when we know the element is being _removed_ from the DOM entirely, not just _moved_ to a new parent (as is often the case when pairing three-element with a web application framework.)
 
 - **Breaking Change:** Ticker events are now emitted by the three-game's `emitter`. Since we're no longer using DOM events, this means we also no longer need the `ticking` property/attribute, so it has been removed.
+
+- **Holy crap:** `applyProps` was refactored to use `if` instead of `switch (true)`. All you Senior JavaScript Architects can finally calm down, for I am no longer impeding upon your creed!
 
 - **Changed:** `yarn dev` now makes use of the excellent [@web/dev-server](https://modern-web.dev/docs/dev-server/overview/). This allows us to get rid of the importmap shim we had been using so far, load additional dependencies straight from our own `node_modules`, and greatly increase iteration speed during development.
 
