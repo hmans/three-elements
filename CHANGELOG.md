@@ -21,6 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **New:** `<three-game>` now can receive an `xr` attribute to enable WebXR features.
 
+- **New:** Tags that wrap any kind of camera object can now set an `active` attribute to make the camera register itself as the scene's active camera. Example:
+
+```html
+<three-perspective-camera position="0, 5, -15" fov="45" active></three-perspective-camera>
+```
+
 - **Changed:** When attributes on an element map to a non-existing property on the wrapped object, there will no longer be a warning logged to the console. (This is very useful when you're combining three-elements with other frameworks that make use of their own attribute names on your elements.)
 
 - **Fixed:** When assigning attributes a value of "0", this will now correctly assign the parsed numerical value of 0 to the corresponding property, not a string representation of it. Programming, how does it work?

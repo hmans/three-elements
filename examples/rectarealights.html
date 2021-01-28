@@ -10,44 +10,26 @@
   </head>
 
   <body>
-    <div id="app"></div>
-
     <three-game autorender>
-      <three-scene id="scene">
+      <three-scene>
+        <!-- camera -->
+        <three-perspective-camera position="0, 5, -15" fov="45" active></three-perspective-camera>
+
         <!-- lights -->
-        <three-rect-area-light
-          id="light1"
-          position="-5, 5, 5"
-          color="red"
-          intensity="5"
-          width="4"
-          height="10"
-        ></three-rect-area-light>
+        <three-template tag="area-light">
+          <three-rect-area-light intensity="5" width="4" height="10"></three-rect-area-light>
+        </three-template>
 
-        <three-rect-area-light
-          id="light2"
-          color="green"
-          position="0, 5, 5"
-          intensity="5"
-          width="4"
-          height="10"
-        ></three-rect-area-light>
+        <area-light id="light1" position="-5, 5, 5" color="red"></area-light>
+        <area-light id="light2" position="0, 5, 5" color="green"></area-light>
+        <area-light id="light3" position="5, 5, 5" color="blue"></area-light>
 
-        <three-rect-area-light
-          id="light3"
-          color="blue"
-          position="5, 5, 5"
-          intensity="5"
-          width="4"
-          height="10"
-        ></three-rect-area-light>
+        <three-rect-area-light-helper light="#light1"></three-rect-area-light-helper>
+        <three-rect-area-light-helper light="#light2"></three-rect-area-light-helper>
+        <three-rect-area-light-helper light="#light3"></three-rect-area-light-helper>
 
         <!-- torus knot -->
-        <three-mesh
-          id="knot"
-          position.y="5"
-          ontick="this.object.rotation.y = performance.now() / 1000"
-        >
+        <three-mesh position.y="5" ontick="this.object.rotation.y = performance.now() / 1000">
           <three-torus-knot-geometry args="[1.5, 0.5, 200, 16]"></three-torus-knot-geometry>
           <three-mesh-standard-material
             color="#fff"
@@ -67,33 +49,16 @@
         </three-mesh>
 
         <!-- orbit controls -->
-        <three-orbit-controls id="controls"></three-orbit-controls>
+        <three-orbit-controls target="0, 5, 0"></three-orbit-controls>
       </three-scene>
     </three-game>
 
     <script type="module">
-      import { RectAreaLightHelper } from "three/examples/jsm/helpers/RectAreaLightHelper"
       import { RectAreaLightUniformsLib } from "three/examples/jsm/lights/RectAreaLightUniformsLib"
       import "three-elements"
 
-      queueMicrotask(() => {
+      game.addEventListener("ready", () => {
         RectAreaLightUniformsLib.init()
-
-        const scene = document.getElementById("scene")
-        const controls = document.getElementById("controls")
-        const knot = document.getElementById("knot")
-
-        scene.camera.fov = 45
-        scene.camera.position.set(0, 5, -15)
-
-        controls.controls.target.copy(knot.object.position)
-        controls.controls.update()
-
-        scene.object.add(new RectAreaLightHelper(document.getElementById("light1").object))
-
-        scene.object.add(new RectAreaLightHelper(document.getElementById("light2").object))
-
-        scene.object.add(new RectAreaLightHelper(document.getElementById("light3").object))
       })
     </script>
   </body>

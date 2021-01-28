@@ -152,6 +152,13 @@ export class ThreeElement<T = any> extends BaseElement {
         this[key] = new Function(newValue).bind(this)
         return true
 
+      case "active":
+        if (this.object instanceof THREE.Camera) {
+          this.scene.camera = this.object
+          return true
+        }
+        break
+
       /*
       If we've reached this point, we're dealing with an attribute that we don't know.
       */
