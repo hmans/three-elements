@@ -1,4 +1,5 @@
 import { expect, fixture, html } from "@open-wc/testing"
+import "../src"
 import { ThreeElement, ThreeScene } from "../src"
 
 describe("the args attribute", () => {
