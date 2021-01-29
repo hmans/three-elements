@@ -76,10 +76,6 @@ export class ThreeElement<T = any> extends BaseElement {
     }
   }
 
-  requestFrame() {
-    this.game.requestFrame()
-  }
-
   protected addObjectToParent() {
     /*
     If the wrapped object is an Object3D, add it to the scene. If we can find a parent somewhere in the
