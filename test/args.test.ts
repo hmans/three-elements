@@ -1,4 +1,4 @@
-import { expect, fixture, html, nextFrame } from "@open-wc/testing"
+import { expect, fixture, html } from "@open-wc/testing"
 import "../src"
 import { ThreeElement } from "../src/ThreeElement"
 
@@ -17,9 +17,6 @@ describe("the args attribute", () => {
   it("provides the arguments for the Three.js constructor", async () => {
     const game = await render()
     const fog = game.querySelector("three-fog") as ThreeElement
-
-    await nextFrame()
-
     expect(fog.object.color.getHexString()).to.equal("333333")
   })
 })
