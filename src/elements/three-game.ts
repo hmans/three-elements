@@ -102,6 +102,10 @@ export class ThreeGame extends HTMLElement {
     this.frameRequested = true
   }
 
+  /* TICKING */
+
+  protected _ticking = false
+
   startTicking() {
     let lastNow = performance.now()
 
@@ -133,11 +137,30 @@ export class ThreeGame extends HTMLElement {
       }
     }
 
-    this.renderer.setAnimationLoop(tick)
+    /*
+    If we have a WebGLRenderer, we'll use its setAnimationLoop. Otherwise,
+    we'll perform normal rAF-style ticking.
+    */
+    this._ticking = true
+
+    if (this.renderer instanceof THREE.WebGLRenderer) {
+      this.renderer.setAnimationLoop(tick)
+    } else {
+      const loop = () => {
+        tick()
+        if (this._ticking) requestAnimationFrame(loop)
+      }
+
+      loop()
+    }
   }
 
   stopTicking() {
-    this.renderer.setAnimationLoop(null)
+    this._ticking = false
+
+    if (this.renderer instanceof THREE.WebGLRenderer) {
+      this.renderer.setAnimationLoop(null)
+    }
   }
 }
 
