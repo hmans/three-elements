@@ -13,45 +13,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **New:** When assigning to an object property via an attribute, you can now set the attribute to a CSS selector to reference another object. This can, for example, be used to re-use geometries, materials and other potentially expensive resources:
 
-```html
-<!-- Resources -->
-<three-box-buffer-geometry id="geometry"></three-box-buffer-geometry>
-<three-mesh-standard-material id="material" color="#555"></three-mesh-standard-material>
+  ```html
+  <!-- Resources -->
+  <three-box-buffer-geometry id="geometry"></three-box-buffer-geometry>
+  <three-mesh-standard-material id="material" color="#555"></three-mesh-standard-material>
 
-<!-- Scene Contents -->
-<three-mesh position="-2, 0, 0" geometry="#geometry" material="#material"></three-mesh>
-<three-mesh position="0, 0, 0" geometry="#geometry" material="#material"></three-mesh>
-<three-mesh position="2, 0, 0" geometry="#geometry" material="#material"></three-mesh>
-```
+  <!-- Scene Contents -->
+  <three-mesh position="-2, 0, 0" geometry="#geometry" material="#material"></three-mesh>
+  <three-mesh position="0, 0, 0" geometry="#geometry" material="#material"></three-mesh>
+  <three-mesh position="2, 0, 0" geometry="#geometry" material="#material"></three-mesh>
+  ```
 
 - **New:** When working with plain string attributes, you can now use the `deg` suffix to convert the specified value into radians. This is very useful in 100% HTML-based projects where you don't have access to JavaScript's `Math.PI`:
 
-```html
-<three-mesh rotation.x="-90deg">...</three-mesh>
-```
+  ```html
+  <three-mesh rotation.x="-90deg">...</three-mesh>
+  ```
 
 - **Changed:** The core ticker loop now makes use of `setAnimationLoop` instead of `requestAnimationFrame`, which is a critical prerequisite for making your three-elements project [WebXR-ready](https://three-elements.hmans.co/advanced/webxr.html).
 
 - **New:** You can now configure custom renderers! Just like with any other element provided by this library, you can use attributes to configure them to your needs:
 
-```html
-<three-game>
-  <three-web-gl-renderer xr.enabled></three-web-gl-renderer>
-  <three-scene> ... </three-scene>
-</three-game>
-```
+  ```html
+  <three-game>
+    <three-web-gl-renderer xr.enabled></three-web-gl-renderer>
+    <three-scene> ... </three-scene>
+  </three-game>
+  ```
+
+  Renderers that are part of the THREE.\* namespace are supported out of the box; support for SVG and CSS renderers will come in a future update.
 
 - **New:** You no longer have to use valid JSON syntax for `arg` attributes -- just provide a list of comma-separated values:
 
-```html
-<three-fog args="#333333, 1, 1000"></three-fog>
-```
+  ```html
+  <three-fog args="#333333, 1, 1000"></three-fog>
+  ```
 
-The commas, in fact, are now purely optional. This will also work:
+  The commas, in fact, are now purely optional. This will also work:
 
-```html
-<three-fog args="#333333 1 1000"></three-fog>
-```
+  ```html
+  <three-fog args="#333333 1 1000"></three-fog>
+  ```
 
 - **Changed:** When attributes on an element map to a non-existing property on the wrapped object, there will no longer be a warning logged to the console. (This is very useful when you're combining three-elements with other frameworks that make use of their own attribute names on your elements.)
 
