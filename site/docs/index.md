@@ -26,9 +26,9 @@ footer: MIT Licensed | Copyright © 2021-present Hendrik Mans
     </three-mesh>
 
     <!-- A floor. We like shadows. Shadows good! -->
-    <three-mesh rotation="[-1.5707, 0, 0]" position.y="-7" receive-shadow>
+    <three-mesh rotation="-1.5707, 0, 0" position.y="-7" receive-shadow>
       <three-plane-buffer-geometry
-        args="[1000, 1000, 32]"
+        args="1000, 1000, 32"
       ></three-plane-buffer-geometry>
       <three-mesh-standard-material color="#888"></three-mesh-standard-material>
     </three-mesh>

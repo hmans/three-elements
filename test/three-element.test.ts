@@ -90,6 +90,38 @@ describe("<three-*> powered by ThreeElement", () => {
       expect(el.object.scale.y).to.equal(1)
       expect(el.object.scale.z).to.equal(1)
     })
+
+    describe("the ...deg suffix", () => {
+      it("converts the value to radians", async () => {
+        const el = await renderMeshElement()
+
+        el.setAttribute("rotation.x", "90deg")
+        await nextFrame()
+        expect(el.object.rotation.x).to.equal(Math.PI / 2)
+
+        el.setAttribute("rotation.x", "-90deg")
+        await nextFrame()
+        expect(el.object.rotation.x).to.equal(Math.PI / -2)
+
+        el.setAttribute("rotation.x", "0deg")
+        await nextFrame()
+        expect(el.object.rotation.x).to.equal(0)
+
+        el.setAttribute("rotation.x", "-0.5deg")
+        await nextFrame()
+        expect(el.object.rotation.x).to.equal((Math.PI / 180) * -0.5)
+      })
+
+      it("works within lists", async () => {
+        const el = await renderMeshElement()
+
+        el.setAttribute("rotation", "90deg, 0, -90deg")
+        await nextFrame()
+        expect(el.object.rotation.x).to.equal(Math.PI / 2)
+        expect(el.object.rotation.y).to.equal(0)
+        expect(el.object.rotation.z).to.equal(Math.PI / -2)
+      })
+    })
   })
 
   describe("the `attach` attribute", () => {

@@ -64,6 +64,9 @@ export class ThreeGame extends HTMLElement {
     /* Initialize window size */
     this.handleWindowResize()
 
+    /* Announce that we're ready */
+    this.dispatchEvent(new Event("ready"))
+
     /* Start ticker */
     this.startTicking()
   }

@@ -3,36 +3,38 @@ import { ThreeElement } from "../ThreeElement"
 import { registerElement } from "../util/registerElement"
 
 export class ThreeOrbitControls extends ThreeElement<OrbitControls> {
-  controls?: OrbitControls
+  createControls() {
+    const previousTarget = this.object?.target
+    this.object?.dispose()
 
-  mountedCallback() {
-    const { renderer } = this.game
-    let { camera } = this.scene
-    this.controls = new OrbitControls(camera, renderer.domElement)
+    /* Create new controls */
+    this.object = new OrbitControls(this.scene.camera, this.game.renderer.domElement)
+    if (previousTarget) this.object.target.copy(previousTarget)
+    this.applyAllAttributes()
 
-    this.ontick = () => {
-      if (!this.controls) return
-
-      /*
-      Check if the scene's camera has changed.
-      TODO: in the future, the scene may event a "camerachanged" event that we could hook into.
-      */
-      if (this.scene.camera !== camera) {
-        this.controls.dispose
-        camera = this.scene.camera
-        this.controls = new OrbitControls(camera, renderer.domElement)
-      }
-
-      this.controls.update()
-    }
-
-    this.controls.addEventListener("change", () => {
+    this.object.addEventListener("change", () => {
       this.game.requestFrame()
     })
   }
 
+  mountedCallback() {
+    let { camera } = this.scene
+
+    this.createControls()
+
+    this.ontick = () => {
+      /* Create a new controls instance if the camera changes */
+      if (this.scene.camera !== camera) {
+        this.createControls()
+        camera = this.scene.camera
+      }
+
+      this.object!.update()
+    }
+  }
+
   removedCallback() {
-    this.controls?.dispose()
+    this.object?.dispose()
     super.removedCallback()
   }
 }

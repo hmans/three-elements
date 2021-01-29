@@ -1,3 +1,4 @@
+import { ThreeElement } from "../ThreeElement"
 import { observeAttributeChange } from "../util/observeAttributeChange"
 import { registerElement } from "../util/registerElement"
 
@@ -6,6 +7,10 @@ It would be easier to just customize HTMLTemplateElement here, but that would
 not work on Safari, so we gotta do some extra work instead.
 */
 export class ThreeTemplate extends HTMLElement {
+  get object() {
+    return (this.firstElementChild as ThreeElement).object
+  }
+
   constructor() {
     super()
     this.attachShadow({ mode: "open" })
@@ -36,15 +41,19 @@ export class ThreeTemplate extends HTMLElement {
         /* Let's make a shadow DOM! */
         this.attachShadow({ mode: "open" })
 
-        /* Copy the template over into our shadow DOM */
+        /* Copy the template */
         this.element = child!.cloneNode(true) as HTMLElement
-        this.shadowRoot!.appendChild(this.element)
+        this.appendChild(this.element)
 
         /* Apply all extra attributes we have */
         for (const key of this.getAttributeNames()) {
           this.element.setAttribute(key, this.getAttribute(key)!)
         }
 
+        /* LOL */
+        this.outerHTML = this.innerHTML
+
+        /* Make sure future attribute changes are applied */
         observeAttributeChange(this, (key, value) => {
           this.element?.setAttribute(key, value)
         })

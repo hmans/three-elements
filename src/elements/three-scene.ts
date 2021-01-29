@@ -73,21 +73,6 @@ export class ThreeScene extends ThreeElement.for(Scene) {
       case "background-color":
         this.object!.background = new Color(newValue)
         return true
-
-      case "camera":
-        queueMicrotask(() => {
-          const el = document.getElementById(newValue) as ThreeElement<Camera>
-
-          if (!el) {
-            throw `A scene referenced a camera element with the DOM ID "${newValue}", but it could not be found.`
-          } else if (!(el.object instanceof Camera)) {
-            throw `A scene referenced a camera element with the DOM ID "${newValue}", but that element did not provide a camera object.`
-          } else {
-            this.camera = el.object!
-            this.camera.lookAt(0, 0, 0)
-          }
-        })
-        return true
     }
 
     return super.attributeChangedCallback(name, oldValue, newValue)

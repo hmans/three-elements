@@ -2,6 +2,7 @@ import * as THREE from "three"
 import { BaseElement } from "./BaseElement"
 import { IConstructable, isDisposable } from "./types"
 import { applyProps } from "./util/applyProps"
+import { attributeValueToArray } from "./util/attributeValueToArray"
 
 export class ThreeElement<T = any> extends BaseElement {
   /** Constructor that will instantiate our object. */
@@ -10,6 +11,10 @@ export class ThreeElement<T = any> extends BaseElement {
   /** The THREE.* object managed by this element. */
   get object() {
     return (this._object ||= this.constructWrappedObject())
+  }
+
+  set object(v: T | undefined) {
+    this._object = v
   }
 
   private _object?: T
@@ -23,9 +28,9 @@ export class ThreeElement<T = any> extends BaseElement {
 
       /* Create managed object */
       const args = this.getAttribute("args")
+
       if (args) {
-        const parsed = JSON.parse(args)
-        object = new constructor(...(Array.isArray(parsed) ? parsed : [parsed]))
+        object = new constructor(...attributeValueToArray(args))
       } else {
         object = new constructor()
       }
@@ -147,6 +152,13 @@ export class ThreeElement<T = any> extends BaseElement {
       case "ondblclick":
         this[key] = new Function(newValue).bind(this)
         return true
+
+      case "active":
+        if (this.object instanceof THREE.Camera) {
+          this.scene.camera = this.object
+          return true
+        }
+        break
 
       /*
       If we've reached this point, we're dealing with an attribute that we don't know.

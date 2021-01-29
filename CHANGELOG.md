@@ -11,9 +11,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Changed:** By popular request, three-elements will no longer log to the console on startup. Enjoy the quiet!
 
+- **New:** When assigning to an object property via an attribute, you can now set the attribute to a CSS selector to reference another object. This can, for example, be used to re-use geometries, materials and other potentially expensive resources:
+
+```html
+<!-- Resources -->
+<three-box-buffer-geometry id="geometry"></three-box-buffer-geometry>
+<three-mesh-standard-material id="material" color="#555"></three-mesh-standard-material>
+
+<!-- Scene Contents -->
+<three-mesh position="-2, 0, 0" geometry="#geometry" material="#material"></three-mesh>
+<three-mesh position="0, 0, 0" geometry="#geometry" material="#material"></three-mesh>
+<three-mesh position="2, 0, 0" geometry="#geometry" material="#material"></three-mesh>
+```
+
+- **New:** When working with plain string attributes, you can now use the `deg` suffix to convert the specified value into radians. This is very useful in 100% HTML-based projects where you don't have access to JavaScript's `Math.PI`:
+
+```html
+<three-mesh rotation.x="-90deg">...</three-mesh>
+```
+
 - **Changed:** The core ticker loop now makes use of `setAnimationLoop` instead of `requestAnimationFrame`, which is a critical prerequisite for making your three-elements project [WebXR-ready](https://three-elements.hmans.co/advanced/webxr.html).
 
 - **New:** `<three-game>` now can receive an `xr` attribute to enable WebXR features.
+
+- **New:** Tags that wrap any kind of camera object can now set an `active` attribute to make the camera register itself as the scene's active camera. Example:
+
+```html
+<three-perspective-camera position="0, 5, -15" fov="45" active></three-perspective-camera>
+```
+
+- **New:** You no longer have to use valid JSON syntax for `arg` attributes -- just provide a list of comma-separated values:
+
+```html
+<three-fog args="#333333, 1, 1000"></three-fog>
+```
+
+The commas, in fact, are now purely optional. This will also work:
+
+```html
+<three-fog args="#333333 1 1000"></three-fog>
+```
 
 - **Changed:** When attributes on an element map to a non-existing property on the wrapped object, there will no longer be a warning logged to the console. (This is very useful when you're combining three-elements with other frameworks that make use of their own attribute names on your elements.)
 
@@ -22,6 +59,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed:** Orthographic cameras now have their frustums and projection matrices updated when the viewport is resized.
 
 - **Fixed:** When using the `attach` attribute, a valid candidate element to attach to is now searched for across the boundaries of Shadow DOMs. If this sentence makes any sense to you, I bow to you, for we are united in this madness.
+
+- **New:** `<three-game>` now dispatches a `ready` event you can hook your game's initialization code into.
 
 ### Internals
 
@@ -36,6 +75,8 @@ If you've been extending ThreeElement in your own code, or hacking on the codeba
 - **Breaking Change:** Ticker events are now emitted by the three-game's `emitter`. Since we're no longer using DOM events, this means we also no longer need the `ticking` property/attribute, so it has been removed.
 
 - **Changed:** Instead of using a MutationObserver instance to monitor the element for updated attributes (we can't feasibly make use of `observedAttributes`, remember?), we now simply hook into `setAttribute` to react on attribute changes.
+
+- **Holy crap:** `applyProps` was refactored to use `if` instead of `switch (true)`. All you Senior JavaScript Architects can finally calm down, for I am no longer impeding upon your creed!
 
 - **Changed:** `yarn dev` now makes use of the excellent [@web/dev-server](https://modern-web.dev/docs/dev-server/overview/). This allows us to get rid of the importmap shim we had been using so far, load additional dependencies straight from our own `node_modules`, and greatly increase iteration speed during development.
 
