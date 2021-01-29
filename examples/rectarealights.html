@@ -11,9 +11,13 @@
 
   <body>
     <three-game id="game" autorender>
-      <three-scene>
+      <three-scene camera=".active">
         <!-- camera -->
-        <three-perspective-camera position="0, 5, -15" fov="45" active></three-perspective-camera>
+        <three-perspective-camera
+          class="active"
+          position="0, 5, -15"
+          fov="45"
+        ></three-perspective-camera>
 
         <!-- lights -->
         <three-template tag="area-light">

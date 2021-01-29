@@ -1,6 +1,7 @@
 import { Camera, Color, OrthographicCamera, PerspectiveCamera, Scene } from "three"
 import { PointerEvents } from "../PointerEvents"
 import { ThreeElement } from "../ThreeElement"
+import { getThreeObjectBySelector } from "../util/getThreeObjectBySelector"
 import { registerElement } from "../util/registerElement"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
@@ -73,6 +74,10 @@ export class ThreeScene extends ThreeElement.for(Scene) {
       case "background-color":
         this.object!.background = new Color(newValue)
         return true
+
+      case "camera":
+        const camera = getThreeObjectBySelector(newValue)
+        if (camera) this.camera = camera
     }
 
     return super.attributeChangedCallback(name, oldValue, newValue)

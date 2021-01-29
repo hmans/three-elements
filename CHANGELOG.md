@@ -34,12 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **New:** `<three-game>` now can receive an `xr` attribute to enable WebXR features.
 
-- **New:** Tags that wrap any kind of camera object can now set an `active` attribute to make the camera register itself as the scene's active camera. Example:
-
-```html
-<three-perspective-camera position="0, 5, -15" fov="45" active></three-perspective-camera>
-```
-
 - **New:** You no longer have to use valid JSON syntax for `arg` attributes -- just provide a list of comma-separated values:
 
 ```html

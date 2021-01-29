@@ -9,9 +9,9 @@
   </head>
   <body>
     <three-game autorender>
-      <three-scene background-color="#c88">
+      <three-scene background-color="#c88" camera=".active">
         <!-- This camera will replace the one that's automatically provided by the scene itself. -->
-        <three-perspective-camera id="camera" position="5, 5, 50" active></three-perspective-camera>
+        <three-perspective-camera class="active" position="5, 5, 50"></three-perspective-camera>
 
         <!-- Lights on! -->
         <three-ambient-light intensity="0.2"></three-ambient-light>
