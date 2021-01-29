@@ -159,12 +159,6 @@ export class BaseElement extends HTMLElement {
   connectedCallback() {
     this.debug("connectedCallback")
 
-    /* Apply props */
-    const attributes = this.getAllAttributes()
-    for (const key in attributes) {
-      this.attributeChangedCallback(key, "", attributes[key])
-    }
-
     /* Emit connected event */
     this.dispatchEvent(new CustomEvent("connected", { bubbles: true, cancelable: false }))
 
