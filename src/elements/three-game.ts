@@ -14,15 +14,9 @@ export class ThreeGame extends HTMLElement {
   }
 
   set renderer(v) {
-    /* Cleanup previous renderer */
-    this.shadowRoot!.removeChild(this._renderer.domElement)
-
-    /* Store renderer */
+    this.cleanupRenderer()
     this._renderer = v
-
-    /* Initialize new renderer */
-    this.shadowRoot!.appendChild(this._renderer.domElement)
-    this.handleWindowResize()
+    this.setupRenderer()
   }
 
   protected _renderer: THREE.Renderer = this.makeDefaultRenderer()
@@ -59,8 +53,8 @@ export class ThreeGame extends HTMLElement {
     this.handleWindowResize = this.handleWindowResize.bind(this)
     window.addEventListener("resize", this.handleWindowResize, false)
 
-    /* Initialize window size */
-    this.handleWindowResize()
+    /* Initialize renderer size */
+    this.setupRenderer()
 
     /* Announce that we're ready */
     this.dispatchEvent(new Event("ready"))
@@ -77,6 +71,15 @@ export class ThreeGame extends HTMLElement {
     window.removeEventListener("resize", this.handleWindowResize, false)
 
     /* Remove canvas from page */
+    this.cleanupRenderer()
+  }
+
+  protected setupRenderer() {
+    this.shadowRoot!.appendChild(this.renderer.domElement)
+    this.handleWindowResize()
+  }
+
+  protected cleanupRenderer() {
     this.shadowRoot!.removeChild(this.renderer.domElement)
   }
 
