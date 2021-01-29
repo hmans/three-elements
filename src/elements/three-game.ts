@@ -100,9 +100,6 @@ export class ThreeGame extends HTMLElement {
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
-    /* Configure WebXR */
-    renderer.xr.enabled = Boolean(this.hasAttribute("xr"))
-
     return renderer
   }
 

@@ -22,13 +22,6 @@ describe("<three-game>", () => {
     expect(el.emitter).to.be.instanceOf(EventEmitter)
   })
 
-  describe("`xr` attribute", () => {
-    it("enables WebXR features on the renderer", async () => {
-      const el = (await fixture(html`<three-game xr></three-game>`)) as ThreeGame
-      expect(el.renderer.xr.enabled).to.equal(true)
-    })
-  })
-
   describe("`autorender` attribute", () => {
     it("enables autorendering", async () => {
       const el = (await fixture(html`<three-game autorender></three-game>`)) as ThreeGame

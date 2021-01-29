@@ -32,7 +32,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Changed:** The core ticker loop now makes use of `setAnimationLoop` instead of `requestAnimationFrame`, which is a critical prerequisite for making your three-elements project [WebXR-ready](https://three-elements.hmans.co/advanced/webxr.html).
 
-- **New:** `<three-game>` now can receive an `xr` attribute to enable WebXR features.
+- **New:** You can now configure custom renderers! Just like with any other element provided by this library, you can use attributes to configure them to your needs:
+
+```html
+<three-game>
+  <three-web-gl-renderer xr.enabled></three-web-gl-renderer>
+  <three-scene> ... </three-scene>
+</three-game>
+```
 
 - **New:** You no longer have to use valid JSON syntax for `arg` attributes -- just provide a list of comma-separated values:
 

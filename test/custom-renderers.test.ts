@@ -23,7 +23,7 @@ describe("using custom renderers", () => {
     const render = () =>
       fixture(html`
         <three-game>
-          <three-web-gl-renderer xr.enabled id="renderer"></three-web-gl-renderer>
+          <three-web-gl-renderer xr.enabled></three-web-gl-renderer>
           <three-scene></three-scene>
         </three-game>
       `)
