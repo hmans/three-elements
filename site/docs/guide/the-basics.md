@@ -129,8 +129,8 @@ You can also use **dotty attributes** to set nested properties:
 
 ## Constructor Arguments
 
-Every element will create its own instance of its corresponding class. The `args` attribute allows you to provide a list of constructor arguments as a JSON array.
+Every element will create its own instance of its corresponding class. The `args` attribute allows you to provide a list of constructor arguments:
 
 ```html
-<three-box-buffer-geometry args="[2, 1, 1]"></three-box-buffer-geometry>
+<three-box-buffer-geometry args="2, 1, 1"></three-box-buffer-geometry>
 ```

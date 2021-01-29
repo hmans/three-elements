@@ -1,7 +1,8 @@
 import { IStringIndexable } from "../types"
 import { camelize } from "./camelize"
-import { MathUtils } from "three"
 import { getThreeObjectBySelector } from "./getThreeObjectBySelector"
+import { attributeValueToArray } from "./attributeValueToArray"
+import { parseDeg } from "./parseDeg"
 
 const IGNORED_KEYS = ["id"]
 
@@ -58,7 +59,7 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
       }
 
       /* Otherwise, set the original string value, but split by commas */
-      const list = value.split(",").map((el: string) => parseJson(el) ?? parseDeg(el) ?? el)
+      const list = attributeValueToArray(value)
       object[key].set(...list)
       return
     }
@@ -95,9 +96,4 @@ const parseJson = (value: string) => {
   } catch (e) {}
 
   return parsed
-}
-
-const parseDeg = (value: string) => {
-  const r = value.trim().match(/^([0-9\.\- ]+)deg$/)
-  if (r) return MathUtils.degToRad(parseFloat(r[1]))
 }

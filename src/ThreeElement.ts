@@ -2,6 +2,7 @@ import * as THREE from "three"
 import { BaseElement } from "./BaseElement"
 import { IConstructable, isDisposable } from "./types"
 import { applyProps } from "./util/applyProps"
+import { attributeValueToArray } from "./util/attributeValueToArray"
 
 export class ThreeElement<T = any> extends BaseElement {
   /** Constructor that will instantiate our object. */
@@ -27,9 +28,9 @@ export class ThreeElement<T = any> extends BaseElement {
 
       /* Create managed object */
       const args = this.getAttribute("args")
+
       if (args) {
-        const parsed = JSON.parse(args)
-        object = new constructor(...(Array.isArray(parsed) ? parsed : [parsed]))
+        object = new constructor(...attributeValueToArray(args))
       } else {
         object = new constructor()
       }

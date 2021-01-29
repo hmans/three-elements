@@ -40,6 +40,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <three-perspective-camera position="0, 5, -15" fov="45" active></three-perspective-camera>
 ```
 
+- **New:** You no longer have to use valid JSON syntax for `arg` attributes -- just provide a list of comma-separated values:
+
+```html
+<three-fog args="#333333, 1, 1000"></three-fog>
+```
+
+The commas, in fact, are now purely optional. This will also work:
+
+```html
+<three-fog args="#333333 1 1000"></three-fog>
+```
+
 - **Changed:** When attributes on an element map to a non-existing property on the wrapped object, there will no longer be a warning logged to the console. (This is very useful when you're combining three-elements with other frameworks that make use of their own attribute names on your elements.)
 
 - **Fixed:** When assigning attributes a value of "0", this will now correctly assign the parsed numerical value of 0 to the corresponding property, not a string representation of it. Programming, how does it work?

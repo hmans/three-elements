@@ -30,7 +30,7 @@
 
         <!-- torus knot -->
         <three-mesh position.y="5" ontick="this.object.rotation.y = performance.now() / 1000">
-          <three-torus-knot-geometry args="[1.5, 0.5, 200, 16]"></three-torus-knot-geometry>
+          <three-torus-knot-geometry args="1.5, 0.5, 200, 16"></three-torus-knot-geometry>
           <three-mesh-standard-material
             color="#fff"
             metalness="0"
@@ -40,7 +40,7 @@
 
         <!-- floor -->
         <three-mesh>
-          <three-box-geometry args="[2000, 0.1, 2000]"></three-box-geometry>
+          <three-box-geometry args="2000, 0.1, 2000"></three-box-geometry>
           <three-mesh-standard-material
             color="#808080"
             metalness="0"

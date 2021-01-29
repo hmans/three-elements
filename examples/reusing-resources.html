@@ -9,24 +9,50 @@
   </head>
   <body>
     <three-game autorender>
-      <three-scene background-color="#222" ontick="this.object.rotateY(0.01)">
+      <three-scene background-color="#222">
         <!-- Lights -->
         <three-ambient-light intensity="0.2"></three-ambient-light>
-        <three-directional-light
-          intensity="0.8"
-          position="10, 40, 50"
-          cast-shadow
-        ></three-directional-light>
+        <three-directional-light intensity="0.8" position="10, 40, 50"></three-directional-light>
 
         <!-- resources we'll reuse -->
-        <three-box-buffer-geometry id="geometry"></three-box-buffer-geometry>
+        <three-box-buffer-geometry id="geometry" args="1, 5, 1"></three-box-buffer-geometry>
         <three-mesh-standard-material id="material" color="#555"></three-mesh-standard-material>
 
         <!-- Scene Contents -->
-        <three-mesh position="-2, 0, 0" geometry="#geometry" material="#material"></three-mesh>
-        <three-mesh position="0, 0, 0" geometry="#geometry" material="#material"></three-mesh>
-        <three-mesh position="2, 0, 0" geometry="#geometry" material="#material"></three-mesh>
-
+        <three-group ontick="this.object.rotateX(0.001); this.object.rotateY(0.002)">
+          <three-mesh
+            geometry="#geometry"
+            material="#material"
+            position="-3.5, 0, 0"
+            scale="0.7"
+            ontick="this.object.rotation.x = this.object.rotation.y += 0.03"
+          ></three-mesh>
+          <three-mesh
+            position="-2, 0, 0"
+            geometry="#geometry"
+            material="#material"
+            ontick="this.object.rotation.x = this.object.rotation.y += 0.015"
+          ></three-mesh>
+          <three-mesh
+            position="0, 0, 0"
+            geometry="#geometry"
+            material="#material"
+            scale="1.5"
+          ></three-mesh>
+          <three-mesh
+            position="2, 0, 0"
+            geometry="#geometry"
+            material="#material"
+            ontick="this.object.rotation.x = this.object.rotation.y -= 0.015"
+          ></three-mesh>
+          <three-mesh
+            position="3.5, 0, 0"
+            geometry="#geometry"
+            material="#material"
+            scale="0.7"
+            ontick="this.object.rotation.x = this.object.rotation.y -= 0.03"
+          ></three-mesh>
+        </three-group>
         <three-orbit-controls></three-orbit-controls>
       </three-scene>
     </three-game>

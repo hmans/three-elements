@@ -49,7 +49,7 @@ describe("applyProps", () => {
     const object = {
       foo: new THREE.Vector3()
     }
-    applyProps(object, { foo: "90deg, 1.23, -90deg" })
+    applyProps(object, { foo: "90deg 1.23 -90deg" })
     expect(object.foo.x).to.equal(Math.PI / 2)
     expect(object.foo.y).to.equal(1.23)
     expect(object.foo.z).to.equal(Math.PI / -2)
