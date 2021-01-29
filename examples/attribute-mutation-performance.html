@@ -8,6 +8,16 @@
     />
   </head>
   <body>
+    <!--
+
+      IMPORTANT NOTE!
+
+      The following code is doing some things that are definitely NOT considered best
+      practices. It solely exists for benchmarking different approaches for tracking
+      attribute changes to elements.
+
+    -->
+
     <div id="root"></div>
 
     <!-- Import dependencies via ESM. The future is now! -->
@@ -29,14 +39,14 @@
                 color="#f30"
               ></three-mesh-standard-material>
 
-              <three-fog near="0" far="64" color="#111"></three-fog>
+              <three-fog near="0" far="32" color="#111"></three-fog>
               <three-ambient-light intensity="0.2"></three-ambient-light>
               <three-directional-light
                 position="10, 10, 40"
                 intensity="0.8"
               ></three-directional-light>
 
-              ${Swarm(100)}
+              ${Swarm(1000)}
 
               <three-orbit-controls></three-orbit-controls>
             </three-scene>

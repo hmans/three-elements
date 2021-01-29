@@ -1,4 +1,4 @@
-import { expect, html, nextFrame } from "@open-wc/testing"
+import { expect, html } from "@open-wc/testing"
 import * as THREE from "three"
 import "../src"
 import { ThreeElement } from "../src/ThreeElement"
@@ -26,12 +26,9 @@ describe("<three-*> powered by ThreeElement", () => {
   describe("assigning to an attribute", () => {
     it("sets the wrapped object's property of the same name", async () => {
       const el = await renderMeshElement()
-
       expect(el.object.name).to.equal("")
 
       el.setAttribute("name", "A good mesh")
-      await nextFrame()
-
       expect(el.object.name).to.equal("A good mesh")
     })
 
@@ -41,8 +38,6 @@ describe("<three-*> powered by ThreeElement", () => {
       expect(el.object.position.x).to.equal(0)
 
       el.setAttribute("position.x", "1")
-      await nextFrame()
-
       expect(el.object.position.x).to.equal(1)
     })
 
@@ -53,8 +48,6 @@ describe("<three-*> powered by ThreeElement", () => {
       expect(el.object.position.x).to.equal(0)
 
       el.setAttribute("position:x", "1")
-      await nextFrame()
-
       expect(el.object.position.x).to.equal(1)
     })
 
@@ -67,8 +60,6 @@ describe("<three-*> powered by ThreeElement", () => {
       expect(el.object.position.z).to.equal(0)
 
       el.setAttribute("position", "1, 2, 3")
-      await nextFrame()
-
       expect(el.object.position.x).to.equal(1)
       expect(el.object.position.y).to.equal(2)
       expect(el.object.position.z).to.equal(3)
@@ -84,8 +75,6 @@ describe("<three-*> powered by ThreeElement", () => {
       expect(el.object.scale.z).to.equal(0)
 
       el.setAttribute("scale", "1")
-      await nextFrame()
-
       expect(el.object.scale.x).to.equal(1)
       expect(el.object.scale.y).to.equal(1)
       expect(el.object.scale.z).to.equal(1)
@@ -96,19 +85,15 @@ describe("<three-*> powered by ThreeElement", () => {
         const el = await renderMeshElement()
 
         el.setAttribute("rotation.x", "90deg")
-        await nextFrame()
         expect(el.object.rotation.x).to.equal(Math.PI / 2)
 
         el.setAttribute("rotation.x", "-90deg")
-        await nextFrame()
         expect(el.object.rotation.x).to.equal(Math.PI / -2)
 
         el.setAttribute("rotation.x", "0deg")
-        await nextFrame()
         expect(el.object.rotation.x).to.equal(0)
 
         el.setAttribute("rotation.x", "-0.5deg")
-        await nextFrame()
         expect(el.object.rotation.x).to.equal((Math.PI / 180) * -0.5)
       })
 
@@ -116,7 +101,6 @@ describe("<three-*> powered by ThreeElement", () => {
         const el = await renderMeshElement()
 
         el.setAttribute("rotation", "90deg, 0, -90deg")
-        await nextFrame()
         expect(el.object.rotation.x).to.equal(Math.PI / 2)
         expect(el.object.rotation.y).to.equal(0)
         expect(el.object.rotation.z).to.equal(Math.PI / -2)

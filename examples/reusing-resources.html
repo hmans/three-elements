@@ -16,7 +16,12 @@
 
         <!-- resources we'll reuse -->
         <three-box-buffer-geometry id="geometry" args="1, 5, 1"></three-box-buffer-geometry>
-        <three-mesh-standard-material id="material" color="#555"></three-mesh-standard-material>
+        <three-mesh-standard-material
+          id="material"
+          color="gold"
+          metalness="0.5"
+          roughness="0.5"
+        ></three-mesh-standard-material>
 
         <!-- Scene Contents -->
         <three-group ontick="this.object.rotateX(0.001); this.object.rotateY(0.002)">

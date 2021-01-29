@@ -2,7 +2,6 @@ import * as THREE from "three"
 import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { IConstructable } from "./types"
-import { observeAttributeChange } from "./util/observeAttributeChange"
 
 /**
  * The `BaseElement` class extends the built-in HTMLElement class with a bit of convenience
@@ -132,8 +131,16 @@ export class BaseElement extends HTMLElement {
     this.requestFrame = this.requestFrame.bind(this)
   }
 
-  /** This element's MutationObserver. */
-  private _observer?: MutationObserver
+  /**
+   * We're overloading setAttribute so it also invokes attributeChangedCallback. We
+   * do this because we can't realistically make use of observedAttributes (since we don't
+   * know at the time element classes are defined what properties their wrapped objects
+   * are exposing.)
+   */
+  setAttribute(name: string, value: string) {
+    this.attributeChangedCallback(name, this.getAttribute(name)!, value)
+    super.setAttribute(name, value)
+  }
 
   /**
    * This callback is invoked when the element is deemed properly initialized. Most
@@ -151,16 +158,6 @@ export class BaseElement extends HTMLElement {
 
   connectedCallback() {
     this.debug("connectedCallback")
-
-    /*
-    When one of this element's attributes changes, apply it to the object. Custom Elements have a built-in
-    mechanism for this (attributeChangedCallback and observedAttributes, but unfortunately we can't use it,
-    since we don't know the set of attributes the wrapped Three.js classes expose beforehand. So instead
-    we're hacking our way around it using a mutation observer. Fun times!)
-    */
-    this._observer ||= observeAttributeChange(this, (prop, value) => {
-      this.attributeChangedCallback(prop, (this as any)[prop], value)
-    })
 
     /* Emit connected event */
     this.dispatchEvent(new CustomEvent("connected", { bubbles: true, cancelable: false }))
@@ -217,10 +214,6 @@ export class BaseElement extends HTMLElement {
 
         /* Invoke removedCallback */
         this.removedCallback()
-
-        /* Disconnect observer */
-        this._observer?.disconnect()
-        this._observer = undefined
       })
     }
   }
