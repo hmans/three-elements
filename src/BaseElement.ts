@@ -40,7 +40,7 @@ export class BaseElement extends HTMLElement {
     if (!this.isConnected)
       throw "Something is accessing my .scene property while I'm not connected. This shouldn't happen! 😭"
 
-    const scene = this.findElementWithInstanceOf(THREE.Scene) as ThreeScene
+    const scene = this.find((node: any) => node.object?.isScene) as ThreeScene
     if (!scene) throw "No <three-scene> tag found!"
     return scene
   }
