@@ -28,12 +28,25 @@ describe("using custom renderers", () => {
         </three-game>
       `)
 
-    it("automatically uses the custom renderer", async () => {
+    it("creates an element that wraps a renderer", async () => {
       const game = (await render()) as ThreeGame
       const renderer = game.querySelector("three-web-gl-renderer") as ThreeElement
+
       expect(renderer.object).to.be.instanceOf(THREE.WebGLRenderer)
-      expect(renderer.object.xr.enabled).to.eq(true)
+    })
+
+    it("automatically attaches the custom renderer to the three-game element", async () => {
+      const game = (await render()) as ThreeGame
+      const renderer = game.querySelector("three-web-gl-renderer") as ThreeElement
+
       expect(game.renderer).to.eq(renderer.object)
+    })
+
+    it("passes custom options to the renderer", async () => {
+      const game = (await render()) as ThreeGame
+      const renderer = game.querySelector("three-web-gl-renderer") as ThreeElement
+
+      expect(renderer.object.xr.enabled).to.eq(true)
     })
   })
 })
