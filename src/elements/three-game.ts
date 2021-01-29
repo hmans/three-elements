@@ -7,12 +7,7 @@ export type TickerFunction = (dt: number, el: HTMLElement) => any
 export class ThreeGame extends HTMLElement {
   emitter = new EventEmitter()
 
-  renderer: THREE.Renderer = new THREE.WebGLRenderer({
-    powerPreference: "high-performance",
-    antialias: true,
-    stencil: true,
-    depth: true
-  })
+  renderer: THREE.Renderer = this.makeDefaultRenderer()
 
   /** The time delta since the last frame, in fractions of a second. */
   deltaTime = 0
@@ -30,20 +25,6 @@ export class ThreeGame extends HTMLElement {
   }
 
   connectedCallback() {
-    /* Set up renderer */
-    this.renderer.setSize(window.innerWidth, window.innerHeight)
-    this.renderer.autoClear = false
-
-    /* Configure color space */
-    this.renderer.outputEncoding = THREE.sRGBEncoding
-
-    /* Enable shadow map */
-    this.renderer.shadowMap.enabled = true
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
-
-    /* Configure WebXR */
-    this.renderer.xr.enabled = Boolean(this.hasAttribute("xr"))
-
     /* We'll plug our canvas into the shadow root. */
     const shadow = this.attachShadow({ mode: "open" })
     shadow.appendChild(this.renderer.domElement)
@@ -80,6 +61,29 @@ export class ThreeGame extends HTMLElement {
 
     /* Remove canvas from page */
     this.shadowRoot!.removeChild(this.renderer.domElement)
+  }
+
+  protected makeDefaultRenderer() {
+    const renderer = new THREE.WebGLRenderer({
+      powerPreference: "high-performance",
+      antialias: true,
+      stencil: true,
+      depth: true
+    })
+
+    renderer.autoClear = false
+
+    /* Configure color space */
+    renderer.outputEncoding = THREE.sRGBEncoding
+
+    /* Enable shadow map */
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap
+
+    /* Configure WebXR */
+    renderer.xr.enabled = Boolean(this.hasAttribute("xr"))
+
+    return renderer
   }
 
   private handleWindowResize() {
