@@ -7,10 +7,26 @@ export type TickerFunction = (dt: number, el: HTMLElement) => any
 export class ThreeGame extends HTMLElement {
   emitter = new EventEmitter()
 
-  renderer: THREE.Renderer = this.makeDefaultRenderer()
+  /* RENDERER */
 
-  /** The time delta since the last frame, in fractions of a second. */
-  deltaTime = 0
+  get renderer() {
+    return this._renderer
+  }
+
+  set renderer(v) {
+    /* Remove previous renderer's canvas from page */
+    this.shadowRoot!.removeChild(this._renderer.domElement)
+
+    /* Store renderer */
+    this._renderer = v
+
+    /* Add new renderer's canvsas to page */
+    this.shadowRoot!.appendChild(this._renderer.domElement)
+  }
+
+  protected _renderer: THREE.Renderer = this.makeDefaultRenderer()
+
+  /* OPTIMIZED RENDERING */
 
   /** Has a frame been requested to be rendered in the next tick? */
   private frameRequested = true
@@ -104,7 +120,11 @@ export class ThreeGame extends HTMLElement {
 
   /* TICKING */
 
+  /** Are we currently ticking? */
   protected _ticking = false
+
+  /** The time delta since the last frame, in fractions of a second. */
+  deltaTime = 0
 
   startTicking() {
     let lastNow = performance.now()
