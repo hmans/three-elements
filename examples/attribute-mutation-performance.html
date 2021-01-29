@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <title>Attribute Mutation Performance</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- Import dependencies via ESM. The future is now! -->
+    <script type="module">
+      import { html, render } from "https://jspm.dev/lit-html"
+      import { Vector3 } from "https://jspm.dev/three"
+      import "three-elements"
+
+      const Game = () => {
+        return html`
+          <three-game id="game" autorender>
+            <three-scene id="scene" background-color="#111">
+              <!-- resources -->
+              <three-dodecahedron-buffer-geometry
+                id="geometry"
+              ></three-dodecahedron-buffer-geometry>
+              <three-mesh-standard-material
+                id="material"
+                color="#f30"
+              ></three-mesh-standard-material>
+
+              <three-fog near="0" far="64" color="#111"></three-fog>
+              <three-ambient-light intensity="0.2"></three-ambient-light>
+              <three-directional-light
+                position="10, 10, 40"
+                intensity="0.8"
+              ></three-directional-light>
+
+              ${Swarm(100)}
+
+              <three-orbit-controls></three-orbit-controls>
+            </three-scene>
+          </three-game>
+        `
+      }
+
+      const MyDodecahedron = (index) => {
+        const t = performance.now() + index * 300
+        const f = 1 + Math.cos(t / 40000)
+
+        const x = Math.cos(t / 400) * 5 * f + Math.sin((t + 500) / 800) * 2
+        const y = Math.sin(t / 300) * 5 * f + Math.cos((t / 4000) * 3)
+        const z = Math.cos((t + 200) / 400) * 3
+
+        return html`<three-mesh
+          position.x=${x}
+          position.y=${y}
+          position.z=${z}
+          geometry="#geometry"
+          material="#material"
+        ></three-mesh>`
+      }
+
+      const Swarm = (count = 10) => {
+        const output = []
+        for (let i = 0; i < count; i++) {
+          output.push(MyDodecahedron(i))
+        }
+        return output
+      }
+
+      /* Start app */
+      const root = document.getElementById("root")
+
+      const animate = () => {
+        render(Game(), root)
+        requestAnimationFrame(animate)
+      }
+
+      animate()
+    </script>
+  </body>
+</html>
