@@ -124,6 +124,13 @@ export class BaseElement extends HTMLElement {
     }
   }
 
+  constructor() {
+    super()
+
+    /* Bind some convenience functions to make it easier to destructure elements in tick event handlers. */
+    this.requestFrame = this.requestFrame.bind(this)
+  }
+
   /**
    * We're overloading setAttribute so it also invokes attributeChangedCallback. We
    * do this because we can't realistically make use of observedAttributes (since we don't
@@ -134,6 +141,9 @@ export class BaseElement extends HTMLElement {
     this.attributeChangedCallback(name, this.getAttribute(name)!, value)
     super.setAttribute(name, value)
   }
+
+  /** This element's MutationObserver. */
+  private _observer?: MutationObserver
 
   /**
    * This callback is invoked when the element is deemed properly initialized. Most
@@ -241,6 +251,10 @@ export class BaseElement extends HTMLElement {
       acc[name] = this.getAttribute(name)
       return acc
     }, {} as Record<string, any>)
+  }
+
+  requestFrame() {
+    this.game.requestFrame()
   }
 
   /**
