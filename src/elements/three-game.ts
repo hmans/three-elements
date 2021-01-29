@@ -14,14 +14,15 @@ export class ThreeGame extends HTMLElement {
   }
 
   set renderer(v) {
-    /* Remove previous renderer's canvas from page */
+    /* Cleanup previous renderer */
     this.shadowRoot!.removeChild(this._renderer.domElement)
 
     /* Store renderer */
     this._renderer = v
 
-    /* Add new renderer's canvsas to page */
+    /* Initialize new renderer */
     this.shadowRoot!.appendChild(this._renderer.domElement)
+    this.handleWindowResize()
   }
 
   protected _renderer: THREE.Renderer = this.makeDefaultRenderer()
