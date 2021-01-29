@@ -142,9 +142,6 @@ export class BaseElement extends HTMLElement {
     super.setAttribute(name, value)
   }
 
-  /** This element's MutationObserver. */
-  private _observer?: MutationObserver
-
   /**
    * This callback is invoked when the element is deemed properly initialized. Most
    * importantly, this happens in a microtask that is very likely executed after all
