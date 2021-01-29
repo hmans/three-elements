@@ -7,7 +7,7 @@ export type TickerFunction = (dt: number, el: HTMLElement) => any
 export class ThreeGame extends HTMLElement {
   emitter = new EventEmitter()
 
-  renderer = new THREE.WebGLRenderer({
+  renderer: THREE.Renderer = new THREE.WebGLRenderer({
     powerPreference: "high-performance",
     antialias: true,
     stencil: true,
