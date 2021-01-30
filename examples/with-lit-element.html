@@ -41,9 +41,9 @@
         }
 
         render() {
-          const onTick = (dt, { object, game }) => {
+          const onTick = (dt, { object, requestFrame }) => {
             /* Directly mutate the Three object. */
-            object.rotation.x = object.rotation.y += this.speed * game.deltaTime
+            object.rotation.x = object.rotation.y += this.speed * dt
 
             /*
               Just for fun, update one of this element's reactive properties. This will
@@ -52,7 +52,7 @@
               */
             this.scale = 5 + Math.cos(Date.now() / 300) * 1.5
 
-            game.requestFrame()
+            requestFrame()
           }
 
           /*

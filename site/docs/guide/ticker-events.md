@@ -52,7 +52,7 @@ The `<three-game>` element exposes a property called `deltaTime` that provides t
 ```html{3}
 <three-game autorender>
   <three-scene background-color="#eee">
-    <three-mesh scale="5" ontick="this.object.rotateZ(2 * this.game.deltaTime)">
+    <three-mesh scale="5" tick="object.rotateZ(2 * dt)">
       <three-box-buffer-geometry></three-box-buffer-geometry>
       <three-mesh-basic-material color="red"></three-mesh-basic-material>
     </three-mesh>

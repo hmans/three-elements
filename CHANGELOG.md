@@ -9,8 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Breaking Change:** Ticker events have been completely reimplemented from scratch. The DOM events we were dispatching in an earlier version have been replaced by an internal event emitter, yielding significant (multliple orders of magnitude) performance gains. Because we are no longer using DOM events, the properties and attributes that allow you to hook callbacks into the ticker have been renamed to `tick`, `lateTick`, `frameTick` and `renderTick`, with their corresponding attributes now named `tick`, `late-tick`, `frame-tick` and `render-tick`.
 
+  Ticker callback code that is passed via string attributes is run as the body of a function where `this` is the element itself, `object` is the object the element is managing, and `dt` is the current frame's delta time value:
+
   ```html
-  <three-mesh tick="this.object.rotateZ(0.01)"></three-mesh>
+  <three-mesh tick="object.rotateZ(2 * dt)"></three-mesh>
   ```
 
   When directly assigning functions to these properties, they will now receive the delta time and a reference to the element itself as arguments. For example, in lit-html, you can now do this:

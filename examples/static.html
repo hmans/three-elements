@@ -28,60 +28,54 @@
           <three-mesh-standard-material color="#ccc"></three-mesh-standard-material>
         </three-mesh>
 
-        <three-group tick="this.object.rotation.x = this.object.rotation.y += 1 * game.deltaTime">
+        <three-group tick="object.rotation.x = object.rotation.y += 1 * dt">
           <three-mesh scale="2.5" receive-shadow cast-shadow>
             <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
             <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
           </three-mesh>
 
-          <three-group
-            tick="this.object.rotation.x = this.object.rotation.y += 0.5 * game.deltaTime"
-          >
+          <three-group tick="object.rotation.x = object.rotation.y += 0.5 * dt">
             <three-mesh
               receive-shadow
               cast-shadow
               position.x="-4"
-              tick="this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
+              tick="object.rotation.x = object.rotation.z += 1 * dt"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="red"></three-mesh-standard-material>
             </three-mesh>
           </three-group>
 
-          <three-group
-            tick="this.object.rotation.x = this.object.rotation.z += 1.5 * game.deltaTime"
-          >
+          <three-group tick="object.rotation.x = object.rotation.z += 1.5 * dt">
             <three-mesh
               receive-shadow
               cast-shadow
               position.x="4"
-              tick="this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
+              tick="object.rotation.x = object.rotation.z += 1 * dt"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="yellow"></three-mesh-standard-material>
             </three-mesh>
           </three-group>
 
-          <three-group tick="this.object.rotation.x = this.object.rotation.y += 2 * game.deltaTime">
+          <three-group tick="object.rotation.x = object.rotation.y += 2 * dt">
             <three-mesh
               receive-shadow
               cast-shadow
               position.y="4"
-              tick="this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
+              tick="object.rotation.x = object.rotation.z += 1 * dt"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="green"></three-mesh-standard-material>
             </three-mesh>
           </three-group>
 
-          <three-group
-            tick="this.object.rotation.x = this.object.rotation.z += 2.5 * game.deltaTime"
-          >
+          <three-group tick="object.rotation.x = object.rotation.z += 2.5 * dt">
             <three-mesh
               receive-shadow
               cast-shadow
               position.y="-4"
-              tick="this.object.rotation.x = this.object.rotation.z += 1 * game.deltaTime"
+              tick="object.rotation.x = object.rotation.z += 1 * dt"
             >
               <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
               <three-mesh-standard-material color="blue"></three-mesh-standard-material>

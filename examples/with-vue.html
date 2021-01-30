@@ -53,8 +53,8 @@
         mounted() {
           const { object, game } = this.$el
 
-          this.$el.tick = () => {
-            object.rotation.z = object.rotation.x += 3 * game.deltaTime
+          this.$el.tick = (dt) => {
+            object.rotation.z = object.rotation.x += 3 * dt
             object.scale.setScalar(4 + Math.cos(Date.now() / 200) * 0.8)
             game.requestFrame()
           }
