@@ -1,4 +1,3 @@
-import * as THREE from "three"
 import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { IConstructable } from "./types"
