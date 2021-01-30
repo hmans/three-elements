@@ -21,5 +21,25 @@ describe("input events", () => {
       el.click()
       expect(material.color.getHexString()).to.equal("ff0000")
     })
+
+    it("bubbles up to a parent group", async () => {
+      let count = 0
+
+      const group = await renderWithinGame<ThreeElement<THREE.Mesh>>(html`
+        <three-group .onclick=${() => count++}>
+          <three-mesh>
+            <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
+            <three-mesh-standard-material color="hotpink"></three-mesh-standard-material>
+          </three-mesh>
+        </three-group>
+      `)
+
+      /* Click on the mesh */
+      const mesh = group.querySelector("three-mesh") as HTMLElement
+      mesh.click()
+
+      /* The generated "onclick" event should have bubbled up to the group owning the mesh */
+      expect(count).to.eq(1)
+    })
   })
 })
