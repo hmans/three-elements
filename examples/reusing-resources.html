@@ -24,19 +24,19 @@
         ></three-mesh-standard-material>
 
         <!-- Scene Contents -->
-        <three-group ontick="this.object.rotateX(0.001); this.object.rotateY(0.002)">
+        <three-group tick-update="this.object.rotateX(0.001); this.object.rotateY(0.002)">
           <three-mesh
             geometry="#geometry"
             material="#material"
             position="-3.5, 0, 0"
             scale="0.7"
-            ontick="this.object.rotation.x = this.object.rotation.y += 0.03"
+            tick-update="this.object.rotation.x = this.object.rotation.y += 0.03"
           ></three-mesh>
           <three-mesh
             position="-2, 0, 0"
             geometry="#geometry"
             material="#material"
-            ontick="this.object.rotation.x = this.object.rotation.y += 0.015"
+            tick-update="this.object.rotation.x = this.object.rotation.y += 0.015"
           ></three-mesh>
           <three-mesh
             position="0, 0, 0"
@@ -48,14 +48,14 @@
             position="2, 0, 0"
             geometry="#geometry"
             material="#material"
-            ontick="this.object.rotation.x = this.object.rotation.y -= 0.015"
+            tick-update="this.object.rotation.x = this.object.rotation.y -= 0.015"
           ></three-mesh>
           <three-mesh
             position="3.5, 0, 0"
             geometry="#geometry"
             material="#material"
             scale="0.7"
-            ontick="this.object.rotation.x = this.object.rotation.y -= 0.03"
+            tick-update="this.object.rotation.x = this.object.rotation.y -= 0.03"
           ></three-mesh>
         </three-group>
         <three-orbit-controls></three-orbit-controls>

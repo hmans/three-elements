@@ -34,10 +34,10 @@
         </script>
 
         <!-- A bunch of rotating cubes. They're really dodecahedrons, sorry! -->
-        <rotating-cube position="+2, +2, 0" ontick="rotate(1, this)"></rotating-cube>
-        <rotating-cube position="+2, -2, 0" ontick="rotate(2, this)"></rotating-cube>
-        <rotating-cube position="-2, -2, 0" ontick="rotate(-2, this)"></rotating-cube>
-        <rotating-cube position="-2, +2, 0" ontick="rotate(-1, this)"></rotating-cube>
+        <rotating-cube position="+2, +2, 0" tick-update="rotate(1, this)"></rotating-cube>
+        <rotating-cube position="+2, -2, 0" tick-update="rotate(2, this)"></rotating-cube>
+        <rotating-cube position="-2, -2, 0" tick-update="rotate(-2, this)"></rotating-cube>
+        <rotating-cube position="-2, +2, 0" tick-update="rotate(-1, this)"></rotating-cube>
 
         <three-orbit-controls></three-orbit-controls>
       </three-scene>

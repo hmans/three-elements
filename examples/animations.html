@@ -37,7 +37,7 @@
       let colorAnimation
       let speedAnimation
 
-      thingy.ontick = () => {
+      thingy.tickUpdate = () => {
         if (rotateSpeed > 0) {
           thingy.object.rotateX(rotateSpeed * 0.8 * game.deltaTime)
           thingy.object.rotateY(rotateSpeed * 0.4 * game.deltaTime)

@@ -124,7 +124,7 @@
           }
         }
 
-        const onTick = (dt, { object, scene }) => {
+        const onTickUpdate = (dt, { object, scene }) => {
           const pointer = scene.pointer.position
           object.rotation.set(pointer.y / 4, pointer.x / -4, 0)
         }
@@ -141,7 +141,7 @@
         }, [animations])
 
         return html`
-          <three-group .ontick=${onTick}>
+          <three-group .tickUpdate=${onTickUpdate}>
             <three-group position="-4, -4, 0">
               ${board.map((row, y) =>
                 row.map((color, x) => {
@@ -167,7 +167,7 @@
       const GameTile = ({ x, y, selected, color }) => {
         const [hover, setHover] = useState(false)
 
-        const onTick = (dt, { object, game }) => {
+        const onTickUpdate = (dt, { object, game }) => {
           object.rotation.x = object.rotation.y += (hover ? 1.5 : 0.5) * dt
           game.requestFrame()
         }
@@ -180,10 +180,10 @@
 
         return html`
           <three-group position.x=${x} position.y=${y} scale=${selected ? 1.3 : 1}>
-            <three-group .ontick=${waveScale}>
+            <three-group .tickUpdate=${waveScale}>
               <three-mesh
                 scale="0.4"
-                .ontick=${onTick}
+                .tickUpdate=${onTickUpdate}
                 .onpointerenter=${(e) => setHover(true)}
                 .onpointerleave=${(e) => setHover(false)}
               >
