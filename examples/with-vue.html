@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>With Vue</title>
@@ -9,7 +10,7 @@
   </head>
   <body>
     <!-- The main game template. -->
-    <div id="game">
+    <div id="root">
       <game></game>
     </div>
 
@@ -61,7 +62,7 @@
         }
       })
 
-      app.mount("#game")
+      app.mount("#root")
     </script>
   </body>
 </html>
