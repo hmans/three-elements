@@ -160,18 +160,18 @@ export class ThreeGame extends HTMLElement {
       this.deltaTime = dt
 
       /* Execute tick and latetick events. */
-      this.emitter.emit("tick", dt)
-      this.emitter.emit("latetick", dt)
+      this.emitter.emit("update", dt)
+      this.emitter.emit("lateUpdate", dt)
 
       /* Has a frame been requested? */
       if (this.frameRequested || this.autorender) {
         this.frameRequested = false
 
         /* If we know that we're rendering a frame, execute frame callbacks. */
-        this.emitter.emit("frametick", dt)
+        this.emitter.emit("frameUpdate", dt)
 
         /* Finally, emit render event. This will trigger scenes to render. */
-        this.emitter.emit("rendertick", dt)
+        this.emitter.emit("render", dt)
       }
     }
 

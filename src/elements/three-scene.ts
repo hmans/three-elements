@@ -50,7 +50,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
 
     /* Set up rendering */
     this.render = this.render.bind(this)
-    this.game.emitter.on("rendertick", this.render)
+    this.tickRender = this.render
 
     /* Start processing events */
     this.pointer!.start()

@@ -1,6 +1,8 @@
 import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
+import { TickerCallbacks } from "./TickerCallbacks"
 import { IConstructable } from "./types"
+import { camelize } from "./util/camelize"
 
 /**
  * The `BaseElement` class extends the built-in HTMLElement class with a bit of convenience
@@ -44,83 +46,46 @@ export class BaseElement extends HTMLElement {
     return scene
   }
 
-  /** A dictionary of ticker callbacks (ontick, etc.) */
-  protected callbacks = {} as Record<string, TickerFunction | undefined>
+  callbacks = new TickerCallbacks(this)
 
-  get ontick() {
-    return this.callbacks["ontick"]
+  get tick() {
+    return this.tickUpdate
   }
 
-  set ontick(fn: TickerFunction | string | undefined) {
-    this.setCallback("ontick", fn)
+  set tick(fn: TickerFunction | string | undefined) {
+    this.tickUpdate = fn
   }
 
-  get onlatetick() {
-    return this.callbacks["onlatetick"]
+  get tickUpdate() {
+    return this.callbacks.get("update")
   }
 
-  set onlatetick(fn: TickerFunction | string | undefined) {
-    this.setCallback("onlatetick", fn)
+  set tickUpdate(fn: TickerFunction | string | undefined) {
+    this.callbacks.set("update", fn)
   }
 
-  get onframetick() {
-    return this.callbacks["onframetick"]
+  get tickLateUpdate() {
+    return this.callbacks.get("lateUpdate")
   }
 
-  set onframetick(fn: TickerFunction | string | undefined) {
-    this.setCallback("onframetick", fn)
+  set tickLateUpdate(fn: TickerFunction | string | undefined) {
+    this.callbacks.set("lateUpdate", fn)
   }
 
-  get onrendertick() {
-    return this.callbacks["onrendertick"]
+  get tickFrameUpdate() {
+    return this.callbacks.get("frameUpdate")
   }
 
-  set onrendertick(fn: TickerFunction | string | undefined) {
-    this.setCallback("onrendertick", fn)
+  set tickFrameUpdate(fn: TickerFunction | string | undefined) {
+    this.callbacks.set("frameUpdate", fn)
   }
 
-  /**
-   * Configures one of the available ticker callbacks.
-   *
-   * @param propName Name of the callback property (eg. `ontick`)
-   * @param fn Callback function or string
-   */
-  protected setCallback(propName: string, fn?: TickerFunction | string) {
-    const eventName = propName.replace(/^on/, "") as any
+  get tickRender() {
+    return this.callbacks.get("render")
+  }
 
-    /* Unregister previous callback */
-    const previousCallback = this.callbacks[eventName]
-    if (previousCallback) {
-      this.game.emitter.off(eventName, previousCallback)
-    }
-
-    const createCallbackFunction = (fn?: TickerFunction | string) => {
-      switch (typeof fn) {
-        /* If the value is a string, we'll create a function from it. Magic! */
-        case "string":
-          return new Function(fn).bind(this) as TickerFunction
-
-        /* If it's already a function, we'll just use that. */
-        case "function":
-          return (dt: number) => fn(dt, this)
-      }
-    }
-
-    /* Store new value, constructing a function from a string if necessary */
-    this.callbacks[eventName] = createCallbackFunction(fn)
-
-    /* Register new callback */
-    const newCallback = this.callbacks[eventName]
-    if (newCallback) {
-      /*
-      We're using queueMicrotask here because at the point when a ticker event
-      property is assigned, it's possible that the elements required to make this
-      work are not done initializing yet.
-      */
-      queueMicrotask(() => {
-        this.game.emitter.on(eventName, newCallback)
-      })
-    }
+  set tickRender(fn: TickerFunction | string | undefined) {
+    this.callbacks.set("render", fn)
   }
 
   constructor() {
@@ -200,10 +165,10 @@ export class BaseElement extends HTMLElement {
     if (!this.isConnected) {
       queueMicrotask(() => {
         /* Remove event handlers */
-        this.ontick = undefined
-        this.onlatetick = undefined
-        this.onframetick = undefined
-        this.onrendertick = undefined
+        this.tickUpdate = undefined
+        this.tickLateUpdate = undefined
+        this.tickFrameUpdate = undefined
+        this.tickRender = undefined
 
         /* Invoke removedCallback */
         this.removedCallback()
@@ -211,17 +176,24 @@ export class BaseElement extends HTMLElement {
     }
   }
 
-  attributeChangedCallback(key: string, oldValue: string, newValue: string): boolean {
-    this.debug("attributeChangedCallback", key, newValue)
+  attributeChangedCallback(key: string, _: string, value: string): boolean {
+    this.debug("attributeChangedCallback", key, value)
 
     switch (key) {
-      /* A bunch of known properties that we will assign directly */
-      case "ontick":
-      case "onlatetick":
-      case "onframetick":
-      case "onrendertick":
-        this[key] = newValue
+      case "tick":
+        this[key] = value
         return true
+    }
+
+    /* Automatically map all tick-* attributes to their corresponding properties. */
+    if (key.startsWith("tick-")) {
+      const propName = camelize(key)
+      if (propName in this) (this[propName as keyof this] as any) = value
+      else
+        console.error(
+          `"${key}" was mapped to propert "${propName}", which is not a valid property on this element. `
+        )
+      return true
     }
 
     return false

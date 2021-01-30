@@ -22,7 +22,7 @@ export class ThreeOrbitControls extends ThreeElement<OrbitControls> {
 
     this.createControls()
 
-    this.ontick = () => {
+    this.tickUpdate = () => {
       /* Create a new controls instance if the camera changes */
       if (this.scene.camera !== camera) {
         this.createControls()

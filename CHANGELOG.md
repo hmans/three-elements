@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - unreleased
 
+- **Breaking Change:** Ticker events have been completely reimplemented from scratch. The DOM events we were dispatching in an earlier version have been replaced by an internal event emitter, yielding significant (multliple orders of magnitude) performance gains. Because we are no longer using DOM events, the properties and attributes that allow you to hook callbacks into the ticker have been renamed to `tickUpdate`, `tickLateUpdate`, `tickFrameUpdate` and `tickRender`, with their corresponding attributes now named `tick-update`, `tick-late-update`, `tick-frame-update` and `tick-render`. Since `tickUpdate` is the most common ticker callback to use, you can also use the `tick` property and attribute as a shortcut:
+
+  ```html
+  <three-mesh tick="this.object.rotateZ(0.01)"></three-mesh>
+  ```
+
+  Please [refer to the documentation](https://three-elements.hmans.co/guide/ticker-events.html) for details on how to use these!
+
 - **New:** We now publish a full [API Reference](https://api.three-elements.hmans.co/). Enjoy!
 
 - **Changed:** By popular request, three-elements will no longer log to the console on startup. Enjoy the quiet!
@@ -74,8 +82,6 @@ If you've been extending ThreeElement in your own code, or hacking on the codeba
 - **Breaking Change:** `readyCallback` was renamed to `mountedCallback` to better reflect when this callback is invoked.
 
 - **New:** The `BaseElement` class now also provides a `removedCallback` method that will be invoked when we know the element is being _removed_ from the DOM entirely, not just _moved_ to a new parent (as is often the case when pairing three-element with a web application framework.)
-
-- **Breaking Change:** Ticker events are now emitted by the three-game's `emitter`. Since we're no longer using DOM events, this means we also no longer need the `ticking` property/attribute, so it has been removed.
 
 - **Changed:** Instead of using a MutationObserver instance to monitor the element for updated attributes (we can't feasibly make use of `observedAttributes`, remember?), we now simply hook into `setAttribute` to react on attribute changes. This yields _significant_ (order of a magnitude) performance improvements in projects that go through element attributes a lot. Sadly, it also means that changes you're making to the DOM in your browser's dev tools will no longer be picked up automatically (but this feature may make a comeback at a later date.)
 
