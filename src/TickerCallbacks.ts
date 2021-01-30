@@ -58,7 +58,7 @@ export class TickerCallbacks {
     switch (typeof fn) {
       /* If the value is a string, we'll create a function from it. Magic! */
       case "string":
-        return new Function(fn).bind(this.element) as TickerFunction
+        return new Function("dt", fn).bind(this.element) as TickerFunction
 
       /* If it's already a function, we'll just use that. */
       case "function":

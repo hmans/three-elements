@@ -41,7 +41,7 @@
         }
 
         render() {
-          const onTickUpdate = (dt, { object, game }) => {
+          const onTick = (dt, { object, game }) => {
             /* Directly mutate the Three object. */
             object.rotation.x = object.rotation.y += this.speed * game.deltaTime
 
@@ -63,7 +63,7 @@
           const output = html`
             <three-mesh
               scale=${this.scale}
-              .tickUpdate=${onTickUpdate}
+              .tick=${onTick}
               .onclick=${(e) => {
                 e.target.object.material.color.setHSL(
                   Math.random(),

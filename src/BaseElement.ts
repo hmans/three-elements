@@ -49,43 +49,35 @@ export class BaseElement extends HTMLElement {
   callbacks = new TickerCallbacks(this)
 
   get tick() {
-    return this.tickUpdate
+    return this.callbacks.get("tick")
   }
 
   set tick(fn: TickerFunction | string | undefined) {
-    this.tickUpdate = fn
+    this.callbacks.set("tick", fn)
   }
 
-  get tickUpdate() {
-    return this.callbacks.get("update")
+  get lateTick() {
+    return this.callbacks.get("late-tick")
   }
 
-  set tickUpdate(fn: TickerFunction | string | undefined) {
-    this.callbacks.set("update", fn)
+  set lateTick(fn: TickerFunction | string | undefined) {
+    this.callbacks.set("late-tick", fn)
   }
 
-  get tickLateUpdate() {
-    return this.callbacks.get("lateUpdate")
+  get frameTick() {
+    return this.callbacks.get("frame-tick")
   }
 
-  set tickLateUpdate(fn: TickerFunction | string | undefined) {
-    this.callbacks.set("lateUpdate", fn)
+  set frameTick(fn: TickerFunction | string | undefined) {
+    this.callbacks.set("frame-tick", fn)
   }
 
-  get tickFrameUpdate() {
-    return this.callbacks.get("frameUpdate")
+  get renderTick() {
+    return this.callbacks.get("render-tick")
   }
 
-  set tickFrameUpdate(fn: TickerFunction | string | undefined) {
-    this.callbacks.set("frameUpdate", fn)
-  }
-
-  get tickRender() {
-    return this.callbacks.get("render")
-  }
-
-  set tickRender(fn: TickerFunction | string | undefined) {
-    this.callbacks.set("render", fn)
+  set renderTick(fn: TickerFunction | string | undefined) {
+    this.callbacks.set("render-tick", fn)
   }
 
   constructor() {
@@ -165,10 +157,10 @@ export class BaseElement extends HTMLElement {
     if (!this.isConnected) {
       queueMicrotask(() => {
         /* Remove event handlers */
-        this.tickUpdate = undefined
-        this.tickLateUpdate = undefined
-        this.tickFrameUpdate = undefined
-        this.tickRender = undefined
+        this.tick = undefined
+        this.lateTick = undefined
+        this.frameTick = undefined
+        this.renderTick = undefined
 
         /* Invoke removedCallback */
         this.removedCallback()
@@ -186,7 +178,7 @@ export class BaseElement extends HTMLElement {
     }
 
     /* Automatically map all tick-* attributes to their corresponding properties. */
-    if (key.startsWith("tick-")) {
+    if (key.endsWith("-tick")) {
       const propName = camelize(key)
       if (propName in this) (this[propName as keyof this] as any) = value
       else
