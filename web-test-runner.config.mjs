@@ -2,7 +2,7 @@ import { importMapsPlugin } from "@web/dev-server-import-maps"
 import { esbuildPlugin } from "@web/dev-server-esbuild"
 
 export default {
-  files: ["test"],
+  files: ["test/**/*.test.ts"],
   nodeResolve: true,
   debug: false,
   watch: false,
