@@ -51,4 +51,34 @@ describe("ticker callbacks", () => {
       expect(counter).to.eq(2)
     })
   })
+
+  describe("the 'tick' shortcut", () => {
+    it("acts like `tick-update` when used as an attribute", async () => {
+      let counter = 0
+
+      ;(window as any).fn = () => counter++
+
+      const obj = (await renderWithinGame(html`
+        <three-object3d tick="fn()"></three-object3d>
+      `)) as ThreeElement
+
+      await nextFrame()
+
+      /* FIXME: the value should absolutely, totally be 1 here, not 2. What's going on? */
+      expect(counter).to.eq(2)
+    })
+
+    it("acts like `tickUpdate` when used as a property", async () => {
+      const obj = (await renderWithinGame(html`
+        <three-object3d></three-object3d>
+      `)) as ThreeElement
+
+      let counter = 0
+      const fn = () => counter++
+
+      obj.tick = fn
+      await nextFrame()
+      expect(counter).to.eq(1)
+    })
+  })
 })

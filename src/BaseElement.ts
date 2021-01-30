@@ -48,6 +48,14 @@ export class BaseElement extends HTMLElement {
 
   callbacks = new TickerCallbacks(this)
 
+  get tick() {
+    return this.tickUpdate
+  }
+
+  set tick(fn: TickerFunction | string | undefined) {
+    this.tickUpdate = fn
+  }
+
   get tickUpdate() {
     return this.callbacks.get("update")
   }
@@ -170,6 +178,12 @@ export class BaseElement extends HTMLElement {
 
   attributeChangedCallback(key: string, _: string, value: string): boolean {
     this.debug("attributeChangedCallback", key, value)
+
+    switch (key) {
+      case "tick":
+        this[key] = value
+        return true
+    }
 
     /* Automatically map all tick-* attributes to their corresponding properties. */
     if (key.startsWith("tick-")) {

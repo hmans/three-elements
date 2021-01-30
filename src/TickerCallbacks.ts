@@ -2,7 +2,7 @@ import { BaseElement } from "./BaseElement"
 import { TickerFunction } from "./elements/three-game"
 
 export class TickerCallbacks {
-  /** A dictionary of ticker callbacks (ontick, etc.) */
+  /** A dictionary of ticker callbacks ("update", "lateUpdate", etc.) */
   protected callbacks = {} as Record<string, TickerFunction | undefined>
 
   /** The element we're attached to. */
@@ -27,7 +27,7 @@ export class TickerCallbacks {
    * any callback that was previously registered for our element and the
    * specified ticker event.
    *
-   * @param name Name of the callback property (eg. `ontick`)
+   * @param name Name of the ticker callback (eg. "update", "frameUpdate")
    * @param fn Callback function or string
    */
   set(name: string, fn?: TickerFunction | string) {
