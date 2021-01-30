@@ -38,6 +38,8 @@ export class ThreeScene extends ThreeElement.for(Scene) {
   }
 
   mountedCallback() {
+    super.mountedCallback()
+
     /* Set up event processor */
     this.pointer = new PointerEvents(this.game.renderer, this.object!, this.camera)
 

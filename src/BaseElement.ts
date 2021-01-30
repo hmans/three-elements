@@ -160,7 +160,7 @@ export class BaseElement extends HTMLElement {
     this.debug("connectedCallback")
 
     /* Emit connected event */
-    this.dispatchEvent(new CustomEvent("connected", { bubbles: true, cancelable: false }))
+    this.dispatchEvent(new Event("connected", { bubbles: true, cancelable: false }))
 
     /*
     Some stuff relies on all custom elements being fully defined and connected. However:
@@ -180,7 +180,7 @@ export class BaseElement extends HTMLElement {
       this.mountedCallback()
 
       /* Emit ready event */
-      this.dispatchEvent(new CustomEvent("ready", { bubbles: true, cancelable: false }))
+      this.dispatchEvent(new Event("mounted", { bubbles: true, cancelable: false }))
     })
   }
 
@@ -194,9 +194,6 @@ export class BaseElement extends HTMLElement {
   disconnectedCallback() {
     this.debug("disconnectedCallback")
 
-    /* Emit disconnected event */
-    this.dispatchEvent(new CustomEvent("disconnected", { bubbles: true, cancelable: false }))
-
     /*
     If isConnected is false, this element is being removed entirely. In this case,
     we'll do some extra cleanup.
@@ -208,9 +205,6 @@ export class BaseElement extends HTMLElement {
         this.onlatetick = undefined
         this.onframetick = undefined
         this.onrendertick = undefined
-
-        /* Emit disconnected event */
-        this.dispatchEvent(new CustomEvent("removed", { bubbles: true, cancelable: false }))
 
         /* Invoke removedCallback */
         this.removedCallback()
