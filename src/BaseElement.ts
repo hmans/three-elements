@@ -49,35 +49,35 @@ export class BaseElement extends HTMLElement {
   callbacks = new TickerCallbacks(this)
 
   get tickUpdate() {
-    return this.callbacks.get("tick")
+    return this.callbacks.get("update")
   }
 
   set tickUpdate(fn: TickerFunction | string | undefined) {
-    this.callbacks.set("tick", fn)
+    this.callbacks.set("update", fn)
   }
 
   get tickLateUpdate() {
-    return this.callbacks.get("latetick")
+    return this.callbacks.get("lateUpdate")
   }
 
   set tickLateUpdate(fn: TickerFunction | string | undefined) {
-    this.callbacks.set("latetick", fn)
+    this.callbacks.set("lateUpdate", fn)
   }
 
-  get tickFrame() {
-    return this.callbacks.get("frametick")
+  get tickFrameUpdate() {
+    return this.callbacks.get("frameUpdate")
   }
 
-  set tickFrame(fn: TickerFunction | string | undefined) {
-    this.callbacks.set("frametick", fn)
+  set tickFrameUpdate(fn: TickerFunction | string | undefined) {
+    this.callbacks.set("frameUpdate", fn)
   }
 
   get tickRender() {
-    return this.callbacks.get("rendertick")
+    return this.callbacks.get("render")
   }
 
   set tickRender(fn: TickerFunction | string | undefined) {
-    this.callbacks.set("rendertick", fn)
+    this.callbacks.set("render", fn)
   }
 
   constructor() {
@@ -159,7 +159,7 @@ export class BaseElement extends HTMLElement {
         /* Remove event handlers */
         this.tickUpdate = undefined
         this.tickLateUpdate = undefined
-        this.tickFrame = undefined
+        this.tickFrameUpdate = undefined
         this.tickRender = undefined
 
         /* Invoke removedCallback */

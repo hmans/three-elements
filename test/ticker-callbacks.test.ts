@@ -14,7 +14,7 @@ describe("ticker callbacks", () => {
       let counter = 0
       const fn = () => counter++
 
-      obj.callbacks.set("tick", fn)
+      obj.callbacks.set("update", fn)
       await nextFrame()
       expect(counter).to.eq(1)
     })
