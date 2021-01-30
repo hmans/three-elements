@@ -1,5 +1,6 @@
 import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
+import { TickerCallbacks } from "./TickerCallbacks"
 import { IConstructable } from "./types"
 
 /**
@@ -44,83 +45,38 @@ export class BaseElement extends HTMLElement {
     return scene
   }
 
-  /** A dictionary of ticker callbacks (ontick, etc.) */
-  protected callbacks = {} as Record<string, TickerFunction | undefined>
+  protected callbacks = new TickerCallbacks(this)
 
   get ontick() {
-    return this.callbacks["ontick"]
+    return this.callbacks.get("tick")
   }
 
   set ontick(fn: TickerFunction | string | undefined) {
-    this.setCallback("ontick", fn)
+    this.callbacks.set("tick", fn)
   }
 
   get onlatetick() {
-    return this.callbacks["onlatetick"]
+    return this.callbacks.get("latetick")
   }
 
   set onlatetick(fn: TickerFunction | string | undefined) {
-    this.setCallback("onlatetick", fn)
+    this.callbacks.set("latetick", fn)
   }
 
   get onframetick() {
-    return this.callbacks["onframetick"]
+    return this.callbacks.get("frametick")
   }
 
   set onframetick(fn: TickerFunction | string | undefined) {
-    this.setCallback("onframetick", fn)
+    this.callbacks.set("frametick", fn)
   }
 
   get onrendertick() {
-    return this.callbacks["onrendertick"]
+    return this.callbacks.get("rendertick")
   }
 
   set onrendertick(fn: TickerFunction | string | undefined) {
-    this.setCallback("onrendertick", fn)
-  }
-
-  /**
-   * Configures one of the available ticker callbacks.
-   *
-   * @param propName Name of the callback property (eg. `ontick`)
-   * @param fn Callback function or string
-   */
-  protected setCallback(propName: string, fn?: TickerFunction | string) {
-    const eventName = propName.replace(/^on/, "") as any
-
-    /* Unregister previous callback */
-    const previousCallback = this.callbacks[eventName]
-    if (previousCallback) {
-      this.game.emitter.off(eventName, previousCallback)
-    }
-
-    const createCallbackFunction = (fn?: TickerFunction | string) => {
-      switch (typeof fn) {
-        /* If the value is a string, we'll create a function from it. Magic! */
-        case "string":
-          return new Function(fn).bind(this) as TickerFunction
-
-        /* If it's already a function, we'll just use that. */
-        case "function":
-          return (dt: number) => fn(dt, this)
-      }
-    }
-
-    /* Store new value, constructing a function from a string if necessary */
-    this.callbacks[eventName] = createCallbackFunction(fn)
-
-    /* Register new callback */
-    const newCallback = this.callbacks[eventName]
-    if (newCallback) {
-      /*
-      We're using queueMicrotask here because at the point when a ticker event
-      property is assigned, it's possible that the elements required to make this
-      work are not done initializing yet.
-      */
-      queueMicrotask(() => {
-        this.game.emitter.on(eventName, newCallback)
-      })
-    }
+    this.callbacks.set("rendertick", fn)
   }
 
   constructor() {
