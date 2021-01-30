@@ -1,4 +1,5 @@
 import * as THREE from "three"
+import { BaseElement } from "../BaseElement"
 import { EventEmitter } from "../util/EventEmitter"
 import { registerElement } from "../util/registerElement"
 
@@ -30,6 +31,26 @@ export class ThreeGame extends HTMLElement {
   }
 
   connectedCallback() {
+    /* EXPERIMENTAL MutationObserver */
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "attributes") {
+          const element = mutation.target as BaseElement
+          const name = mutation.attributeName!
+          const newValue = element.getAttribute(name)
+
+          element.attributeChangedCallback(name, undefined, newValue)
+        }
+      })
+    })
+
+    observer.observe(this, {
+      attributes: true,
+      attributeOldValue: false,
+      subtree: true,
+      childList: true
+    })
+
     /* Set up renderer */
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.renderer.autoClear = false

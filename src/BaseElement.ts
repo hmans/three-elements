@@ -132,17 +132,6 @@ export class BaseElement extends HTMLElement {
   }
 
   /**
-   * We're overloading setAttribute so it also invokes attributeChangedCallback. We
-   * do this because we can't realistically make use of observedAttributes (since we don't
-   * know at the time element classes are defined what properties their wrapped objects
-   * are exposing.)
-   */
-  setAttribute(name: string, value: string) {
-    this.attributeChangedCallback(name, this.getAttribute(name)!, value)
-    super.setAttribute(name, value)
-  }
-
-  /**
    * This callback is invoked when the element is deemed properly initialized. Most
    * importantly, this happens in a microtask that is very likely executed after all
    * the other elements in the document have finished running their connectedCallbacks.
@@ -218,7 +207,11 @@ export class BaseElement extends HTMLElement {
     }
   }
 
-  attributeChangedCallback(key: string, oldValue: string, newValue: string): boolean {
+  attributeChangedCallback(
+    key: string,
+    oldValue: string | undefined,
+    newValue: string | null | undefined
+  ): boolean {
     this.debug("attributeChangedCallback", key, newValue)
 
     switch (key) {
@@ -227,7 +220,7 @@ export class BaseElement extends HTMLElement {
       case "onlatetick":
       case "onframetick":
       case "onrendertick":
-        this[key] = newValue
+        this[key] = newValue!
         return true
     }
 
