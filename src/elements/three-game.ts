@@ -1,4 +1,5 @@
 import * as THREE from "three"
+import { ThreeElement } from "../ThreeElement"
 import { EventEmitter } from "../util/EventEmitter"
 import { registerElement } from "../util/registerElement"
 
@@ -55,6 +56,16 @@ export class ThreeGame extends HTMLElement {
 
     /* Initialize renderer size */
     this.setupRenderer()
+
+    /* Look out for some specific stuff connecting within our branch of the document */
+    this.addEventListener("connected", ({ target }) => {
+      if (target instanceof ThreeElement) {
+        /* Pick up renderers as they connect */
+        if ([THREE.WebGLRenderer, THREE.WebGL1Renderer].includes(target.object.constructor)) {
+          this.renderer = target.object
+        }
+      }
+    })
 
     /* Announce that we're ready */
     this.dispatchEvent(new Event("ready"))

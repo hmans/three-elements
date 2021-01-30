@@ -1,6 +1,5 @@
 import * as THREE from "three"
 import { ThreeElement } from "./ThreeElement"
-import { ThreeRendererElement } from "./ThreeRendererElement"
 import { IConstructable } from "./types"
 import { dasherize } from "./util/dasherize"
 import { registerElement } from "./util/registerElement"
@@ -11,7 +10,6 @@ export { registerElement, ThreeElement }
 const defineThreeElements = () => {
   /* Custom elements we want to set up manually in order to get the naming right */
   registerElement("three-object3d", ThreeElement.for(THREE.Object3D))
-  registerElement("three-web-gl-renderer", ThreeRendererElement.for(THREE.WebGLRenderer))
 
   /*
   For everything else inside THREE.* that can be constructed, automatically
