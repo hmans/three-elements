@@ -12,12 +12,20 @@ export class TickerCallbacks {
     this.element = element
   }
 
+  /**
+   * Returns the callback that is currently registered for our element and the
+   * specified ticker event.
+   *
+   * @param name Name of the ticker event.
+   */
   get(name: string) {
     return this.callbacks[name]
   }
 
   /**
-   * Configures one of the available ticker callbacks.
+   * Hooks a new callback up with the game's ticker. Automatically unmounts
+   * any callback that was previously registered for our element and the
+   * specified ticker event.
    *
    * @param name Name of the callback property (eg. `ontick`)
    * @param fn Callback function or string
@@ -29,20 +37,8 @@ export class TickerCallbacks {
       this.element.game.emitter.off(name, previousCallback)
     }
 
-    const createCallbackFunction = (fn?: TickerFunction | string) => {
-      switch (typeof fn) {
-        /* If the value is a string, we'll create a function from it. Magic! */
-        case "string":
-          return new Function(fn).bind(this.element) as TickerFunction
-
-        /* If it's already a function, we'll just use that. */
-        case "function":
-          return (dt: number) => fn(dt, this.element)
-      }
-    }
-
     /* Store new value, constructing a function from a string if necessary */
-    this.callbacks[name] = createCallbackFunction(fn)
+    this.callbacks[name] = this.createCallbackFunction(fn)
 
     /* Register new callback */
     const newCallback = this.callbacks[name]
@@ -55,6 +51,18 @@ export class TickerCallbacks {
       queueMicrotask(() => {
         this.element.game.emitter.on(name, newCallback)
       })
+    }
+  }
+
+  protected createCallbackFunction(fn?: TickerFunction | string) {
+    switch (typeof fn) {
+      /* If the value is a string, we'll create a function from it. Magic! */
+      case "string":
+        return new Function(fn).bind(this.element) as TickerFunction
+
+      /* If it's already a function, we'll just use that. */
+      case "function":
+        return (dt: number) => fn(dt, this.element)
     }
   }
 }
