@@ -65,7 +65,7 @@ The same application from above, when built using three-elements, looks like thi
 ```html
 <three-game autorender>
   <three-scene>
-    <three-mesh ontick="this.object.rotation.x = this.object.rotation.y += 0.1">
+    <three-mesh tick="this.object.rotation.x = this.object.rotation.y += 0.1">
       <three-box-buffer-geometry></three-box-buffer-geometry>
       <three-mesh-basic-material color="#00ff00"></three-mesh-basic-material>
     </three-mesh>

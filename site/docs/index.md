@@ -17,7 +17,7 @@ footer: MIT Licensed | Copyright © 2021-present Hendrik Mans
     <three-mesh
       scale="4"
       cast-shadow
-      ontick="this.object.rotation.x = this.object.rotation.y += 0.01; this.object.scale.setScalar(4 + Math.cos(Date.now() / 700) * 0.6)"
+      tick="this.object.rotation.x = this.object.rotation.y += 0.01; this.object.scale.setScalar(4 + Math.cos(Date.now() / 700) * 0.6)"
     >
       <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
       <three-mesh-standard-material
@@ -26,7 +26,7 @@ footer: MIT Licensed | Copyright © 2021-present Hendrik Mans
     </three-mesh>
 
     <!-- A floor. We like shadows. Shadows good! -->
-    <three-mesh rotation="-1.5707, 0, 0" position.y="-7" receive-shadow>
+    <three-mesh rotation.x="-90deg" position.y="-7" receive-shadow>
       <three-plane-buffer-geometry
         args="1000, 1000, 32"
       ></three-plane-buffer-geometry>
