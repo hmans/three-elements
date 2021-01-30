@@ -1,5 +1,4 @@
 import * as THREE from "three"
-import { ThreeElement } from "../ThreeElement"
 import { EventEmitter } from "../util/EventEmitter"
 import { registerElement } from "../util/registerElement"
 
@@ -58,15 +57,17 @@ export class ThreeGame extends HTMLElement {
     this.setupRenderer()
 
     /* Look out for some specific stuff connecting within our branch of the document */
-    this.addEventListener("connected", ({ target }) => {
-      if (target instanceof ThreeElement) {
+    this.addEventListener("connected", (e) => {
+      const target = e.target as HTMLElement & { object?: any }
+
+      if (target) {
         /*
         Pick up renderers as they connect. We need to figure out if the originating element
         represents a Three.js renderer. This is made slightly difficult by renderers not
         having a common base class, and no `isRenderer` property being available. Time
         to get creative and just make a wild guess. :>
         */
-        if (target.tagName.endsWith("-RENDERER") && target.object.render) {
+        if (target.tagName.endsWith("-RENDERER") && (target as any).object.render) {
           this.renderer = target.object
         }
       }
