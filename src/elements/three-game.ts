@@ -60,8 +60,13 @@ export class ThreeGame extends HTMLElement {
     /* Look out for some specific stuff connecting within our branch of the document */
     this.addEventListener("connected", ({ target }) => {
       if (target instanceof ThreeElement) {
-        /* Pick up renderers as they connect */
-        if ([THREE.WebGLRenderer, THREE.WebGL1Renderer].includes(target.object.constructor)) {
+        /*
+        Pick up renderers as they connect. We need to figure out if the originating element
+        represents a Three.js renderer. This is made slightly difficult by renderers not
+        having a common base class, and no `isRenderer` property being available. Time
+        to get creative and just make a wild guess. :>
+        */
+        if (target.tagName.endsWith("-RENDERER") && target.object.render) {
           this.renderer = target.object
         }
       }
