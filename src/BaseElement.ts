@@ -45,7 +45,7 @@ export class BaseElement extends HTMLElement {
     return scene
   }
 
-  protected callbacks = new TickerCallbacks(this)
+  callbacks = new TickerCallbacks(this)
 
   get ontick() {
     return this.callbacks.get("tick")
