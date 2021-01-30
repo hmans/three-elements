@@ -171,7 +171,7 @@ export class ThreeElement<T = any> extends BaseElement {
     Create an anonymous class that inherits from our cool base class, but sets
     its own Three.js constructor property.
     */
-    return class extends ThreeElement<T> {
+    return class extends this<T> {
       static threeConstructor = constructor
     }
   }

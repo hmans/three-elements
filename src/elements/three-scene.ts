@@ -1,4 +1,4 @@
-import { Camera, Color, OrthographicCamera, PerspectiveCamera, Scene } from "three"
+import { Camera, Color, OrthographicCamera, PerspectiveCamera, Scene, WebGLRenderer } from "three"
 import { PointerEvents } from "../PointerEvents"
 import { ThreeElement } from "../ThreeElement"
 import { getThreeObjectBySelector } from "../util/getThreeObjectBySelector"
@@ -38,6 +38,8 @@ export class ThreeScene extends ThreeElement.for(Scene) {
   }
 
   mountedCallback() {
+    super.mountedCallback()
+
     /* Set up event processor */
     this.pointer = new PointerEvents(this.game.renderer, this.object!, this.camera)
 
@@ -57,7 +59,9 @@ export class ThreeScene extends ThreeElement.for(Scene) {
   render() {
     const { renderer } = this.game
 
-    renderer.clearDepth()
+    if (renderer instanceof WebGLRenderer) {
+      renderer.clearDepth()
+    }
     renderer.render(this.object!, this.camera)
   }
 

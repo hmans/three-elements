@@ -7,15 +7,21 @@ export type TickerFunction = (dt: number, el: HTMLElement) => any
 export class ThreeGame extends HTMLElement {
   emitter = new EventEmitter()
 
-  renderer = new THREE.WebGLRenderer({
-    powerPreference: "high-performance",
-    antialias: true,
-    stencil: true,
-    depth: true
-  })
+  /* RENDERER */
 
-  /** The time delta since the last frame, in fractions of a second. */
-  deltaTime = 0
+  get renderer() {
+    return this._renderer
+  }
+
+  set renderer(v) {
+    this.cleanupRenderer()
+    this._renderer = v
+    this.setupRenderer()
+  }
+
+  protected _renderer: THREE.Renderer = this.makeDefaultRenderer()
+
+  /* OPTIMIZED RENDERING */
 
   /** Has a frame been requested to be rendered in the next tick? */
   private frameRequested = true
@@ -30,20 +36,6 @@ export class ThreeGame extends HTMLElement {
   }
 
   connectedCallback() {
-    /* Set up renderer */
-    this.renderer.setSize(window.innerWidth, window.innerHeight)
-    this.renderer.autoClear = false
-
-    /* Configure color space */
-    this.renderer.outputEncoding = THREE.sRGBEncoding
-
-    /* Enable shadow map */
-    this.renderer.shadowMap.enabled = true
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
-
-    /* Configure WebXR */
-    this.renderer.xr.enabled = Boolean(this.hasAttribute("xr"))
-
     /* We'll plug our canvas into the shadow root. */
     const shadow = this.attachShadow({ mode: "open" })
     shadow.appendChild(this.renderer.domElement)
@@ -61,8 +53,25 @@ export class ThreeGame extends HTMLElement {
     this.handleWindowResize = this.handleWindowResize.bind(this)
     window.addEventListener("resize", this.handleWindowResize, false)
 
-    /* Initialize window size */
-    this.handleWindowResize()
+    /* Initialize renderer size */
+    this.setupRenderer()
+
+    /* Look out for some specific stuff connecting within our branch of the document */
+    this.addEventListener("connected", (e) => {
+      const target = e.target as HTMLElement & { object?: any }
+
+      if (target) {
+        /*
+        Pick up renderers as they connect. We need to figure out if the originating element
+        represents a Three.js renderer. This is made slightly difficult by renderers not
+        having a common base class, and no `isRenderer` property being available. Time
+        to get creative and just make a wild guess. :>
+        */
+        if (target.tagName.endsWith("-RENDERER") && (target as any).object.render) {
+          this.renderer = target.object
+        }
+      }
+    })
 
     /* Announce that we're ready */
     this.dispatchEvent(new Event("ready"))
@@ -79,7 +88,36 @@ export class ThreeGame extends HTMLElement {
     window.removeEventListener("resize", this.handleWindowResize, false)
 
     /* Remove canvas from page */
+    this.cleanupRenderer()
+  }
+
+  protected setupRenderer() {
+    this.shadowRoot!.appendChild(this.renderer.domElement)
+    this.handleWindowResize()
+  }
+
+  protected cleanupRenderer() {
     this.shadowRoot!.removeChild(this.renderer.domElement)
+  }
+
+  protected makeDefaultRenderer() {
+    const renderer = new THREE.WebGLRenderer({
+      powerPreference: "high-performance",
+      antialias: true,
+      stencil: true,
+      depth: true
+    })
+
+    renderer.autoClear = false
+
+    /* Configure color space */
+    renderer.outputEncoding = THREE.sRGBEncoding
+
+    /* Enable shadow map */
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap
+
+    return renderer
   }
 
   private handleWindowResize() {
@@ -97,6 +135,14 @@ export class ThreeGame extends HTMLElement {
   requestFrame() {
     this.frameRequested = true
   }
+
+  /* TICKING */
+
+  /** Are we currently ticking? */
+  protected _ticking = false
+
+  /** The time delta since the last frame, in fractions of a second. */
+  deltaTime = 0
 
   startTicking() {
     let lastNow = performance.now()
@@ -129,11 +175,30 @@ export class ThreeGame extends HTMLElement {
       }
     }
 
-    this.renderer.setAnimationLoop(tick)
+    /*
+    If we have a WebGLRenderer, we'll use its setAnimationLoop. Otherwise,
+    we'll perform normal rAF-style ticking.
+    */
+    this._ticking = true
+
+    if (this.renderer instanceof THREE.WebGLRenderer) {
+      this.renderer.setAnimationLoop(tick)
+    } else {
+      const loop = () => {
+        tick()
+        if (this._ticking) requestAnimationFrame(loop)
+      }
+
+      loop()
+    }
   }
 
   stopTicking() {
-    this.renderer.setAnimationLoop(null)
+    this._ticking = false
+
+    if (this.renderer instanceof THREE.WebGLRenderer) {
+      this.renderer.setAnimationLoop(null)
+    }
   }
 }
 
