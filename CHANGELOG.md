@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - unreleased
 
+- **Breaking Change:** Ticker events have been completely reimplemented from scratch. The DOM events we were dispatching in an earlier version have been replaced by an internal event emitter, yielding significant (multliple orders of magnitude) performance gains. Because we are no longer using DOM events, the properties and attributes that allow you to hook callbacks into the ticker have been renamed to `tickUpdate`, `tickLateUpdate`, `tickFrameUpdate` and `tickRender`, with their corresponding attributes now named `tick-update`, `tick-late-update`, `tick-frame-update` and `tick-render`. Since `tickUpdate` is the most common ticker callback to use, you can also use the `tick` property and attribute as a shortcut:
+
+  ```html
+  <three-mesh tick="this.object.rotateZ(0.01)"></three-mesh>
+  ```
+
+  Please [refer to the documentation](https://three-elements.hmans.co/guide/ticker-events.html) for details on how to use these!
+
 - **New:** We now publish a full [API Reference](https://api.three-elements.hmans.co/). Enjoy!
 
 - **Changed:** By popular request, three-elements will no longer log to the console on startup. Enjoy the quiet!
