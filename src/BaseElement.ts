@@ -47,35 +47,35 @@ export class BaseElement extends HTMLElement {
 
   callbacks = new TickerCallbacks(this)
 
-  get ontick() {
+  get tickUpdate() {
     return this.callbacks.get("tick")
   }
 
-  set ontick(fn: TickerFunction | string | undefined) {
+  set tickUpdate(fn: TickerFunction | string | undefined) {
     this.callbacks.set("tick", fn)
   }
 
-  get onlatetick() {
+  get tickLateUpdate() {
     return this.callbacks.get("latetick")
   }
 
-  set onlatetick(fn: TickerFunction | string | undefined) {
+  set tickLateUpdate(fn: TickerFunction | string | undefined) {
     this.callbacks.set("latetick", fn)
   }
 
-  get onframetick() {
+  get tickFrame() {
     return this.callbacks.get("frametick")
   }
 
-  set onframetick(fn: TickerFunction | string | undefined) {
+  set tickFrame(fn: TickerFunction | string | undefined) {
     this.callbacks.set("frametick", fn)
   }
 
-  get onrendertick() {
+  get tickRender() {
     return this.callbacks.get("rendertick")
   }
 
-  set onrendertick(fn: TickerFunction | string | undefined) {
+  set tickRender(fn: TickerFunction | string | undefined) {
     this.callbacks.set("rendertick", fn)
   }
 
@@ -156,10 +156,10 @@ export class BaseElement extends HTMLElement {
     if (!this.isConnected) {
       queueMicrotask(() => {
         /* Remove event handlers */
-        this.ontick = undefined
-        this.onlatetick = undefined
-        this.onframetick = undefined
-        this.onrendertick = undefined
+        this.tickUpdate = undefined
+        this.tickLateUpdate = undefined
+        this.tickFrame = undefined
+        this.tickRender = undefined
 
         /* Invoke removedCallback */
         this.removedCallback()

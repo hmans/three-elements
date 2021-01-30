@@ -29,7 +29,7 @@ describe("ticker callbacks", () => {
       let counter = 0
       const fn = () => counter++
 
-      obj.ontick = fn
+      obj.tickUpdate = fn
       await nextFrame()
       expect(counter).to.eq(1)
     })
@@ -42,7 +42,7 @@ describe("ticker callbacks", () => {
       ;(window as any).fn = () => counter++
 
       const obj = (await renderWithinGame(html`
-        <three-object3d ontick="fn()"></three-object3d>
+        <three-object3d tick-update="fn()"></three-object3d>
       `)) as ThreeElement
 
       await nextFrame()
