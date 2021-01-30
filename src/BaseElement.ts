@@ -2,6 +2,7 @@ import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { TickerCallbacks } from "./TickerCallbacks"
 import { IConstructable } from "./types"
+import { camelize } from "./util/camelize"
 
 /**
  * The `BaseElement` class extends the built-in HTMLElement class with a bit of convenience
@@ -167,17 +168,18 @@ export class BaseElement extends HTMLElement {
     }
   }
 
-  attributeChangedCallback(key: string, oldValue: string, newValue: string): boolean {
-    this.debug("attributeChangedCallback", key, newValue)
+  attributeChangedCallback(key: string, _: string, value: string): boolean {
+    this.debug("attributeChangedCallback", key, value)
 
-    switch (key) {
-      /* A bunch of known properties that we will assign directly */
-      case "ontick":
-      case "onlatetick":
-      case "onframetick":
-      case "onrendertick":
-        this[key] = newValue
-        return true
+    /* Automatically map all tick-* attributes to their corresponding properties. */
+    if (key.startsWith("tick-")) {
+      const propName = camelize(key)
+      if (propName in this) (this[propName as keyof this] as any) = value
+      else
+        console.error(
+          `"${key}" was mapped to propert "${propName}", which is not a valid property on this element. `
+        )
+      return true
     }
 
     return false
