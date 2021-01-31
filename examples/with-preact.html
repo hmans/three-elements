@@ -18,6 +18,17 @@
       import { h, Component, render } from "https://jspm.dev/preact"
       import { useRef, useEffect } from "https://jspm.dev/preact/hooks"
 
+      const makeProxy = (fun) =>
+        new Proxy(T, {
+          get: (target, prop, receiver) => {
+            return fun(target[prop])
+          }
+        })
+
+      const THREE = makeProxy((tagName) => (props = null, children = []) =>
+        h(tagName, props, children)
+      )
+
       const make = (count, fun) => {
         const result = []
         for (let i = 0; i < count; i++) result.push(fun(i))
@@ -25,17 +36,17 @@
       }
 
       const Lights = () => [
-        h(T.AmbientLight, { intensity: 0.2 }),
-        h(T.DirectionalLight, {
+        THREE.AmbientLight({ intensity: 0.2 }),
+        THREE.DirectionalLight({
           position: [10, 20, 30],
           intensity: 1.2
         })
       ]
 
-      const Fog = () => h(T.Fog, { color: "#222", near: 16, far: 40 })
+      const Fog = () => THREE.Fog({ color: "#222", near: 16, far: 40 })
 
       const Cube = (props) =>
-        h(T.Mesh, {
+        THREE.Mesh({
           ...props,
           geometry: "#geometry",
           material: "#material",
@@ -56,8 +67,7 @@
         })
 
       const Swarm = () =>
-        h(
-          T.Group,
+        THREE.Group(
           { tick: (dt, { object }) => (object.rotation.y = object.rotation.z += 0.4 * dt) },
           make(10, (z) =>
             make(10, (y) =>
@@ -71,8 +81,8 @@
         )
 
       const Resources = () => [
-        h(T.BoxBufferGeometry, { id: "geometry" }),
-        h(T.MeshStandardMaterial, {
+        THREE.BoxBufferGeometry({ id: "geometry" }),
+        THREE.MeshStandardMaterial({
           id: "material",
           color: "gold",
           metalness: 0.1,
@@ -80,10 +90,10 @@
         })
       ]
 
-      const Camera = () => h(T.PerspectiveCamera, { id: "camera", fov: 70, position: [0, 0, 30] })
+      const Camera = () => THREE.PerspectiveCamera({ id: "camera", fov: 70, position: [0, 0, 30] })
 
       const Scene = () =>
-        h(T.Scene, { camera: "#camera", "background-color": "#222" }, [
+        THREE.Scene({ camera: "#camera", "background-color": "#222" }, [
           h(Resources),
           h(Fog),
           h(Camera),
