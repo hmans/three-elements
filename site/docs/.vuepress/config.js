@@ -31,7 +31,7 @@ module.exports = {
     [
       "script",
       { type: "module" },
-      `import "https://cdn.skypack.dev/three-elements"`
+      `import "https://cdn.skypack.dev/three-elements@next"`
     ]
   ],
 
