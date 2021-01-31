@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>With Preact</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+  </head>
+  <body>
+    <!-- The main game template. -->
+    <div id="root"></div>
+
+    <!-- Import dependencies via ESM. The future is now! -->
+    <script type="module">
+      import "three-elements"
+      import { h, Component, render } from "https://jspm.dev/preact"
+      import { useRef, useEffect } from "https://jspm.dev/preact/hooks"
+
+      const make = (count, fun) => {
+        const result = []
+        for (let i = 0; i < count; i++) result.push(fun(i))
+        return result
+      }
+
+      const Lights = () => [
+        h("three-ambient-light", { intensity: 0.2 }),
+        h("three-directional-light", { position: [10, 20, 30], intensity: 0.8 })
+      ]
+
+      const Cube = (props) =>
+        h(
+          "three-mesh",
+          {
+            ...props,
+            tick: (dt, { object }) => (object.rotation.x = object.rotation.y += dt)
+          },
+          [
+            h("three-box-buffer-geometry"),
+            h("three-mesh-standard-material", { color: "gold", metalness: 0.5, roughness: 0.5 })
+          ]
+        )
+
+      const Swarm = () =>
+        h(
+          "three-group",
+          { tick: (dt, { object }) => (object.rotation.y = object.rotation.z += 0.4 * dt) },
+          make(10, (z) =>
+            make(10, (y) =>
+              make(10, (x) =>
+                h(Cube, {
+                  position: [(x - 5) * 2 + 1, (y - 5) * 2 + 1, (z - 5) * 2 + 1]
+                })
+              )
+            )
+          )
+        )
+
+      const Scene = () => {
+        const scene = useRef()
+
+        useEffect(() => {
+          scene.current.camera.position.z = 30
+        }, [])
+
+        return h("three-scene", { ref: scene, "background-color": "#222" }, [
+          Lights(),
+          Swarm(),
+          h("three-orbit-controls")
+        ])
+      }
+
+      const Game = () => h("three-game", { autorender: true }, Scene())
+
+      render(h(Game), document.getElementById("root"))
+    </script>
+  </body>
+</html>
