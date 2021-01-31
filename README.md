@@ -17,7 +17,7 @@
 
 ### **three-elements provides Web Components-powered custom HTML elements for building Three.js-powered games and interactive experiences.** 🎉
 
-> **WARNING:** It is early days for this library, so pleace proceed with caution!
+> **WARNING:** It is early days for this library, so please proceed with caution!
 
 - Directly exposes all [Three.js] classes as **HTML elements** (eg. `<three-mesh>` for `THREE.Mesh`!)
 - **Elements are fully reactive**; if their attributes change, this is immediately reflected in the Three.js scene.
