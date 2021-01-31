@@ -7,9 +7,20 @@ export * from "./elements"
 export { BaseElement } from "./BaseElement"
 export { registerElement, ThreeElement }
 
+export const T: Record<string, string> = {}
+
+const registerElementAndProxy = (
+  tagName: string,
+  threeName: string,
+  klass: IConstructable<HTMLElement>
+) => {
+  registerElement(tagName, klass)
+  T[threeName] = tagName
+}
+
 const defineThreeElements = () => {
   /* Custom elements we want to set up manually in order to get the naming right */
-  registerElement("three-object3d", ThreeElement.for(THREE.Object3D))
+  registerElementAndProxy("three-object3d", "Object3D", ThreeElement.for(THREE.Object3D))
 
   /*
   For everything else inside THREE.* that can be constructed, automatically
@@ -20,7 +31,7 @@ const defineThreeElements = () => {
     const name = `three-${dasherize(thing)}`
 
     if (typeof klass === "function" && "prototype" in klass) {
-      registerElement(name, ThreeElement.for(klass as IConstructable))
+      registerElementAndProxy(name, thing, ThreeElement.for(klass as IConstructable))
     }
   }
 }

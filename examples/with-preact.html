@@ -14,7 +14,7 @@
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
-      import "three-elements"
+      import { T } from "three-elements"
       import { h, Component, render } from "https://jspm.dev/preact"
       import { useRef, useEffect } from "https://jspm.dev/preact/hooks"
 
@@ -25,17 +25,17 @@
       }
 
       const Lights = () => [
-        h("three-ambient-light", { intensity: 0.2 }),
-        h("three-directional-light", {
+        h(T.AmbientLight, { intensity: 0.2 }),
+        h(T.DirectionalLight, {
           position: [10, 20, 30],
           intensity: 1.2
         })
       ]
 
-      const Fog = () => h("three-fog", { color: "#222", near: 16, far: 40 })
+      const Fog = () => h(T.Fog, { color: "#222", near: 16, far: 40 })
 
       const Cube = (props) =>
-        h("three-mesh", {
+        h(T.Mesh, {
           ...props,
           geometry: "#geometry",
           material: "#material",
@@ -57,7 +57,7 @@
 
       const Swarm = () =>
         h(
-          "three-group",
+          T.Group,
           { tick: (dt, { object }) => (object.rotation.y = object.rotation.z += 0.4 * dt) },
           make(10, (z) =>
             make(10, (y) =>
@@ -71,8 +71,8 @@
         )
 
       const Resources = () => [
-        h("three-box-buffer-geometry", { id: "geometry" }),
-        h("three-mesh-standard-material", {
+        h(T.BoxBufferGeometry, { id: "geometry" }),
+        h(T.MeshStandardMaterial, {
           id: "material",
           color: "gold",
           metalness: 0.1,
@@ -80,11 +80,10 @@
         })
       ]
 
-      const Camera = () =>
-        h("three-perspective-camera", { id: "camera", fov: 70, position: [0, 0, 30] })
+      const Camera = () => h(T.PerspectiveCamera, { id: "camera", fov: 70, position: [0, 0, 30] })
 
       const Scene = () =>
-        h("three-scene", { camera: "#camera", "background-color": "#222" }, [
+        h(T.Scene, { camera: "#camera", "background-color": "#222" }, [
           h(Resources),
           h(Fog),
           h(Camera),
