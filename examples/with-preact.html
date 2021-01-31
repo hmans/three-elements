@@ -83,8 +83,8 @@
       const Camera = () =>
         h("three-perspective-camera", { id: "camera", fov: 70, position: [0, 0, 30] })
 
-      const Scene = () => {
-        return h("three-scene", { camera: "#camera", "background-color": "#222" }, [
+      const Scene = () =>
+        h("three-scene", { camera: "#camera", "background-color": "#222" }, [
           h(Resources),
           h(Fog),
           h(Camera),
@@ -92,7 +92,6 @@
           h(Swarm),
           h("three-orbit-controls")
         ])
-      }
 
       const Game = () => h("three-game", { autorender: true }, Scene())
 
