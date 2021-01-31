@@ -26,21 +26,34 @@
 
       const Lights = () => [
         h("three-ambient-light", { intensity: 0.2 }),
-        h("three-directional-light", { position: [10, 20, 30], intensity: 0.8 })
+        h("three-directional-light", {
+          position: [10, 20, 30],
+          intensity: 1.2
+        })
       ]
 
+      const Fog = () => h("three-fog", { color: "#222", near: 16, far: 40 })
+
       const Cube = (props) =>
-        h(
-          "three-mesh",
-          {
-            ...props,
-            tick: (dt, { object }) => (object.rotation.x = object.rotation.y += dt)
-          },
-          [
-            h("three-box-buffer-geometry"),
-            h("three-mesh-standard-material", { color: "gold", metalness: 0.5, roughness: 0.5 })
-          ]
-        )
+        h("three-mesh", {
+          ...props,
+          geometry: "#geometry",
+          material: "#material",
+          tick: (dt, { object }) => {
+            /* Time */
+            const t =
+              performance.now() +
+              object.position.z * 100 +
+              object.position.y * 100 +
+              object.position.x * 100
+
+            /* Rotation */
+            object.rotation.x = object.rotation.y += (1 + Math.cos(t / 200) * 0.5) * dt
+
+            /* Scale */
+            object.scale.setScalar(1 + Math.cos(t / 400) * 0.2)
+          }
+        })
 
       const Swarm = () =>
         h(
@@ -57,6 +70,16 @@
           )
         )
 
+      const Resources = () => [
+        h("three-box-buffer-geometry", { id: "geometry" }),
+        h("three-mesh-standard-material", {
+          id: "material",
+          color: "gold",
+          metalness: 0.1,
+          roughness: 0.3
+        })
+      ]
+
       const Scene = () => {
         const scene = useRef()
 
@@ -65,8 +88,10 @@
         }, [])
 
         return h("three-scene", { ref: scene, "background-color": "#222" }, [
-          Lights(),
-          Swarm(),
+          h(Resources),
+          h(Fog),
+          h(Lights),
+          h(Swarm),
           h("three-orbit-controls")
         ])
       }
