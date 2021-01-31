@@ -54,4 +54,14 @@ describe("applyProps", () => {
     expect(object.foo.y).to.equal(1.23)
     expect(object.foo.z).to.equal(Math.PI / -2)
   })
+
+  it("handles a JSON array correctly", () => {
+    const object = {
+      foo: new THREE.Vector3()
+    }
+    applyProps(object, { foo: "[1, 2, 3]" })
+    expect(object.foo.x).to.equal(1)
+    expect(object.foo.y).to.equal(2)
+    expect(object.foo.z).to.equal(3)
+  })
 })

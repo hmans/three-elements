@@ -36,7 +36,7 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
     }
 
     /* It is attribute-setting time! Let's try to parse the value. */
-    const parsed = parseJson(value) ?? parseDeg(value)
+    const parsed = typeof value === "string" ? parseJson(value) ?? parseDeg(value) : value
 
     /* Handle properties that provide .set methods */
     if (object[key]?.set !== undefined) {
