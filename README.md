@@ -36,7 +36,7 @@
     <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
 
     <!-- Spinning dodecahedron! -->
-    <three-mesh ontick="this.rotation.z += game.deltaTime">
+    <three-mesh tick="object.rotation.z += dt">
       <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
       <three-mesh-standard-material color="red"></three-mesh-standard-material>
     </three-mesh>
@@ -47,6 +47,7 @@
 ## DOCUMENTATION
 
 - [**Documentation**](https://three-elements.hmans.co) & [**Guide**](https://three-elements.hmans.co/guide/)
+- [API Reference](https://api.three-elements.hmans.co/)
 - [Changelog](./CHANGELOG.md)
 - [Announcement blog post](https://hmans.co/posts/2021-01-18-three-elements/)
 
