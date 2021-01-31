@@ -80,16 +80,14 @@
         })
       ]
 
+      const Camera = () =>
+        h("three-perspective-camera", { id: "camera", fov: 70, position: [0, 0, 30] })
+
       const Scene = () => {
-        const scene = useRef()
-
-        useEffect(() => {
-          scene.current.camera.position.z = 30
-        }, [])
-
-        return h("three-scene", { ref: scene, "background-color": "#222" }, [
+        return h("three-scene", { camera: "#camera", "background-color": "#222" }, [
           h(Resources),
           h(Fog),
+          h(Camera),
           h(Lights),
           h(Swarm),
           h("three-orbit-controls")
