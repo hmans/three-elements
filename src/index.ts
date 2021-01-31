@@ -7,7 +7,12 @@ export * from "./elements"
 export { BaseElement } from "./BaseElement"
 export { registerElement, ThreeElement }
 
-export const T: Record<string, string> = {}
+const T: Record<string, string> = {}
+
+export const makeProxy = (fun: (tagName: string) => Function) =>
+  new Proxy(T, {
+    get: (target, prop: string) => fun(target[prop])
+  })
 
 const registerElementAndProxy = (
   tagName: string,
