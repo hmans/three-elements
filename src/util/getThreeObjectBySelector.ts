@@ -9,11 +9,8 @@ export const getThreeObjectBySelector = (selector: string) => {
   /* Find the element */
   const el = document.querySelector(selector)
 
-  /* Check if element was found */
-  if (!el) {
-    console.error(`Could not find a DOM element with the selector "${selector}". 😢`)
-    return
-  }
+  /* Bail if element was not found. */
+  if (!el) return
 
   /* Check if the element has an object */
   if (!("object" in el)) {

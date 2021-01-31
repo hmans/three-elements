@@ -73,8 +73,6 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
 
       if (referencedObject) {
         object[key] = referencedObject
-      } else {
-        console.error(`No element was found for selector "${value}". 😭`)
       }
 
       return
