@@ -1,7 +1,7 @@
 # Lifecycle Events
 
 ::: warning TODO
-This section of the guide is still missing. Here's the tl;dr:
+Lifecycle events are currently reworked. In the currently available version of three-elements, elements dispatch `connected` and `mounted` DOM events when they connect or complete their initialisation, respectively. These events bubble up the DOM tree.
 
-Elements dispatch `connected`, `ready`, and `disconnected` DOM events when they appear, complete their initialisation, or disappear, respectively. These events bubble up the DOM tree, so do with them what you will.
+Please note that this is _extremely likely_ to change in an upcoming version, so please use this with caution.
 :::

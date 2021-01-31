@@ -4,14 +4,17 @@
 
 three-elements makes it easy to get started with WebXR.
 
-You can enable WebXR features by adding the `xr` attribute to `<three-game>`. You will also want to enable `autorender` to make sure that new frames are rendered on every engine tick.
+You will need to enable `autorender` on your `<three-game>` tag, and also supply a [custom renderer](./custom-renderers) that is preconfigured for XR:
 
 ```html
-<three-game id="game" autorender xr>
+<three-game id="game" autorender>
+  <!-- custom renderer with XR enabled -->
+  <three-web-gl-renderer xr.enabled></three-web-gl-renderer>
+
   <three-scene background-color="#808080">
     <three-ambient-light intensity="1.2"></three-ambient-light>
 
-    <three-mesh scale="4" rotation.x="-1.5707">
+    <three-mesh scale="4" rotation.x="-90deg">
       <three-plane-buffer-geometry></three-plane-buffer-geometry>
       <three-mesh-standard-material
         color="#eeeeee"

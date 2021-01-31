@@ -44,8 +44,12 @@ Or, with NPM:
 npm install -D three-elements three
 ```
 
-::: tip Heeeeyyyyy, you know...
-Have you ever stopped to wonder why the documentation of pretty much every single package on NPM explains how to actually add the package to a project? I mean, seriously, shouldn't you know this at this point, and shouldn't it be enough to just give the official name of the package?
+Now just import the library somewhere in your code:
 
-It's `three-elements`, by the way. Yeah.
+```js
+import "three-elements"
+```
+
+::: tip
+The `three-elements` package provides some [optional exports](https://api.three-elements.hmans.co/modules.html). If you don't need any of them, please still import the library like shown above &ndash; if you don't, it will never have a chance to register its custom elements.
 :::

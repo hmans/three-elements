@@ -95,7 +95,9 @@ module.exports = {
         collapsable: false,
         children: [
           "/advanced/stacked-scenes",
+          "/advanced/custom-renderers",
           "/advanced/optimized-rendering",
+          "/advanced/reusing-resources",
           "/advanced/frameworks",
           "/advanced/webxr"
         ]

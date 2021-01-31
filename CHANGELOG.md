@@ -23,10 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
   Please [refer to the documentation](https://three-elements.hmans.co/guide/ticker-events.html) for details on how to use these!
 
-- **New:** We now publish a full [API Reference](https://api.three-elements.hmans.co/). Enjoy!
-
-- **Changed:** By popular request, three-elements will no longer log to the console on startup. Enjoy the quiet!
-
 - **New:** When assigning to an object property via an attribute, you can now set the attribute to a CSS selector to reference another object. This can, for example, be used to re-use geometries, materials and other potentially expensive resources:
 
   ```html
@@ -45,8 +41,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ```html
   <three-mesh rotation.x="-90deg">...</three-mesh>
   ```
-
-- **Changed:** The core ticker loop now makes use of `setAnimationLoop` instead of `requestAnimationFrame`, which is a critical prerequisite for making your three-elements project [WebXR-ready](https://three-elements.hmans.co/advanced/webxr.html).
 
 - **New:** You can now configure custom renderers! Just like with any other element provided by this library, you can use attributes to configure them to your needs:
 
@@ -71,6 +65,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   <three-fog args="#333333 1 1000"></three-fog>
   ```
 
+- **New:** `<three-game>` now dispatches a `ready` event you can hook your game's initialization code into.
+
+- **New:** We now publish a full [API Reference](https://api.three-elements.hmans.co/). Enjoy!
+
+- **Changed:** By popular request, three-elements will no longer log to the console on startup. Enjoy the quiet!
+
+- **Changed:** The core ticker loop now makes use of `setAnimationLoop` instead of `requestAnimationFrame`, which is a critical prerequisite for making your three-elements project [WebXR-ready](https://three-elements.hmans.co/advanced/webxr.html).
+
 - **Changed:** When attributes on an element map to a non-existing property on the wrapped object, there will no longer be a warning logged to the console. (This is very useful when you're combining three-elements with other frameworks that make use of their own attribute names on your elements.)
 
 - **Fixed:** When assigning attributes a value of "0", this will now correctly assign the parsed numerical value of 0 to the corresponding property, not a string representation of it. Programming, how does it work?
@@ -79,7 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Fixed:** When using the `attach` attribute, a valid candidate element to attach to is now searched for across the boundaries of Shadow DOMs. If this sentence makes any sense to you, I bow to you, for we are united in this madness.
 
-- **New:** `<three-game>` now dispatches a `ready` event you can hook your game's initialization code into.
+- **Fixed:** Many little odds and ends, especially with regard to framework interoperability.
 
 ### Internals
 
@@ -93,9 +95,9 @@ If you've been extending ThreeElement in your own code, or hacking on the codeba
 
 - **Changed:** Instead of using a MutationObserver instance to monitor the element for updated attributes (we can't feasibly make use of `observedAttributes`, remember?), we now simply hook into `setAttribute` to react on attribute changes. This yields _significant_ (order of a magnitude) performance improvements in projects that go through element attributes a lot. Sadly, it also means that changes you're making to the DOM in your browser's dev tools will no longer be picked up automatically (but this feature may make a comeback at a later date.)
 
-- **Holy crap:** `applyProps` was refactored to use `if` instead of `switch (true)`. All you Senior JavaScript Architects can finally calm down, for I am no longer impeding upon your creed!
-
 - **Changed:** `yarn dev` now makes use of the excellent [@web/dev-server](https://modern-web.dev/docs/dev-server/overview/). This allows us to get rid of the importmap shim we had been using so far, load additional dependencies straight from our own `node_modules`, and greatly increase iteration speed during development.
+
+- **Holy Crap:** `applyProps` was refactored to use `if` instead of `switch (true)`. All you Senior JavaScript Architects can finally calm down, for I am no longer impeding upon your creed!
 
 ## [0.2.1] - 2021-01-27
 
