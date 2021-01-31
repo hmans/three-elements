@@ -18,9 +18,7 @@
       import { h, Component, render } from "https://jspm.dev/preact"
       import { useRef, useEffect } from "https://jspm.dev/preact/hooks"
 
-      const THREE = makeProxy((tagName) => (props = null, children = []) =>
-        h(tagName, props, children)
-      )
+      const T = makeProxy((tagName) => (props = null, children = []) => h(tagName, props, children))
 
       const make = (count, fun) => {
         const result = []
@@ -29,17 +27,17 @@
       }
 
       const Lights = () => [
-        THREE.AmbientLight({ intensity: 0.2 }),
-        THREE.DirectionalLight({
+        T.AmbientLight({ intensity: 0.2 }),
+        T.DirectionalLight({
           position: [10, 20, 30],
           intensity: 1.2
         })
       ]
 
-      const Fog = () => THREE.Fog({ color: "#222", near: 16, far: 40 })
+      const Fog = () => T.Fog({ color: "#222", near: 16, far: 40 })
 
       const Cube = (props) =>
-        THREE.Mesh({
+        T.Mesh({
           ...props,
           geometry: "#geometry",
           material: "#material",
@@ -60,7 +58,7 @@
         })
 
       const Swarm = () =>
-        THREE.Group(
+        T.Group(
           { tick: (dt, { object }) => (object.rotation.y = object.rotation.z += 0.4 * dt) },
           make(10, (z) =>
             make(10, (y) =>
@@ -74,8 +72,8 @@
         )
 
       const Resources = () => [
-        THREE.BoxBufferGeometry({ id: "geometry" }),
-        THREE.MeshStandardMaterial({
+        T.BoxBufferGeometry({ id: "geometry" }),
+        T.MeshStandardMaterial({
           id: "material",
           color: "gold",
           metalness: 0.1,
@@ -83,10 +81,10 @@
         })
       ]
 
-      const Camera = () => THREE.PerspectiveCamera({ id: "camera", fov: 70, position: [0, 0, 30] })
+      const Camera = () => T.PerspectiveCamera({ id: "camera", fov: 70, position: [0, 0, 30] })
 
       const Scene = () =>
-        THREE.Scene({ camera: "#camera", "background-color": "#222" }, [
+        T.Scene({ camera: "#camera", "background-color": "#222" }, [
           h(Resources),
           h(Fog),
           h(Camera),
