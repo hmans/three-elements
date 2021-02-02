@@ -29,7 +29,7 @@
 
 ```html
 <!-- Create a Three.js game with a default camera. -->
-<three-game id="game" autorender>
+<three-game autorender>
   <three-scene background-color="#444">
     <!-- Lights on! -->
     <three-ambient-light intensity="0.2"></three-ambient-light>
