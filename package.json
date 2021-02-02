@@ -4,5 +4,15 @@
   "version": "0.3.0",
   "repository": "git@github.com:hmans/three-elements.git",
   "author": "Hendrik Mans <hendrik@mans.de>",
-  "license": "MIT"
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "lerna run build",
+    "test": "lerna run test"
+  },
+  "devDependencies": {
+    "lerna": "^3.22.1"
+  }
 }
