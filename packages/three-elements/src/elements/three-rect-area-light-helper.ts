@@ -1,7 +1,7 @@
 import { RectAreaLightHelper } from "three/examples/jsm/helpers/RectAreaLightHelper"
 import { ThreeElement } from "../ThreeElement"
 import { getThreeObjectBySelector } from "../util/getThreeObjectBySelector"
-import { registerElement } from "../util/registerElement"
+import { registerThreeElement } from "../util/registerElement"
 
 export class ThreeRectAreaLightHelper extends ThreeElement.for(RectAreaLightHelper) {
   attributeChangedCallback(
@@ -20,4 +20,8 @@ export class ThreeRectAreaLightHelper extends ThreeElement.for(RectAreaLightHelp
   }
 }
 
-registerElement("three-rect-area-light-helper", ThreeRectAreaLightHelper)
+registerThreeElement(
+  "three-rect-area-light-helper",
+  "RectAreaLightHelper",
+  ThreeRectAreaLightHelper
+)

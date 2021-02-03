@@ -1,6 +1,6 @@
 import * as THREE from "three"
 import { EventEmitter } from "../util/EventEmitter"
-import { registerElement } from "../util/registerElement"
+import { registerThreeElement } from "../util/registerElement"
 
 export type TickerFunction = (dt: number, el: HTMLElement) => any
 
@@ -202,4 +202,4 @@ export class ThreeGame extends HTMLElement {
   }
 }
 
-registerElement("three-game", ThreeGame)
+registerThreeElement("three-game", "Game", ThreeGame)

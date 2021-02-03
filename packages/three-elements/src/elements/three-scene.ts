@@ -2,7 +2,7 @@ import { Camera, Color, OrthographicCamera, PerspectiveCamera, Scene, WebGLRende
 import { PointerEvents } from "../PointerEvents"
 import { ThreeElement } from "../ThreeElement"
 import { getThreeObjectBySelector } from "../util/getThreeObjectBySelector"
-import { registerElement } from "../util/registerElement"
+import { registerThreeElement } from "../util/registerElement"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
   /** The current camera that is being used to render the scene. */
@@ -114,4 +114,4 @@ export class ThreeScene extends ThreeElement.for(Scene) {
   }
 }
 
-registerElement("three-scene", ThreeScene)
+registerThreeElement("three-scene", "Scene", ThreeScene)

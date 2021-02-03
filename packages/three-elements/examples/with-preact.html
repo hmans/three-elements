@@ -93,7 +93,7 @@
           h("three-orbit-controls")
         ])
 
-      const Game = () => h("three-game", { autorender: true }, Scene())
+      const Game = () => T.Game({ autorender: true }, h(Scene))
 
       render(h(Game), document.getElementById("root"))
     </script>
