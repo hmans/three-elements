@@ -2,30 +2,15 @@ import * as THREE from "three"
 import { ThreeElement } from "./ThreeElement"
 import { IConstructable } from "./types"
 import { dasherize } from "./util/dasherize"
-import { registerElement } from "./util/registerElement"
+import { registerElement, registerThreeElement } from "./util/registerElement"
 export * from "./elements"
 export { BaseElement } from "./BaseElement"
 export { registerElement, ThreeElement }
-
-const T: Record<string, string> = {}
-
-export const makeProxy = (fun: (tagName: string) => Function) =>
-  new Proxy(T, {
-    get: (target, prop: string) => fun(target[prop])
-  })
-
-const registerElementAndProxy = (
-  tagName: string,
-  threeName: string,
-  klass: IConstructable<HTMLElement>
-) => {
-  registerElement(tagName, klass)
-  T[threeName] = tagName
-}
+export { makeProxy } from "./util/makeProxy"
 
 const defineThreeElements = () => {
   /* Custom elements we want to set up manually in order to get the naming right */
-  registerElementAndProxy("three-object3d", "Object3D", ThreeElement.for(THREE.Object3D))
+  registerThreeElement("three-object3d", "Object3D", ThreeElement.for(THREE.Object3D))
 
   /*
   For everything else inside THREE.* that can be constructed, automatically
@@ -36,7 +21,7 @@ const defineThreeElements = () => {
     const name = `three-${dasherize(thing)}`
 
     if (typeof klass === "function" && "prototype" in klass) {
-      registerElementAndProxy(name, thing, ThreeElement.for(klass as IConstructable))
+      registerThreeElement(name, thing, ThreeElement.for(klass as IConstructable))
     }
   }
 }
