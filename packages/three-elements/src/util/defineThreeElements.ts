@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { ThreeElement } from ".."
+import { ThreeElement } from "../ThreeElement"
 import { IConstructable } from "../types"
 import { dasherize } from "./dasherize"
 import { registerThreeElement } from "./registerElement"
