@@ -19,7 +19,8 @@ describe("the preact proxy object", () => {
     const vdom = T.Group({ name: "My Favorite Group" }, [])
     render(vdom, document.body)
 
-    const el = document.body.firstElementChild
+    const el = document.body.firstElementChild as ThreeElement
     expect(el).to.be.instanceOf(ThreeElement)
+    expect(el.object.name).to.eq("My Favorite Group")
   })
 })
