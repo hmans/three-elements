@@ -60,7 +60,7 @@
 
 **Please get in touch _before_ submitting Pull Requests** (ideally, _before_ even implementing them.) At this stage in its development, three-elements still is heavily in flux. If there is something you would like to contribute, please open an issue and describe your suggestion.
 
-If you want to do some hacking, just run `yarn dev`, which will compile the package in watch mode and spawn a server on `localhost:5000` that serves the contents of the `examples/` directory.
+If you want to do some hacking, just run `yarn dev`, which will compile the package in watch mode and spawn a server on `localhost:5000` that serves the contents of the `packages/examples/public/` directory.
 
 ## THANKS
 
