@@ -1,6 +1,6 @@
 import { expect } from "@open-wc/testing"
 import { T } from "../src/index"
-import { render } from "preact"
+import { h, render } from "preact"
 import { ThreeElement } from "three-elements"
 
 describe("the preact proxy object", () => {
