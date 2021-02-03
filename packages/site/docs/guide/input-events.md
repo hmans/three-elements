@@ -30,6 +30,8 @@ Let's have an example with a mesh that reacts on the pointer entering, leaving, 
 </three-game>
 ```
 
+Remember, these are just plain old DOM events &ndash; just use them like you would do with any other HTML element.
+
 :::
 
 ::: tip Wait, what? How does this work?
@@ -40,4 +42,4 @@ A typical approach to handling pointer events in a Three.js project is to retrie
 
 ## List of Available Events
 
-Currently implemented are `pointerdown`, `pointerup`, `pointermove`, `pointerenter`, `pointerleave`, `pointerout`, `click`, and `dblclick`. Hook into them like you would do for any other DOM element.
+Currently implemented are `pointerdown`, `pointerup`, `pointermove`, `pointerenter`, `pointerleave`, `pointerout`, `click`, and `dblclick`.

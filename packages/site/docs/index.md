@@ -17,11 +17,14 @@ footer: MIT Licensed | Copyright © 2021-present Hendrik Mans
     <three-mesh
       scale="4"
       cast-shadow
-      tick="this.object.rotation.x = this.object.rotation.y += 0.01; this.object.scale.setScalar(4 + Math.cos(Date.now() / 700) * 0.6)"
+      tick="object.rotation.x = object.rotation.y += 0.01;
+            object.scale.setScalar(4 + Math.cos(Date.now() / 700) * 0.6)"
     >
       <three-dodecahedron-buffer-geometry></three-dodecahedron-buffer-geometry>
       <three-mesh-standard-material
         color="hotpink"
+        metalness="0.5"
+        roughness="0.5"
       ></three-mesh-standard-material>
     </three-mesh>
 
@@ -37,7 +40,7 @@ footer: MIT Licensed | Copyright © 2021-present Hendrik Mans
     <three-orbit-controls></three-orbit-controls>
 
     <!-- Lights -->
-    <three-ambient-light intensity="0.2"></three-ambient-light>
+    <three-ambient-light intensity="0.3"></three-ambient-light>
     <three-directional-light
       intensity="0.8"
       position="40, 40, 20"

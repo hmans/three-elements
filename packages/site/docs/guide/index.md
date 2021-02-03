@@ -54,7 +54,7 @@ Both approaches have advantages and disadvantages. The main advantage of three-e
 three-elements' primary job is to translate your declarative code into the imperative commands that Three.js understands. Yay!
 :::
 
-## What does three-elements add?
+## But what about three-elements?
 
 three-elements wraps Three.js and provides a set of custom HTML elements (Web Components) that allow you to declaratively construct Three.js applications. If this sentence sounds confusing, here's a simpler way to put it:
 
@@ -86,9 +86,9 @@ Attributes are linked to the wrapped object's properties of the same name. They'
 
 You can use three-elements to build 3D applications using **static HTML** (like we've been doing in the examples), or **pair it with any web application framework** that interacts with the DOM.
 
-On top of all this, three-elements provides a thin bit of scaffolding to reduce boilerplate in your own code. Most importantly:
+On top of all this, three-elements provides some basic scaffolding to reduce boilerplate in your own code. Most importantly:
 
-- A built-in [**ticker**](./ticker-events) that lets you hook into various stages of each frame.
+- A built-in [**ticker**](./ticker-events) that lets you hook callback code into various stages of each frame.
 - **Full [**pointer events**](./input-events) support;** just set `onclick`, `onpointerover` & friends on your `<three-*>` elements like you're used to from normal, non-3D web application development.
 - Support for [**stacked scenes**](/advanced/stacked-scenes/), making the implementation of HUDs or cockpit views trivial.
 - [**Optimized rendering**](/advanced/optimized-rendering/) where no new frames will be rendered if there hasn't been a change in the scene.

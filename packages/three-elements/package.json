@@ -1,0 +1,50 @@
+{
+  "name": "three-elements",
+  "version": "0.3.1-alpha.0",
+  "author": {
+    "name": "Hendrik Mans",
+    "email": "hendrik@mans.de",
+    "url": "https://hendrik.mans.de"
+  },
+  "description": "Web Components for Three.js.",
+  "homepage": "https://github.com/hmans/three-elements",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hmans/three-elements"
+  },
+  "keywords": [
+    "webgl",
+    "three",
+    "graphics",
+    "gamedev",
+    "webcomponents"
+  ],
+  "sideEffects": true,
+  "license": "MIT",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "unpkg": "dist/index.umd.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.modern.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "dev": "web-dev-server --port=5000",
+    "docs": "typedoc",
+    "watch": "yarn clean && microbundle watch --globals three=THREE",
+    "build": "yarn clean && microbundle --globals three=THREE",
+    "test": "web-test-runner --puppeteer",
+    "prepublishOnly": "yarn build && yarn test",
+    "site:dev": "cd site && yarn dev",
+    "site:build": "cd site && yarn build"
+  },
+  "peerDependencies": {
+    "three": ">=0.121.0"
+  }
+}

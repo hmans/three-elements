@@ -6,10 +6,13 @@ Every `<three-scene>` you create comes with a default camera out of the box that
 
 :::demo
 
-```html{2,5}
+```html{4,8}
 <three-game>
+  <!-- Note how the camera attribute here is a CSS selector
+  referencing the DOM element below. -->
   <three-scene background-color="#eee" camera="#camera">
-    <!-- This camera will replace the one that's automatically provided by the scene itself. -->
+    <!-- This camera will replace the one that's automatically
+    provided by the scene itself. -->
     <three-perspective-camera
       id="camera"
       position="5, 5, 50"
@@ -27,6 +30,8 @@ Every `<three-scene>` you create comes with a default camera out of the box that
       <three-mesh-standard-material color="red"></three-mesh-standard-material>
     </three-mesh>
 
+    <!-- These orbit controls will automatically
+    pick up the currently active camera. -->
     <three-orbit-controls></three-orbit-controls>
   </three-scene>
 </three-game>

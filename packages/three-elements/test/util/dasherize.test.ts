@@ -11,4 +11,10 @@ describe("dasherize", () => {
     expect(dasherize("FooBar")).to.eq("foo-bar")
     expect(dasherize("FooBarBaz")).to.eq("foo-bar-baz")
   })
+
+  it("converts number suffixes corretly", () => {
+    expect(dasherize("Vector3")).to.eq("vector3")
+    expect(dasherize("Object3D")).to.eq("object3d")
+    expect(dasherize("Deg2Rad")).to.eq("deg2rad")
+  })
 })

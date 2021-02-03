@@ -1,6 +1,4 @@
-/examples/src/
 **/node_modules/
 **/*.log
 **/dist/
-/docs/
 **/.vuepress/dist/
