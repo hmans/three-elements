@@ -1,0 +1,52 @@
+{
+  "name": "@three-elements/preact",
+  "version": "0.3.1-alpha.0",
+  "author": {
+    "name": "Hendrik Mans",
+    "email": "hendrik@mans.de",
+    "url": "https://hmans.co/"
+  },
+  "description": "Preact bindings for three-elements.",
+  "homepage": "https://github.com/hmans/three-elements",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hmans/three-elements"
+  },
+  "keywords": [
+    "webgl",
+    "three",
+    "graphics",
+    "gamedev",
+    "webcomponents",
+    "preact"
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "unpkg": "dist/index.umd.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.modern.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "docs": "typedoc",
+    "watch": "yarn clean && microbundle watch",
+    "build": "yarn clean && microbundle",
+    "test": "web-test-runner --puppeteer",
+    "prepublishOnly": "yarn build && yarn test"
+  },
+  "dependencies": {
+    "@three-elements/proxy": "^0.3.1-alpha.0"
+  },
+  "peerDependencies": {
+    "three-elements": "^0.3.1-alpha.0",
+    "preact": ">=10.0.0"
+  }
+}

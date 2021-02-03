@@ -14,11 +14,11 @@
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
-      import { makeProxy } from "three-elements"
+      import "three-elements"
       import { h, Component, render } from "https://jspm.dev/preact"
       import { useRef, useEffect } from "https://jspm.dev/preact/hooks"
 
-      const T = makeProxy((tagName) => (props = null, children = []) => h(tagName, props, children))
+      import { T } from "@three-elements/preact"
 
       const make = (count, fun) => {
         const result = []
