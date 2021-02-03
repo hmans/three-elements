@@ -4,7 +4,11 @@ import * as THREE from "three"
 
 type THREE = typeof THREE
 
-type ThreeElementAttributes<T> = Partial<T>
+type AllPossibleAttributes<T> = {
+  [K in keyof T]: T[K] extends Function ? never : T[K]
+}
+
+type ThreeElementAttributes<T> = Partial<AllPossibleAttributes<T>>
 
 type PreactProxyFunction<T> = (
   props?: ThreeElementAttributes<T>,
