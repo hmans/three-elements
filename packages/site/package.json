@@ -1,7 +1,7 @@
 {
   "name": "three-elements-site",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.3.1-alpha.0",
   "main": "index.js",
   "author": "Hendrik Mans",
   "license": "MIT",
