@@ -11770,10 +11770,10 @@ thenify-all@^1.0.0:
     any-promise "^1.0.0"
 
 "three-elements-site@file:packages/site":
-  version "1.0.0"
+  version "0.3.1-alpha.0"
 
-"three-elements@file:packages/core":
-  version "0.3.0"
+"three-elements@file:packages/three-elements":
+  version "0.3.1-alpha.0"
 
 three@^0.125.2:
   version "0.125.2"

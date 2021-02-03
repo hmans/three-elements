@@ -1,10 +1,8 @@
-import { ThreeElement } from "./ThreeElement"
 import { defineThreeElements } from "./util/defineThreeElements"
-import { registerElement } from "./util/registerElement"
+export { registerElement, registeredThreeElements } from "./util/registerElement"
 export * from "./elements"
 export { BaseElement } from "./BaseElement"
-export { registerElement, ThreeElement }
-export { makeProxy } from "./util/makeProxy"
+export { ThreeElement } from "./ThreeElement"
 
 /* Let's gooo! */
 defineThreeElements()
