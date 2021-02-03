@@ -19,7 +19,7 @@ export const registeredThreeElements: Record<string, string> = {}
 
 /**
  * Registers an element and adds it to the dictionary that's mapping THREE.* namespace
- * properties to tag names.
+ * properties (and more) to tag names.
  */
 export const registerThreeElement = (
   tagName: string,
