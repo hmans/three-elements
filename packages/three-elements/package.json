@@ -35,14 +35,11 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "dev": "web-dev-server --port=5000",
     "docs": "typedoc",
     "watch": "yarn clean && microbundle watch --globals three=THREE",
     "build": "yarn clean && microbundle --globals three=THREE",
     "test": "web-test-runner --puppeteer",
-    "prepublishOnly": "yarn build && yarn test",
-    "site:dev": "cd site && yarn dev",
-    "site:build": "cd site && yarn build"
+    "prepublishOnly": "yarn build && yarn test"
   },
   "peerDependencies": {
     "three": ">=0.121.0"
