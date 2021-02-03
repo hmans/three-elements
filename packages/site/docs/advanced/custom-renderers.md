@@ -15,7 +15,7 @@ You can customize these by interacting with the element's `renderer` property, b
 
 ```html
 <three-game>
-  <three-web-gl-renderer xr.enabled antialias="false"></three-web-gl-renderer>
+  <three-webgl-renderer xr.enabled antialias="false"></three-webgl-renderer>
   <three-scene></three-scene>
 </three-game>
 ```

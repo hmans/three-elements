@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.0] - unreleased
 
+- **Breaking Change:** `<three-web-gl-renderer>` now is `<three-webgl-renderer>`.
+
 ### Internals
 
 - **Changed:** The repository has been converted into a monorepo to provide a better structure for the packages that we already have, and a nicer home for the packages we will be adding in the future.

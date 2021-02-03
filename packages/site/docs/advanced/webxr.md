@@ -9,7 +9,7 @@ You will need to enable `autorender` on your `<three-game>` tag, and also supply
 ```html
 <three-game id="game" autorender>
   <!-- custom renderer with XR enabled -->
-  <three-web-gl-renderer xr.enabled></three-web-gl-renderer>
+  <three-webgl-renderer xr.enabled></three-webgl-renderer>
 
   <three-scene background-color="#808080">
     <three-ambient-light intensity="1.2"></three-ambient-light>
