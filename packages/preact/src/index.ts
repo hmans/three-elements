@@ -4,8 +4,12 @@ import * as THREE from "three"
 
 type THREE = typeof THREE
 
+type AllPossibleKeys<T> = {
+  [K in keyof T]: T[K] extends Function ? never : K
+}[keyof T]
+
 type AllPossibleAttributes<T> = {
-  [K in keyof T]: T[K] extends Function ? never : T[K]
+  [K in AllPossibleKeys<T>]: T[K]
 }
 
 type ThreeElementAttributes<T> = Partial<AllPossibleAttributes<T>>
