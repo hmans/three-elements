@@ -1,1 +1,1 @@
-packages/core/README.md
+packages/three-elements/README.md
