@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - unreleased
+
+### Internals
+
+- **Changed:** The repository has been converted into a monorepo to provide a better structure for the packages that we already have, and a nicer home for the packages we will be adding in the future.
+
 ## [0.3.0] - 2021-02-01
 
 - **Breaking Change:** Ticker events have been completely reimplemented from scratch. The DOM events we were dispatching in an earlier version have been replaced by an internal event emitter, yielding significant (multliple orders of magnitude) performance gains. Because we are no longer using DOM events, the properties and attributes that allow you to hook callbacks into the ticker have been renamed to `tick`, `lateTick`, `frameTick` and `renderTick`, with their corresponding attributes now named `tick`, `late-tick`, `frame-tick` and `render-tick`.
@@ -18,7 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   When directly assigning functions to these properties, they will now receive the delta time and a reference to the element itself as arguments. For example, in lit-html, you can now do this:
 
   ```js
-  html`<three-mesh .tick=${(dt, { object }) => object.rotateZ(5 * dt)}></three-mesh>`
+  html`
+    <three-mesh .tick=${(dt, { object }) => object.rotateZ(5 * dt)}></three-mesh>
+  `
   ```
 
   Please [refer to the documentation](https://three-elements.hmans.co/guide/ticker-events.html) for details on how to use these!
