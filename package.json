@@ -37,7 +37,7 @@
     "vuepress-plugin-plausible": "^0.0.2"
   },
   "dependencies": {
-    "three-elements": "file:packages/core",
+    "three-elements": "file:packages/three-elements",
     "three-elements-site": "file:packages/site"
   }
 }
