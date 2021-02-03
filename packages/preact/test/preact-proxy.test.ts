@@ -1,5 +1,7 @@
 import { expect } from "@open-wc/testing"
 import { T } from "../src/index"
+import { render } from "preact"
+import { ThreeElement } from "three-elements"
 
 describe("the preact proxy object", () => {
   it("has properties for the various THREE.* props", () => {
@@ -11,5 +13,13 @@ describe("the preact proxy object", () => {
     /* Something that very likely does not exist. mrdoob, I beg you,
     don't add a THREE.FooBarBaz, or you'll break this test */
     expect(T.FooBarBaz).to.eq(undefined)
+  })
+
+  it("its members return preact vdom generator functions", () => {
+    const vdom = T.Group({ name: "My Favorite Group" }, [])
+    render(vdom, document.body)
+
+    const el = document.body.firstElementChild
+    expect(el).to.be.instanceOf(ThreeElement)
   })
 })
