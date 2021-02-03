@@ -8,9 +8,6 @@ export { BaseElement } from "./BaseElement"
 export { registerElement, ThreeElement }
 
 const defineThreeElements = () => {
-  /* Custom elements we want to set up manually in order to get the naming right */
-  registerElement("three-object3d", ThreeElement.for(THREE.Object3D))
-
   /*
   For everything else inside THREE.* that can be constructed, automatically
   generate a custom element.
