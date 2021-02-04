@@ -7,9 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.0] - unreleased
 
-- **New:** You can now set the `observed` attribute on the `<three-game>` tag to make it monitor changed attributes using a MutationObserver. This is useful if you want to edit the DOM of a project directly in your browser's devtools; other than that, it serves no real purpose. Please keep in mind that enabling this flag has a very high performance cost; for this reason, we're also making it log a warning when enabled.
+- **New: Texture loading!** The `<three-texture>` element now accepts a `url` attribute that will make it load a texture from the specified URL:
 
-- **New:** We now provide a `@three-elements/preact` package that provides some light-weight bindings for use in Preact applications using its hyperscript syntax. This makes use of an experimental new proxy generator (housed in the equally new `@three-elements/proxy` package) that can be used to create three-elements bindings for all sorts of web frameworks, so expect to see more of this in the future.
+  ```html
+  <three-mesh-standard-material>
+    <three-texture url="texture.jpg" attach="map"></three-texture>
+  </three-mesh-standard-material>
+  ```
+
+- **New: Opt-in attribute observing!** You can now set the `observed` attribute on the `<three-game>` tag to make it monitor changed attributes using a MutationObserver. This is useful if you want to edit the DOM of a project directly in your browser's devtools; other than that, it serves no real purpose. Please keep in mind that enabling this flag has a very high performance cost; for this reason, we're also making it log a warning when enabled.
+
+- **New: Experimental Preact Bindings!** We now provide a `@three-elements/preact` package that provides some light-weight bindings for use in Preact applications using its hyperscript syntax. This makes use of an experimental new proxy generator (housed in the equally new `@three-elements/proxy` package) that can be used to create three-elements bindings for all sorts of web frameworks, so expect to see more of this in the future.
 
 - **Breaking Change:** `<three-web-gl-renderer>` now is `<three-webgl-renderer>`.
 
