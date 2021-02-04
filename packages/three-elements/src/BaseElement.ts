@@ -16,7 +16,8 @@ export class BaseElement extends HTMLElement {
    * Returns the instance of ThreeGame that this element is nested under.
    */
   get game(): ThreeGame {
-    return (this._game ||= this.findGame())
+    if (!this._game) this._game = this.findGame()
+    return this._game
   }
   private _game?: ThreeGame
 
@@ -33,7 +34,8 @@ export class BaseElement extends HTMLElement {
    * Returns the instance of ThreeScene that this element is nested under.
    */
   get scene(): ThreeScene {
-    return (this._scene ||= this.findScene())
+    if (!this._scene) this._scene = this.findScene()
+    return this._scene
   }
   private _scene?: ThreeScene
 
