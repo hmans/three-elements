@@ -20,6 +20,9 @@
     "webcomponents"
   ],
   "sideEffects": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "MIT",
   "source": "src/index.ts",
   "main": "dist/index.js",
@@ -43,5 +46,6 @@
   },
   "peerDependencies": {
     "three": ">=0.121.0"
-  }
+  },
+  "gitHead": "c3f0dd533ca26538b691b7ff6f5a7548f3512c36"
 }
