@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Textures</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+  </head>
+  <body>
+    <three-game autorender>
+      <three-scene background-color="#222">
+        <!-- Lights -->
+        <three-ambient-light intensity="0.2"></three-ambient-light>
+        <three-directional-light intensity="0.8" position="10, 40, 50"></three-directional-light>
+
+        <!-- resources we'll reuse -->
+        <three-box-buffer-geometry id="geometry"></three-box-buffer-geometry>
+        <three-mesh-standard-material
+          id="material"
+          color="brown"
+          metalness="0.0"
+          roughness="0.8"
+        ></three-mesh-standard-material>
+
+        <!-- Scene Contents -->
+        <three-mesh
+          geometry="#geometry"
+          material="#material"
+          scale="4"
+          tick="object.rotation.x = object.rotation.y += 0.2 * dt"
+        ></three-mesh>
+        <three-orbit-controls></three-orbit-controls>
+      </three-scene>
+    </three-game>
+
+    <script type="module">
+      import "three-elements"
+    </script>
+  </body>
+</html>
