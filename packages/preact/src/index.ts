@@ -1,5 +1,5 @@
 import { makeProxy, ProxyAttributes } from "@three-elements/proxy"
-import { h } from "preact"
+import { h, ComponentChildren, Component } from "preact"
 import * as THREE from "three"
 
 type THREE = typeof THREE
@@ -15,6 +15,6 @@ type PreactProxy = {
     : undefined
 }
 
-export const T = (makeProxy((tagName) => (props = null, children = []) =>
-  h(tagName, props, children)
+export const T = (makeProxy((tagName) => (props = null, ...children: ComponentChildren[]) =>
+  h(tagName, props, ...children)
 ) as unknown) as PreactProxy
