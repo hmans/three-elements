@@ -1,7 +1,7 @@
 {
   "name": "@three-elements/proxy",
   "private": false,
-  "version": "0.4.0-alpha.1",
+  "version": "0.4.0-alpha.2",
   "author": {
     "name": "Hendrik Mans",
     "email": "hendrik@mans.de",
@@ -46,7 +46,7 @@
     "prepublishOnly": "yarn build && yarn test"
   },
   "dependencies": {
-    "three-elements": "^0.4.0-alpha.1"
+    "three-elements": "^0.4.0-alpha.2"
   },
   "gitHead": "c3f0dd533ca26538b691b7ff6f5a7548f3512c36"
 }
