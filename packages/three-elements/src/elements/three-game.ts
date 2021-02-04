@@ -12,7 +12,7 @@ export class ThreeGame extends HTMLElement {
 
   emitter = new EventEmitter()
 
-  /* OBSERVER */
+  /* OPT-IN OBSERVER */
 
   /**
    * ThreeGame optionally allows the user to request it to use a MutationObserver
