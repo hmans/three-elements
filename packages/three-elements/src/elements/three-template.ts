@@ -1,6 +1,6 @@
 import { ThreeElement } from "../ThreeElement"
 import { observeAttributeChange } from "../util/observeAttributeChange"
-import { registerElement } from "../util/registerElement"
+import { registerThreeElement } from "../util/registerElement"
 
 /*
 It would be easier to just customize HTMLTemplateElement here, but that would
@@ -65,4 +65,4 @@ export class ThreeTemplate extends HTMLElement {
   }
 }
 
-registerElement("three-template", ThreeTemplate)
+registerThreeElement("three-template", "Template", ThreeTemplate)

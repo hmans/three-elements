@@ -1,7 +1,7 @@
 import { Group } from "three"
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { ThreeElement } from "../ThreeElement"
-import { registerElement } from "../util/registerElement"
+import { registerThreeElement } from "../util/registerElement"
 
 const loadedUrls: Record<string, GLTF> = {}
 
@@ -52,4 +52,4 @@ export class ThreeGLTFAsset extends ThreeElement.for(Group) {
   }
 }
 
-registerElement("three-gltf-asset", ThreeGLTFAsset)
+registerThreeElement("three-gltf-asset", "GLTFAsset", ThreeGLTFAsset)

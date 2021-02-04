@@ -1,0 +1,10 @@
+{
+  "name": "three-elements-examples",
+  "private": true,
+  "version": "1.0.0",
+  "author": "Hendrik Mans",
+  "license": "MIT",
+  "scripts": {
+    "dev": "web-dev-server --port=5000"
+  }
+}

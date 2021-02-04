@@ -2,18 +2,13 @@ import { importMapsPlugin } from "@web/dev-server-import-maps"
 import { esbuildPlugin } from "@web/dev-server-esbuild"
 
 export default {
-  open: false,
-  watch: true,
+  files: ["test/**/*.test.ts"],
   nodeResolve: true,
-  rootDir: "examples",
+  debug: false,
+  watch: false,
+  open: false,
   plugins: [
-    importMapsPlugin({
-      inject: {
-        importMap: {
-          imports: { "three-elements": "/src/index.ts" }
-        }
-      }
-    }),
+    importMapsPlugin(),
     esbuildPlugin({
       ts: true,
       target: "auto"

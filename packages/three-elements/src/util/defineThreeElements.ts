@@ -1,7 +1,8 @@
 import * as THREE from "three"
-import { registerElement, ThreeElement } from ".."
+import { ThreeElement } from "../ThreeElement"
 import { IConstructable } from "../types"
 import { dasherize } from "./dasherize"
+import { registerThreeElement } from "./registerElement"
 
 export const defineThreeElements = () => {
   /*
@@ -13,7 +14,7 @@ export const defineThreeElements = () => {
     const tagName = `three-${dasherize(threeProp)}`
 
     if (typeof threeClass === "function" && "prototype" in threeClass) {
-      registerElement(tagName, ThreeElement.for(threeClass as IConstructable))
+      registerThreeElement(tagName, threeProp, ThreeElement.for(threeClass as IConstructable))
     }
   }
 }

@@ -11769,12 +11769,6 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-"three-elements-site@file:packages/site":
-  version "1.0.0"
-
-"three-elements@file:packages/core":
-  version "0.3.0"
-
 three@^0.125.2:
   version "0.125.2"
   resolved "https://registry.yarnpkg.com/three/-/three-0.125.2.tgz#dcba12749a2eb41522e15212b919cd3fbf729b12"

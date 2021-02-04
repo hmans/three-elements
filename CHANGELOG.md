@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.0] - unreleased
 
+- **New:** We now provide a `@three-elements/preact` package that provides some light-weight bindings for use in Preact applications using its hyperscript syntax. This makes use of an experimental new proxy generator (housed in the equally new `@three-elements/proxy` package) that can be used to create three-elements bindings for all sorts of web frameworks, so expect to see more of this in the future.
+
 - **Breaking Change:** `<three-web-gl-renderer>` now is `<three-webgl-renderer>`.
 
 ### Internals
