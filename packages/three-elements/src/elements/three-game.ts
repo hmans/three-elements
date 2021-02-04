@@ -1,11 +1,63 @@
 import * as THREE from "three"
+import { BaseElement } from "../BaseElement"
 import { EventEmitter } from "../util/EventEmitter"
 import { registerThreeElement } from "../util/registerElement"
 
 export type TickerFunction = (dt: number, el: HTMLElement) => any
 
 export class ThreeGame extends HTMLElement {
+  static get observedAttributes() {
+    return ["observed"]
+  }
+
   emitter = new EventEmitter()
+
+  /* OBSERVER */
+
+  /**
+   * ThreeGame optionally allows the user to request it to use a MutationObserver
+   * that will notify elements when their attributes have changed through any other
+   * method than something invoking `setAttribute`. This typically only happens when
+   * the user modifies an attribute in the devtools of their browser.
+   *
+   * Users wishing to be able to do this can just set the boolean attribute `observed`:
+   *
+   * `<three-game observed>`
+   */
+  protected observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === "attributes") {
+        const element = mutation.target as BaseElement
+        const name = mutation.attributeName!
+        const newValue = element.getAttribute(name)
+
+        if (newValue) element.attributeChangedCallback(name, null, newValue)
+      }
+    })
+  })
+
+  protected _observed = false
+
+  get observed() {
+    return this._observed
+  }
+
+  set observed(v) {
+    /* Store value */
+    this._observed = v
+
+    /* React to the new value in a hopefully idempotent fashion */
+    this.observer.disconnect()
+
+    if (this._observed) {
+      this.observer.observe(this, {
+        attributes: true,
+        attributeOldValue: false,
+        subtree: true,
+        childList: true
+      })
+    }
+  }
 
   /* RENDERER */
 
@@ -56,6 +108,9 @@ export class ThreeGame extends HTMLElement {
     /* Initialize renderer size */
     this.setupRenderer()
 
+    /* Start observing, if requested */
+    this.observed = this.hasAttribute("observed")
+
     /* Look out for some specific stuff connecting within our branch of the document */
     this.addEventListener("connected", (e) => {
       const target = e.target as HTMLElement & { object?: any }
@@ -81,6 +136,9 @@ export class ThreeGame extends HTMLElement {
   }
 
   disconnectedCallback() {
+    /* Stop observing */
+    this.observer.disconnect()
+
     /* Stop ticking */
     this.stopTicking()
 
@@ -89,6 +147,14 @@ export class ThreeGame extends HTMLElement {
 
     /* Remove canvas from page */
     this.cleanupRenderer()
+  }
+
+  attributeChangedCallback(key: string, _: string | null, value: string) {
+    switch (key) {
+      case "observed":
+        this.observed = this.hasAttribute("observed")
+        break
+    }
   }
 
   protected setupRenderer() {

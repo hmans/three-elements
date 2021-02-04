@@ -94,7 +94,7 @@ export class BaseElement extends HTMLElement {
    * are exposing.)
    */
   setAttribute(name: string, value: string) {
-    this.attributeChangedCallback(name, this.getAttribute(name)!, value)
+    this.attributeChangedCallback(name, this.getAttribute(name), value)
     super.setAttribute(name, value)
   }
 
@@ -168,7 +168,7 @@ export class BaseElement extends HTMLElement {
     }
   }
 
-  attributeChangedCallback(key: string, _: string, value: string): boolean {
+  attributeChangedCallback(key: string, _: string | null, value: string): boolean {
     this.debug("attributeChangedCallback", key, value)
 
     switch (key) {
