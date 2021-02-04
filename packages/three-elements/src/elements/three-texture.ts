@@ -12,6 +12,10 @@ export class ThreeTexture extends ThreeElement.for(Texture) {
   public set url(url) {
     /* If the URL has changed, initiate loading of texture. */
     if (this._url !== url) {
+      /* Dispose any existing texture */
+      this.object?.dispose()
+
+      /* Set up a new texture object */
       if (url) {
         this.object = new TextureLoader().load(url)
       } else {
