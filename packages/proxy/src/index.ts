@@ -16,7 +16,9 @@ export type ProxyAttributes<T> = {
   [K in NonFunctionProps<T>]: T[K]
 }
 
-export const makeProxy = (fun: (tagName: string) => Function) =>
-  new Proxy(registeredThreeElements, {
+export type ProxyFactoryFunction<T> = (tagName: string) => T
+
+export const makeProxy = <T = any>(fun: ProxyFactoryFunction<T>) =>
+  (new Proxy(registeredThreeElements, {
     get: (target, prop: string) => (target[prop] ? fun(target[prop]) : undefined)
-  })
+  }) as unknown) as Record<keyof typeof registeredThreeElements, T>
