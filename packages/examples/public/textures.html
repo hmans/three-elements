@@ -15,22 +15,23 @@
         <three-ambient-light intensity="0.2"></three-ambient-light>
         <three-directional-light intensity="0.8" position="10, 40, 50"></three-directional-light>
 
-        <!-- resources we'll reuse -->
-        <three-box-buffer-geometry id="geometry"></three-box-buffer-geometry>
-        <three-mesh-standard-material
-          id="material"
-          color="brown"
-          metalness="0.0"
-          roughness="0.8"
-        ></three-mesh-standard-material>
-
         <!-- Scene Contents -->
-        <three-mesh
-          geometry="#geometry"
-          material="#material"
-          scale="4"
-          tick="object.rotation.x = object.rotation.y += 0.2 * dt"
-        ></three-mesh>
+        <three-mesh scale="4" tick="object.rotation.x = object.rotation.y += 0.5 * dt">
+          <!-- Boxy McBox! -->
+          <three-box-buffer-geometry id="geometry"></three-box-buffer-geometry>
+
+          <!-- A MeshStandardMaterial with a bunch of textures attaching themselves to it. -->
+          <three-mesh-standard-material id="material">
+            <three-texture url="textures/bricks/diffuse.jpg" attach="map"></three-texture>
+            <three-texture url="textures/bricks/ao.jpg" attach="aoMap"></three-texture>
+            <three-texture url="textures/bricks/height.jpg" attach="bumpMap"></three-texture>
+            <three-texture url="textures/bricks/normal.jpg" attach="normalMap"></three-texture>
+            <three-texture
+              url="textures/bricks/roughness.jpg"
+              attach="roughnessMap"
+            ></three-texture>
+          </three-mesh-standard-material>
+        </three-mesh>
         <three-orbit-controls></three-orbit-controls>
       </three-scene>
     </three-game>
