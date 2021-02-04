@@ -50,6 +50,10 @@ export class ThreeGame extends HTMLElement {
     this.observer.disconnect()
 
     if (this._observed) {
+      console.warn(
+        "WARNING: You have enabled the `observed` attribute. This feature is intended for development only and should not be enabled in production projects, as it has a significant impact on performance."
+      )
+
       this.observer.observe(this, {
         attributes: true,
         attributeOldValue: false,
@@ -107,9 +111,6 @@ export class ThreeGame extends HTMLElement {
 
     /* Initialize renderer size */
     this.setupRenderer()
-
-    /* Start observing, if requested */
-    this.observed = this.hasAttribute("observed")
 
     /* Look out for some specific stuff connecting within our branch of the document */
     this.addEventListener("connected", (e) => {
