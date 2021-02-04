@@ -2,20 +2,22 @@ import { makeProxy } from "@three-elements/proxy"
 import { h } from "preact"
 import * as THREE from "three"
 
+/* Extract to proxy package: */
+
 type THREE = typeof THREE
 
-type AllPossibleKeys<T> = {
+type ExposedThreeObjectProps<T> = {
   [K in keyof T]: T[K] extends Function ? never : K
 }[keyof T]
 
-type AllPossibleAttributes<T> = {
-  [K in AllPossibleKeys<T>]: T[K]
+type ExposedThreeObjectAttributes<T> = {
+  [K in ExposedThreeObjectProps<T>]: T[K]
 }
 
-type ThreeElementAttributes<T> = Partial<AllPossibleAttributes<T>>
+/* Preact specific: */
 
 type PreactProxyFunction<T> = (
-  props?: ThreeElementAttributes<T>,
+  props?: Partial<ExposedThreeObjectAttributes<T>>,
   ...children: preact.ComponentChildren[]
 ) => preact.VNode
 
