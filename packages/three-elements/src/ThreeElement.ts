@@ -10,7 +10,8 @@ export class ThreeElement<T = any> extends BaseElement {
 
   /** The THREE.* object managed by this element. */
   get object() {
-    return (this._object ||= this.constructWrappedObject())
+    if (!this._object) this._object = this.constructWrappedObject()
+    return this._object
   }
 
   set object(v: T | undefined) {
