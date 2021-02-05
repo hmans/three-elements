@@ -45,50 +45,36 @@ export class ThreeElement<T = any> extends BaseElement {
     }
   }
 
-  connectedCallback() {
-    super.connectedCallback()
+  mountedCallback() {
+    super.mountedCallback()
 
-    /*
-    We could do the following in `mountedCallback`, but we want to minimize the risk
-    of user code accidentally overloading that function without calling super's implementation.
-    */
-    queueMicrotask(() => {
-      /* Handle attach attribute */
-      this.handleAttach()
+    /* Handle attach attribute */
+    this.handleAttach()
 
-      /* Add object to scene */
-      this.addObjectToParent()
+    /* Add object to scene */
+    this.addObjectToParent()
 
-      /* Make sure a frame is queued */
-      this.game.requestFrame()
-    })
+    /* Make sure a frame is queued */
+    this.game.requestFrame()
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback()
+  removedCallback() {
+    /* Queue a frame, because very likely something just changed in the scene :) */
+    this.game.requestFrame()
 
-    /*
-    We could do the following in `removedCallback`, but we want to minimize the risk
-    of user code accidentally overloading that function without calling super's implementation.
-    */
-    if (!this.isConnected) {
-      queueMicrotask(() => {
-        /* Queue a frame, because very likely something just changed in the scene :) */
-        this.game.requestFrame()
-
-        /* If the wrapped object is parented, remove it from its parent */
-        if (this.object instanceof THREE.Object3D && this.object.parent) {
-          this.debug("Removing from scene:", this.object)
-          this.object.parent.remove(this.object)
-        }
-
-        /* If the object can be disposed, dispose of it! */
-        if (isDisposable(this.object)) {
-          this.debug("Disposing:", this.object)
-          this.object.dispose()
-        }
-      })
+    /* If the wrapped object is parented, remove it from its parent */
+    if (this.object instanceof THREE.Object3D && this.object.parent) {
+      this.debug("Removing from scene:", this.object)
+      this.object.parent.remove(this.object)
     }
+
+    /* If the object can be disposed, dispose of it! */
+    if (isDisposable(this.object)) {
+      this.debug("Disposing:", this.object)
+      this.object.dispose()
+    }
+
+    super.removedCallback()
   }
 
   protected addObjectToParent() {
