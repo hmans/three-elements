@@ -12,6 +12,8 @@ import { camelize } from "./util/camelize"
  * need access to the game's ticker or renderer.
  */
 export class BaseElement extends HTMLElement {
+  isMounted = false
+
   /**
    * Returns the instance of ThreeGame that this element is nested under.
    */
@@ -134,11 +136,12 @@ export class BaseElement extends HTMLElement {
       /* Apply all attributes */
       this.applyAllAttributes()
 
-      /* Invoke mount method */
-      this.mountedCallback()
-
-      /* Emit ready event */
-      this.dispatchEvent(new Event("mounted", { bubbles: true, cancelable: false }))
+      /* Mount the component if this is our first time connecting */
+      if (!this.isMounted) {
+        this.isMounted = true
+        this.mountedCallback()
+        this.dispatchEvent(new Event("mounted", { bubbles: true, cancelable: false }))
+      }
     })
   }
 
