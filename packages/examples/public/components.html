@@ -26,16 +26,39 @@
       import * as THREE from "three"
       import { ThreeElement } from "three-elements"
 
+      /*
+      Since three-elements provides its main functionality as HTML tags, it can be
+      used with pretty much any component-based framework you throw at it. The
+      library also allows you to create new web components (custom elements) based on
+      its own implementation of them. To do so, just inherit from the `ThreeElement`
+      class -- if you use the `ThreeElement.for(className)` helper method, you'll
+      extend a class that manages an instance of the Three.js class you specify.
+
+      This is useful if you want to make your component automatically support
+      attributes being forwarded to the Three.js object. In this example, we
+      introduce a custom "speed" attribute, but also forward the other attributes
+      -- like `scale` -- to a THREE.Mesh instance that is managed by the element.
+      */
+
       class RotatingThingy extends ThreeElement.for(THREE.Mesh) {
+        /*
+        The mountedCallback will be invoked after the element has been successfully
+        connected to the DOM. This is where you typically add extra logic. Don't
+        forget to call the super class' implementation of the method!
+        */
         mountedCallback() {
           super.mountedCallback()
 
           this.speed = this.getAttribute("speed")
 
+          /*
+          Let's greate some geometry and material nodes. You could just as well
+          use a framework like lit-html or Preact here.
+          */
+
           const geometry = document.createElement("three-dodecahedron-buffer-geometry")
           const material = document.createElement("three-mesh-standard-material")
           material.setAttribute("color", "red")
-
           this.appendChild(geometry)
           this.appendChild(material)
 
