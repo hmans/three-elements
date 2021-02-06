@@ -28,7 +28,8 @@ export class BaseElement extends HTMLElement {
       throw "Something is accessing my .game property while I'm not connected. This shouldn't happen! 😭"
 
     const game = this.find((node) => node instanceof ThreeGame) as ThreeGame
-    if (!game) throw "No <three-game> tag found!"
+    if (!game)
+      throw "No <three-game> tag found! If you're seeing this error, it might be a sign that you're importing multiple versions of three-elements."
     return game
   }
 
