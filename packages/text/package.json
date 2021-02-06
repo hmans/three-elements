@@ -21,7 +21,7 @@
     "webcomponents",
     "text"
   ],
-  "sideEffects": false,
+  "sideEffects": true,
   "publishConfig": {
     "access": "public"
   },

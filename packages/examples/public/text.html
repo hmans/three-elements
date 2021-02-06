@@ -17,10 +17,11 @@
         <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
 
         <three-text
-          id="text"
-          text="this is the text attribute"
+          text="Lorem ipsum dolor sit amet?"
+          anchor-x="50%"
+          anchor-y="50%"
           color="red"
-          font-size="3"
+          font-size="1.2"
         ></three-text>
 
         <three-orbit-controls></three-orbit-controls>
@@ -29,12 +30,8 @@
 
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
-      import { registerElement, ThreeElement } from "three-elements"
-      import { Text as TroikaText } from "troika-three-text"
-
-      class ThreeText extends ThreeElement.for(TroikaText) {}
-
-      registerElement("three-text", ThreeText)
+      import "three-elements"
+      import "@three-elements/text"
     </script>
   </body>
 </html>
