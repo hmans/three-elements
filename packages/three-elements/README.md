@@ -28,6 +28,9 @@
 - Built-in templating support lets you reuse objects or entire scenes across your project without the need for any JavaScript component framework.
 
 ```html
+<!-- Load three-elements -->
+<script type="module" src="https://jspm.dev/three-elements"></script>
+
 <!-- Create a Three.js game with a default camera. -->
 <three-game autorender>
   <three-scene background-color="#444">
