@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Text</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+  </head>
+  <body>
+    <!-- Here's a simple Three.js scene. -->
+    <three-game autorender>
+      <three-scene background-color="#654" id="scene">
+        <!-- Lights on! -->
+        <three-ambient-light intensity="0.2"></three-ambient-light>
+        <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
+
+        <three-text
+          id="text"
+          text="this is the text attribute"
+          color="red"
+          font-size="3"
+        ></three-text>
+
+        <three-orbit-controls></three-orbit-controls>
+      </three-scene>
+    </three-game>
+
+    <!-- Import dependencies via ESM. The future is now! -->
+    <script type="module">
+      import { registerElement, ThreeElement } from "three-elements"
+      import { Text as TroikaText } from "troika-three-text"
+
+      class ThreeText extends ThreeElement.for(TroikaText) {}
+
+      registerElement("three-text", ThreeText)
+    </script>
+  </body>
+</html>

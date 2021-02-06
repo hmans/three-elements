@@ -47,6 +47,7 @@
     "prepublishOnly": "yarn build && yarn test"
   },
   "dependencies": {
-    "three-elements": ">= 0.3.0"
+    "three-elements": ">= 0.3.0",
+    "troika-three-text": "^0.38.1"
   }
 }
