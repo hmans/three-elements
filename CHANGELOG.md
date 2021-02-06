@@ -15,6 +15,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   </three-mesh-standard-material>
   ```
 
+- **New: Text Rendering!** We now provide a `@three-elements/text` package that provides text rendering capabilities via a `<three-text>` element. This functionality is powered by the [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) library.
+
+  ```html
+  <three-text
+    rotation.z="20deg"
+    text="Lorem ipsum dolor sit amet?"
+    anchor-x="50%"
+    anchor-y="50%"
+    material.color="hotpink"
+    font-size="1.2"
+  ></three-text>
+  ```
+
 - **New: Opt-in attribute observing!** You can now set the `observed` attribute on the `<three-game>` tag to make it monitor changed attributes using a MutationObserver. This is useful if you want to edit the DOM of a project directly in your browser's devtools; other than that, it serves no real purpose. Please keep in mind that enabling this flag has a very high performance cost; for this reason, we're also making it log a warning when enabled.
 
 - **New: Experimental Preact Bindings!** We now provide a `@three-elements/preact` package that provides some light-weight bindings for use in Preact applications using its hyperscript syntax. This makes use of an experimental new proxy generator (housed in the equally new `@three-elements/proxy` package) that can be used to create three-elements bindings for all sorts of web frameworks, so expect to see more of this in the future.
