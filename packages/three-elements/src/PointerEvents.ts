@@ -18,12 +18,14 @@ export class PointerEvents {
   constructor(public renderer: Renderer, public scene: Scene, public camera: Camera) {}
 
   start() {
-    const { renderer, scene, camera } = this
+    const { renderer, scene } = this
     let previousIntersections: Intersection[]
     let previousIntersection: Intersection | undefined
 
     /* Set up pointer event handling */
     renderer.domElement.addEventListener("pointermove", (e) => {
+      const { camera } = this
+
       normalizePointerPosition(renderer, e.x, e.y, this.position)
 
       /* Raycast against all objects in scene, and keep the intersections for later. */
