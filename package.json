@@ -11,8 +11,7 @@
   "scripts": {
     "build": "lerna run build",
     "dev": "cd packages/examples && yarn dev",
-    "test": "lerna run test",
-    "release:next": "lerna publish prerelease --pre-dist-tag next"
+    "test": "lerna run test"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.0",
