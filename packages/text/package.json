@@ -46,6 +46,9 @@
     "test": "web-test-runner --puppeteer",
     "prepublishOnly": "yarn build && yarn test"
   },
+  "devDependencies": {
+    "three-elements": "^0.4.0-alpha.6"
+  },
   "dependencies": {
     "troika-three-text": "^0.38.1"
   },
