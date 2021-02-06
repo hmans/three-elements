@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Text</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+  </head>
+  <body>
+    <!-- Here's a simple Three.js scene. -->
+    <three-game autorender>
+      <three-scene background-color="#654" id="scene">
+        <!-- Lights on! -->
+        <three-ambient-light intensity="0.2"></three-ambient-light>
+        <three-directional-light intensity="0.8" position="10, 10, 50"></three-directional-light>
+
+        <three-text
+          position.x="2"
+          text="Lorem ipsum dolor sit amet?"
+          anchor-x="50%"
+          anchor-y="50%"
+          material.color="hotpink"
+          font-size="1.2"
+          max-width="2"
+        ></three-text>
+
+        <three-text
+          position.x="-2"
+          text="Lorem ipsum dolor sit amet?"
+          anchor-x="50%"
+          anchor-y="50%"
+          material.color="yellow"
+          font-size="1.2"
+          max-width="2"
+        ></three-text>
+
+        <three-orbit-controls></three-orbit-controls>
+      </three-scene>
+    </three-game>
+
+    <!-- Import dependencies via ESM. The future is now! -->
+    <script type="module">
+      import "three-elements"
+      import "@three-elements/text"
+    </script>
+  </body>
+</html>
