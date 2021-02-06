@@ -11791,11 +11791,6 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-"three-elements@>= 0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/three-elements/-/three-elements-0.3.0.tgz#db05b4f8a7a4d11365a62d3ad45c5f8ad3652382"
-  integrity sha512-6BC0UzIChTxYMeus0Flm4+r+Weh7BIhsqmR3uNGCa2u+nBlL7wA4o6tt0W0Lj49iVAQbMFGFjw0UCH5YEyNXTQ==
-
 three@^0.125.2:
   version "0.125.2"
   resolved "https://registry.yarnpkg.com/three/-/three-0.125.2.tgz#dcba12749a2eb41522e15212b919cd3fbf729b12"
