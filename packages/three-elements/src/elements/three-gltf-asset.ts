@@ -6,20 +6,29 @@ import { registerThreeElement } from "../util/registerElement"
 const loadedUrls: Record<string, GLTF> = {}
 
 export class ThreeGLTFAsset extends ThreeElement.for(Group) {
+  protected _url?: string
+
   public get url() {
-    return this.getAttribute("url")
+    return this._url
   }
 
   public set url(url) {
-    if (url) {
-      if (url in loadedUrls) {
-        this.setupGLTF(loadedUrls[url])
-      } else {
-        const loader = new GLTFLoader()
-        loader.load(url, (gltf) => {
-          loadedUrls[url] = gltf
-          this.setupGLTF(gltf)
-        })
+    if (url != this._url) {
+      this._url = url
+
+      /* Clear this group */
+      this.object?.clear()
+
+      if (url) {
+        if (url in loadedUrls) {
+          this.setupGLTF(loadedUrls[url])
+        } else {
+          const loader = new GLTFLoader()
+          loader.load(url, (gltf) => {
+            loadedUrls[url] = gltf
+            this.setupGLTF(gltf)
+          })
+        }
       }
     }
   }
@@ -39,9 +48,9 @@ export class ThreeGLTFAsset extends ThreeElement.for(Group) {
     const scene = gltf.scene.clone(true)
 
     /* Apply shadow settings */
-    scene.traverse((o3d) => {
-      o3d.castShadow = this.object!.castShadow
-      o3d.receiveShadow = this.object!.receiveShadow
+    scene.traverse((node) => {
+      node.castShadow = this.object!.castShadow
+      node.receiveShadow = this.object!.receiveShadow
     })
 
     /* Add the GLTF to our local group */
