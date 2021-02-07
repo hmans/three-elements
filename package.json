@@ -12,7 +12,7 @@
     "build": "lerna run build",
     "dev": "cd packages/examples && yarn dev",
     "ci": "yarn lerna bootstrap && yarn build && yarn test",
-    "test": "lerna run test"
+    "test": "lerna run test --concurrency 1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.0",
