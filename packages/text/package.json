@@ -1,7 +1,7 @@
 {
   "name": "@three-elements/text",
   "private": false,
-  "version": "0.4.0-alpha.8",
+  "version": "0.4.0-alpha.9",
   "author": {
     "name": "Hendrik Mans",
     "email": "hendrik@mans.de",
@@ -47,7 +47,7 @@
     "prepublishOnly": "yarn build && yarn test"
   },
   "devDependencies": {
-    "three-elements": "^0.4.0-alpha.8"
+    "three-elements": "^0.4.0-alpha.9"
   },
   "dependencies": {
     "troika-three-text": "^0.38.1"
