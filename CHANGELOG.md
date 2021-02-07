@@ -36,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Fixed:** When switching a scene to a new camera, this new camera would not be picked up by the scene's pointer event manager, pretty much breaking pointer interactions for the entire scene. This has now been resolved.
 
+- **Fixed:** Pointer event handling has been made significantly more reliable.
+
 ### Internals
 
 - **Changed:** The repository has been converted into a monorepo to provide a better structure for the packages that we already have, and a nicer home for the packages we will be adding in the future.

@@ -20,10 +20,6 @@ export class ThreeScene extends ThreeElement.for(Scene) {
   set camera(camera) {
     this._camera = camera
     this.handleWindowResize()
-
-    if (this.pointer) {
-      this.pointer.camera = camera
-    }
   }
 
   /** The pointer events system. */
@@ -41,7 +37,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     super.mountedCallback()
 
     /* Set up event processor */
-    this.pointer = new PointerEvents(this.game.renderer, this.object!, this.camera)
+    this.pointer = new PointerEvents(this)
 
     /* Handle window resizing */
     this.handleWindowResize = this.handleWindowResize.bind(this)

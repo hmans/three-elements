@@ -19,7 +19,7 @@
         <!-- Define a template. It automatically becomes available as a new HTML tag. -->
         <three-template tag="rotating-cube">
           <three-group
-            onpointerdown="cursor.object.position.copy(this.scene.pointer.intersection.point);"
+            onpointerdown="cursor.object.position.copy(container.object.worldToLocal(this.scene.pointer.intersection.point))"
           >
             <three-mesh
               onpointerover="this.object.material.color.set('#fff');"
@@ -32,9 +32,7 @@
         </three-template>
 
         <!-- A bunch of rotating cubes. They're really dodecahedrons, sorry! -->
-        <three-group
-          tick="object.rotation.set(this.scene.pointer.position.y / 5, this.scene.pointer.position.x / -5, 0)"
-        >
+        <three-group id="container" tick="object.rotateY(dt)">
           <rotating-cube position="+2, +2, 0"></rotating-cube>
           <rotating-cube position="+2, -2, 0"></rotating-cube>
           <rotating-cube position="-2, -2, 0"></rotating-cube>
