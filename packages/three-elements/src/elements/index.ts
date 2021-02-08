@@ -1,5 +1,4 @@
 export * from "./three-game"
-export * from "./three-gltf-asset"
 export * from "./three-orbit-controls"
 export * from "./three-rect-area-light-helper"
 export * from "./three-scene"

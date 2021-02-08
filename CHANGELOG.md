@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.0] - unreleased
 
+- **New: GLTF loading & rendering!** We now provide a new `@three-elements/loaders` package that will house a series of extra elements that can load 3D models in various formats via HTTP and render them, starting with the `<three-gltf-asset>` element:
+
+  ```html
+  <three-gltf-asset url="models/spaceship.gltf"></three-gltf-asset>
+  ```
+
 - **New: Texture loading!** The `<three-texture>` element now accepts a `url` attribute that will make it load a texture from the specified URL:
 
   ```html
