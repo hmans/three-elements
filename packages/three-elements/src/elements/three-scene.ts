@@ -5,6 +5,13 @@ import { getThreeObjectBySelector } from "../util/getThreeObjectBySelector"
 import { registerThreeElement } from "../util/registerElement"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
+  /**
+   * Background color of the scene.
+   */
+  set backgroundColor(v: string) {
+    this.object!.background = new Color(v)
+  }
+
   /** The current camera that is being used to render the scene. */
   private _camera: Camera = new PerspectiveCamera(
     75,
@@ -67,12 +74,6 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     window.removeEventListener("resize", this.handleWindowResize)
 
     super.disconnectedCallback()
-  }
-
-  /* backgroundColor property.
-     TODO: remove this */
-  set backgroundColor(v) {
-    this.object!.background = new Color(v)
   }
 
   handleWindowResize() {
