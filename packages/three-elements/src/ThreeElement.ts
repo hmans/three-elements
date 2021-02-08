@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import { BaseElement } from "./BaseElement"
 import { IConstructable, isDisposable } from "./types"
-import { applyProps } from "./util/applyProps"
+import { applyProp } from "./util/applyProps"
 import { attributeValueToArray } from "./util/attributeValueToArray"
 
 export class ThreeElement<T = any> extends BaseElement {
@@ -142,7 +142,7 @@ export class ThreeElement<T = any> extends BaseElement {
     Good times! Let's assign it directly. If we have an object, that is.
     */
     if (this.object) {
-      applyProps(this.object, { [key]: newValue })
+      applyProp(this.object, key, newValue)
       return true
     }
 

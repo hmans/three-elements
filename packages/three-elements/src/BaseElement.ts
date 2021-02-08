@@ -2,9 +2,8 @@ import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { TickerCallbacks } from "./TickerCallbacks"
 import { IConstructable } from "./types"
-import { applyProps } from "./util/applyProps"
+import { applyProp } from "./util/applyProps"
 import { camelize } from "./util/camelize"
-import { getThreeObjectBySelector } from "./util/getThreeObjectBySelector"
 
 /**
  * The `BaseElement` class extends the built-in HTMLElement class with a bit of convenience
@@ -185,10 +184,10 @@ export class BaseElement extends HTMLElement {
     directly set it.
     */
 
-    const propName = camelize(key) as keyof this
+    const propName = camelize(key)
 
-    if (propName in this && typeof this[propName] !== "function") {
-      applyProps(this, { [propName]: value })
+    if (propName in this && typeof this[propName as keyof this] !== "function") {
+      applyProp(this, propName, value)
       return true
     }
 
