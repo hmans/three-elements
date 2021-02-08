@@ -133,20 +133,13 @@ export class ThreeElement<T = any> extends BaseElement {
     if (super.attributeChangedCallback(key, oldValue, newValue)) return true
 
     /* Explicit NOOPs */
-    if (key in ["args", "id"]) {
-      return true
-    }
+    if (key in ["args", "id"]) return true
 
     /*
     Okay, at this point, we'll just assume that the property lives on the wrapped object.
     Good times! Let's assign it directly. If we have an object, that is.
     */
-    if (this.object) {
-      applyProp(this.object, key, newValue)
-      return true
-    }
-
-    return false
+    return this.object && applyProp(this.object, key, newValue)
   }
 
   static for<T>(constructor: IConstructable<T>): IConstructable<ThreeElement<T>> {
