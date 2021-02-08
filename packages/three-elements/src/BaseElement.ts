@@ -182,29 +182,13 @@ export class BaseElement extends HTMLElement {
     /*
     We're going to look for a property that matches the camelcased version of the
     attribute name. If we can write to it (and it's not a function), we'll
-    automatically set it.
+    directly set it.
     */
 
     const propName = camelize(key) as keyof this
-    console.log(key, propName, typeof this[propName])
 
     if (propName in this && typeof this[propName] !== "function") {
-      /*
-      If the property is an object, we'll assume that this attribute's new
-      string value refers to another DOM element, and grab the object that is
-      wrapped by it and use it as our property's new value here.
-      */
-      if (typeof this[propName] === "object") {
-        this[propName] = getThreeObjectBySelector(value)
-        return true
-      }
-
-      /*
-      If we've reached this point, we're probably dealing with a scalar value, so
-      just assign the damn thing directly.
-      */
       applyProps(this, { [propName]: value })
-
       return true
     }
 
