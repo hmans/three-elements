@@ -50,6 +50,14 @@ export const applyProp = (
     return
   }
 
+  /*
+  Handle function properties.
+  */
+  if (typeof object[key] === "function") {
+    object[key] = new Function(value).bind(object)
+    return
+  }
+
   /* It is attribute-setting time! Let's try to parse the value. */
   const parsed = typeof value === "string" ? parseJson(value) ?? parseDeg(value) : value
 
