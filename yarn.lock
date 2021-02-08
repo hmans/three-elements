@@ -2500,34 +2500,10 @@
   dependencies:
     semver "^7.3.4"
 
-"@web/dev-server-core@^0.3.0", "@web/dev-server-core@^0.3.2", "@web/dev-server-core@^0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@web/dev-server-core/-/dev-server-core-0.3.3.tgz#814bc86460c43ab9d66b640f2b3b65d452ce30e0"
-  integrity sha512-zj70hj6FBIFAGZfyqrOlDY1bYtqTea5ioTcgGx55tIeHiUmblDCcpbBUIqj4pcw/GjpQPBBFw5oX1WyuiHQNhA==
-  dependencies:
-    "@types/koa" "^2.11.6"
-    "@types/ws" "^7.4.0"
-    "@web/parse5-utils" "^1.0.0"
-    chokidar "^3.4.3"
-    clone "^2.1.2"
-    es-module-lexer "^0.3.26"
-    get-stream "^6.0.0"
-    is-stream "^2.0.0"
-    isbinaryfile "^4.0.6"
-    koa "^2.13.0"
-    koa-etag "^4.0.0"
-    koa-send "^5.0.1"
-    koa-static "^5.0.0"
-    lru-cache "^6.0.0"
-    mime-types "^2.1.27"
-    parse5 "^6.0.1"
-    picomatch "^2.2.2"
-    ws "^7.4.2"
-
-"@web/dev-server-core@^0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@web/dev-server-core/-/dev-server-core-0.3.4.tgz#9c90bbabb879c09d71fc6d9795353cdb0ce23e67"
-  integrity sha512-abUPtDZAG3V1Btw32T7dMk5cWuve5mclSa7ybOkUF95hPlSmX7JCNN16/wPdrk9Ytos9U9U4cZjQVanw31qbtg==
+"@web/dev-server-core@^0.3.0", "@web/dev-server-core@^0.3.2", "@web/dev-server-core@^0.3.3", "@web/dev-server-core@^0.3.4", "@web/dev-server-core@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@web/dev-server-core/-/dev-server-core-0.3.5.tgz#9bbde14e2b53dd03f346b08a306825f28587dc04"
+  integrity sha512-sflV1pg2bRhM+S643J/bnCLPE3oTd59UoeQslrhHNLC6ZMkePIhOtiC99F9hTEHLsVrP5oIs1bAhz0YJMXw/cw==
   dependencies:
     "@types/koa" "^2.11.6"
     "@types/ws" "^7.4.0"
@@ -2583,15 +2559,15 @@
     whatwg-url "^8.4.0"
 
 "@web/dev-server@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@web/dev-server/-/dev-server-0.1.5.tgz#e26ce32fb432f833366cb50cd84405a0e6734723"
-  integrity sha512-6fiaKH6WKOO2Va6uIQW4WRbHLtLkIreSSH9dAWkMnw9u4+DVhSOhl58n60zwBbzbN6uwRDAQqMvZO+nKnoV5lg==
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@web/dev-server/-/dev-server-0.1.6.tgz#cdc20cd2f2d9806f1ba4b30e2a67bb00153c7eca"
+  integrity sha512-bPG9St6zAD/hdeqghzgr1Mlp8rzGfL39bCyIHm3lUF64vrZ17xGjv3Wilhe6NhR37cYn359Qrh75qSumhPxt8g==
   dependencies:
     "@babel/code-frame" "^7.12.11"
     "@rollup/plugin-node-resolve" "^11.0.1"
     "@types/command-line-args" "^5.0.0"
     "@web/config-loader" "^0.1.3"
-    "@web/dev-server-core" "^0.3.2"
+    "@web/dev-server-core" "^0.3.5"
     "@web/dev-server-rollup" "^0.3.2"
     camelcase "^6.2.0"
     chalk "^4.1.0"
