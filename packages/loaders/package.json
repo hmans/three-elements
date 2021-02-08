@@ -40,16 +40,13 @@
   "scripts": {
     "clean": "rimraf dist",
     "docs": "typedoc",
-    "watch": "yarn clean && microbundle watch",
-    "build": "yarn clean && microbundle",
+    "watch": "yarn clean && microbundle watch --globals three=THREE",
+    "build": "yarn clean && microbundle --globals three=THREE",
     "test": "web-test-runner --puppeteer",
     "prepublishOnly": "yarn build && yarn test"
   },
-  "devDependencies": {
-    "three-elements": "^0.4.0-alpha.9"
-  },
   "peerDependencies": {
-    "three-elements": "^0.4.0-alpha.1"
-  },
-  "gitHead": "c3f0dd533ca26538b691b7ff6f5a7548f3512c36"
+    "three": ">=0.121.0",
+    "three-elements": ">=0.4.0-alpha.9"
+  }
 }
