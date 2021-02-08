@@ -39,8 +39,8 @@
       const Cube = (props) =>
         T.Mesh({
           ...props,
-          geometry: "#geometry",
-          material: "#material",
+          "ref:geometry": "#geometry",
+          "ref:material": "#material",
           tick: (dt, { object }) => {
             /* Time */
             const t =
@@ -84,7 +84,7 @@
       const Camera = () => T.PerspectiveCamera({ id: "camera", fov: 70, position: [0, 0, 30] })
 
       const Scene = () =>
-        T.Scene({ camera: "#camera", backgroundColor: "#222" }, [
+        T.Scene({ "ref:camera": "#camera", backgroundColor: "#222" }, [
           h(Resources),
           h(Fog),
           h(Camera),

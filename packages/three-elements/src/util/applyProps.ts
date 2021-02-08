@@ -12,8 +12,20 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
   }
 }
 
-export const applyProp = (object: IStringIndexable, name: string, value: any) => {
+export const applyProp = (
+  object: IStringIndexable,
+  name: string,
+  value: any,
+  directive: string = ""
+) => {
   let [firstKey, ...rest] = name.split(/[\.:]/)
+
+  /* Check for "ref" directive */
+  if (firstKey === "ref") {
+    applyProp(object, rest.join("."), value, "ref")
+    return
+  }
+
   const key = camelize(firstKey)
 
   /* Skip all ignored keys. */
@@ -24,7 +36,7 @@ export const applyProp = (object: IStringIndexable, name: string, value: any) =>
 
   /* Recursively handle nested keys, eg. position.x */
   if (key in object && rest.length > 0) {
-    applyProp(object[key], rest.join("."), value)
+    applyProp(object[key], rest.join("."), value, directive)
     return
   }
 
@@ -71,9 +83,8 @@ export const applyProp = (object: IStringIndexable, name: string, value: any) =>
   Is the property an object? In that case, we'll assume that the string value of the attribute
   contains a DOM selector that references another object that we should assign here.
   */
-  if (typeof object[key] === "object") {
+  if (typeof object[key] === "object" && directive === "ref") {
     const referencedObject = getThreeObjectBySelector(value)
-
     if (referencedObject) {
       object[key] = referencedObject
     }

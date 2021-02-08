@@ -27,34 +27,34 @@
         <!-- Scene Contents -->
         <three-group tick="object.rotateX(0.1 * dt); object.rotateY(0.2 * dt)">
           <three-mesh
-            geometry="#geometry"
-            material="#material"
+            ref:geometry="#geometry"
+            ref:material="#material"
             position="-3.5, 0, 0"
             scale="0.7"
             tick="object.rotation.x = object.rotation.y += 3 * dt"
           ></three-mesh>
           <three-mesh
             position="-2, 0, 0"
-            geometry="#geometry"
-            material="#material"
+            ref:geometry="#geometry"
+            ref:material="#material"
             tick="object.rotation.x = object.rotation.y += 1.5 * dt"
           ></three-mesh>
           <three-mesh
             position="0, 0, 0"
-            geometry="#geometry"
-            material="#material"
+            ref:geometry="#geometry"
+            ref:material="#material"
             scale="1.5"
           ></three-mesh>
           <three-mesh
             position="2, 0, 0"
-            geometry="#geometry"
-            material="#material"
+            ref:geometry="#geometry"
+            ref:material="#material"
             tick="object.rotation.x = object.rotation.y -= 1.5 * dt"
           ></three-mesh>
           <three-mesh
             position="3.5, 0, 0"
-            geometry="#geometry"
-            material="#material"
+            ref:geometry="#geometry"
+            ref:material="#material"
             scale="0.7"
             tick="object.rotation.x = object.rotation.y -= 3 * dt"
           ></three-mesh>

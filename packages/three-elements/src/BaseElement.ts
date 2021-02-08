@@ -186,11 +186,14 @@ export class BaseElement extends HTMLElement {
 
     const propName = camelize(key)
 
-    if (propName in this && typeof this[propName as keyof this] !== "function") {
-      applyProp(this, propName, value)
-      return true
-    }
+    /* We'll skip functions, HTMLElement and the browser will take care of these. */
+    if (typeof this[propName as keyof this] === "function") return true
 
+    /* Try to apply the prop! */
+    applyProp(this, propName, value)
+
+    /* We don't know if we actually successfully applied the property, so let's
+       return false here. */
     return false
   }
 
