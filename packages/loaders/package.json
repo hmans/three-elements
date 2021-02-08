@@ -45,8 +45,8 @@
     "test": "web-test-runner --puppeteer",
     "prepublishOnly": "yarn build && yarn test"
   },
-  "peerDependencies": {
-    "three": ">=0.121.0",
-    "three-elements": ">=0.4.0-alpha.9"
+  "dependencies": {
+    "three-elements": ">=0.4.0-alpha.9",
+    "three": ">=0.125.2"
   }
 }
