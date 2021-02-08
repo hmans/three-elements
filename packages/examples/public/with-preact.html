@@ -15,8 +15,8 @@
     <!-- Import dependencies via ESM. The future is now! -->
     <script type="module">
       import "three-elements"
-      import { h, Component, render } from "https://jspm.dev/preact"
-      import { useRef, useEffect } from "https://jspm.dev/preact/hooks"
+      import { h, Component, render } from "preact"
+      import { useRef, useEffect } from "preact/hooks"
 
       import { T } from "@three-elements/preact"
 
@@ -84,7 +84,7 @@
       const Camera = () => T.PerspectiveCamera({ id: "camera", fov: 70, position: [0, 0, 30] })
 
       const Scene = () =>
-        T.Scene({ camera: "#camera", "background-color": "#222" }, [
+        T.Scene({ camera: "#camera", backgroundColor: "#222" }, [
           h(Resources),
           h(Fog),
           h(Camera),
