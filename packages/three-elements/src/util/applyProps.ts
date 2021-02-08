@@ -49,11 +49,15 @@ export const applyProp = (
   }
 
   /*
-  Handle function properties.
+  Handle function properties, but only if their name starts with "on".
   */
   if (typeof object[key] === "function") {
-    object[key] = new Function(value).bind(object)
-    return true
+    if (key.startsWith("on")) {
+      object[key] = new Function(value).bind(object)
+      return true
+    } else {
+      return false
+    }
   }
 
   /* It is attribute-setting time! Let's try to parse the value. */
