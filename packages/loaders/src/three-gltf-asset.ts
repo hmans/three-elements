@@ -38,17 +38,6 @@ export class ThreeGLTFAsset extends ThreeElement.for(Group) {
 
   protected _url?: string
 
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    switch (name) {
-      case "url":
-        this.url = newValue
-        return true
-
-      default:
-        return super.attributeChangedCallback(name, oldValue, newValue)
-    }
-  }
-
   private setupGLTF(gltf: GLTF) {
     /* Create a copy of the GLTF just for this element */
     const scene = gltf.scene.clone(true)
