@@ -176,22 +176,8 @@ export class BaseElement extends HTMLElement {
   }
 
   attributeChangedCallback(key: string, _: string | null, value: string): boolean {
-    this.debug("attributeChangedCallback", key, value)
-
-    /*
-    We're going to look for a property that matches the camelcased version of the
-    attribute name. If we can write to it (and it's not a function), we'll
-    directly set it.
-    */
-
     const propName = camelize(key)
-
-    /* Try to apply the prop! */
-    applyProp(this, propName, value)
-
-    /* We don't know if we actually successfully applied the property, so let's
-       return false here. */
-    return false
+    return applyProp(this, propName, value)
   }
 
   /**

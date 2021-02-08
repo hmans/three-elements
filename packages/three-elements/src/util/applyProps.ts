@@ -17,27 +17,25 @@ export const applyProp = (
   name: string,
   value: any,
   directive: string = ""
-) => {
+): boolean => {
   let [firstKey, ...rest] = name.split(/[\.:]/)
 
   /* Check for "ref" directive */
   if (firstKey === "ref") {
-    applyProp(object, rest.join("."), value, "ref")
-    return
+    return applyProp(object, rest.join("."), value, "ref")
   }
 
   const key = camelize(firstKey)
 
   /* Skip all ignored keys. */
-  if (IGNORED_KEYS.includes(key)) return
+  if (IGNORED_KEYS.includes(key)) return false
 
   /* Skip all data attributes. */
-  if (firstKey.startsWith("data-")) return
+  if (firstKey.startsWith("data-")) return false
 
   /* Recursively handle nested keys, eg. position.x */
   if (key in object && rest.length > 0) {
-    applyProp(object[key], rest.join("."), value, directive)
-    return
+    return applyProp(object[key], rest.join("."), value, directive)
   }
 
   /*
@@ -47,7 +45,7 @@ export const applyProp = (
   */
   if (typeof object[key] === "boolean") {
     object[key] = ![undefined, null, false, "no", "false"].includes(value)
-    return
+    return true
   }
 
   /*
@@ -55,7 +53,7 @@ export const applyProp = (
   */
   if (typeof object[key] === "function") {
     object[key] = new Function(value).bind(object)
-    return
+    return true
   }
 
   /* It is attribute-setting time! Let's try to parse the value. */
@@ -66,25 +64,25 @@ export const applyProp = (
     /* If the value is an array, feed its destructured representation to the set method. */
     if (Array.isArray(parsed)) {
       object[key].set(...parsed)
-      return
+      return true
     }
 
     /* A bit of special handling for "scale" properties, where we'll also accept a single numerical value */
     if (key === "scale" && typeof parsed === "number") {
       object[key].setScalar(parsed)
-      return
+      return true
     }
 
     /* If we have a parsed value, set it directly */
     if (parsed) {
       object[key].set(parsed)
-      return
+      return true
     }
 
     /* Otherwise, set the original string value, but split by commas */
     const list = attributeValueToArray(value)
     object[key].set(...list)
-    return
+    return true
   }
 
   /*
@@ -95,16 +93,22 @@ export const applyProp = (
     const referencedObject = getThreeObjectBySelector(value)
     if (referencedObject) {
       object[key] = referencedObject
+      return true
+    } else {
+      return false
     }
-
-    return
   }
 
   /*
   If we've reached this point, we're finally able to set a property on the object.
   Amazing! But let's only do it if the property key is actually known.
   */
-  if (key in object) object[key] = parsed !== undefined ? parsed : value
+  if (key in object) {
+    object[key] = parsed !== undefined ? parsed : value
+    return true
+  } else {
+    return false
+  }
 }
 
 const parseJson = (value: string) => {
