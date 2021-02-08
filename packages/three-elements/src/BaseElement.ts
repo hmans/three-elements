@@ -186,6 +186,7 @@ export class BaseElement extends HTMLElement {
     */
 
     const propName = camelize(key) as keyof this
+    console.log(key, propName, typeof this[propName])
 
     if (propName in this && typeof this[propName] !== "function") {
       /*
@@ -195,15 +196,6 @@ export class BaseElement extends HTMLElement {
       */
       if (typeof this[propName] === "object") {
         this[propName] = getThreeObjectBySelector(value)
-        return true
-      }
-
-      /*
-      If the property is a function and starts with "on", we'll assume that
-      the attribute's string value is the body of a DOM event listener,
-      and handle it accordingly. */
-      if (typeof this[propName] === "function" && key.startsWith("on")) {
-        this[propName] = new Function(value).bind(this)
         return true
       }
 
