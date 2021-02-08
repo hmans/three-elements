@@ -2,34 +2,41 @@ import { Group } from "three"
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { ThreeElement, registerThreeElement } from "three-elements"
 
-const loadedUrls: Record<string, GLTF> = {}
+const loader = new GLTFLoader()
 
 export class ThreeGLTFAsset extends ThreeElement.for(Group) {
-  protected _url?: string
+  /**
+   * Has the GLTF been loaded?
+   */
+  loaded = false
 
+  /**
+   * URL of the GLTF to load.
+   */
   public get url() {
     return this._url
   }
 
   public set url(url) {
+    /* Only act if the URL has changed. */
     if (url != this._url) {
       this._url = url
 
       /* Clear this group */
       this.object?.clear()
+      this.loaded = false
+
       if (url) {
-        if (url in loadedUrls) {
-          this.setupGLTF(loadedUrls[url])
-        } else {
-          const loader = new GLTFLoader()
-          loader.load(url, (gltf) => {
-            loadedUrls[url] = gltf
-            this.setupGLTF(gltf)
-          })
-        }
+        loader.load(url, (gltf) => {
+          this.loaded = true
+          this.dispatchEvent(new Event("loaded", { bubbles: false, cancelable: false }))
+          this.setupGLTF(gltf)
+        })
       }
     }
   }
+
+  protected _url?: string
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     switch (name) {
