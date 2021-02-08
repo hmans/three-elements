@@ -2,6 +2,7 @@ import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { TickerCallbacks } from "./TickerCallbacks"
 import { IConstructable } from "./types"
+import { applyProps } from "./util/applyProps"
 import { camelize } from "./util/camelize"
 import { getThreeObjectBySelector } from "./util/getThreeObjectBySelector"
 
@@ -186,21 +187,31 @@ export class BaseElement extends HTMLElement {
 
     const propName = camelize(key) as keyof this
 
-    console.log(key)
-
     if (propName in this && typeof this[propName] !== "function") {
-      console.log("Property found:", propName)
-
       /*
       If the property is an object, we'll assume that this attribute's new
       string value refers to another DOM element, and grab the object that is
       wrapped by it and use it as our property's new value here.
       */
       if (typeof this[propName] === "object") {
-        Object.assign(this, { [propName]: getThreeObjectBySelector(value) })
-      } else {
-        Object.assign(this, { [propName]: value })
+        this[propName] = getThreeObjectBySelector(value)
+        return true
       }
+
+      /*
+      If the property is a function and starts with "on", we'll assume that
+      the attribute's string value is the body of a DOM event listener,
+      and handle it accordingly. */
+      if (typeof this[propName] === "function" && key.startsWith("on")) {
+        this[propName] = new Function(value).bind(this)
+        return true
+      }
+
+      /*
+      If we've reached this point, we're probably dealing with a scalar value, so
+      just assign the damn thing directly.
+      */
+      applyProps(this, { [propName]: value })
 
       return true
     }

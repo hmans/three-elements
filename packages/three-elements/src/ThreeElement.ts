@@ -132,36 +132,18 @@ export class ThreeElement<T = any> extends BaseElement {
   attributeChangedCallback(key: string, oldValue: any, newValue: any) {
     if (super.attributeChangedCallback(key, oldValue, newValue)) return true
 
-    switch (key) {
-      /* NOOPs */
-      case "args":
-      case "id":
-        return true
+    /* Explicit NOOPs */
+    if (key in ["args", "id"]) {
+      return true
+    }
 
-      /* Event handlers that we will want to convert into a function first */
-      case "onpointerdown":
-      case "onpointerup":
-      case "onpointerenter":
-      case "onpointerleave":
-      case "onpointerover":
-      case "onpointerout":
-      case "onclick":
-      case "ondblclick":
-        this[key] = new Function(newValue).bind(this)
-        return true
-
-      /*
-      If we've reached this point, we're dealing with an attribute that we don't know.
-      */
-      default:
-        /*
-        Okay, at this point, we'll just assume that the property lives on the wrapped object.
-        Good times! Let's assign it directly.
-        */
-        if (this.object) {
-          applyProps(this.object, { [key]: newValue })
-          return true
-        }
+    /*
+    Okay, at this point, we'll just assume that the property lives on the wrapped object.
+    Good times! Let's assign it directly. If we have an object, that is.
+    */
+    if (this.object) {
+      applyProps(this.object, { [key]: newValue })
+      return true
     }
 
     return false
