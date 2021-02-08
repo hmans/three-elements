@@ -25,16 +25,6 @@ export class ThreeTexture extends ThreeElement.for(Texture) {
 
     this._url = url
   }
-
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    switch (name) {
-      case "url":
-        this.url = newValue
-        return true
-      default:
-        return super.attributeChangedCallback(name, oldValue, newValue)
-    }
-  }
 }
 
 registerThreeElement("three-texture", "Texture", ThreeTexture)

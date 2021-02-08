@@ -89,8 +89,9 @@ export const applyProp = (
   Is the property an object? In that case, we'll assume that the string value of the attribute
   contains a DOM selector that references another object that we should assign here.
   */
-  if (typeof object[key] === "object" && directive === "ref") {
+  if (key in object && directive === "ref") {
     const referencedObject = getThreeObjectBySelector(value)
+
     if (referencedObject) {
       object[key] = referencedObject
       return true
