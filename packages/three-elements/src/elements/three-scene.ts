@@ -25,8 +25,12 @@ export class ThreeScene extends ThreeElement.for(Scene) {
   }
 
   set camera(camera) {
-    this._camera = camera
-    this.handleWindowResize()
+    if (camera instanceof Camera) {
+      this._camera = camera
+      this.handleWindowResize()
+    } else {
+      console.error("Can't accept this as a camera:", camera)
+    }
   }
 
   /** The pointer events system. */
