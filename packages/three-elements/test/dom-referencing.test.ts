@@ -15,7 +15,7 @@ describe("<three-*> powered by ThreeElement", () => {
           ></three-mesh-standard-material>
 
           <!-- something that's using the resources -->
-          <three-mesh geometry="#geometry" material="#material"> </three-mesh>
+          <three-mesh ref:geometry="#geometry" ref:material="#material"> </three-mesh>
         </three-scene>
       </three-game>
     `)

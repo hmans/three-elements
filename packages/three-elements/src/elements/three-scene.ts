@@ -1,7 +1,6 @@
 import { Camera, Color, OrthographicCamera, PerspectiveCamera, Scene, WebGLRenderer } from "three"
 import { PointerEvents } from "../PointerEvents"
 import { ThreeElement } from "../ThreeElement"
-import { getThreeObjectBySelector } from "../util/getThreeObjectBySelector"
 import { registerThreeElement } from "../util/registerElement"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
