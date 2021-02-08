@@ -69,18 +69,10 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     super.disconnectedCallback()
   }
 
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    switch (name) {
-      case "background-color":
-        this.object!.background = new Color(newValue)
-        return true
-
-      case "camera":
-        const camera = getThreeObjectBySelector(newValue)
-        if (camera) this.camera = camera
-    }
-
-    return super.attributeChangedCallback(name, oldValue, newValue)
+  /* backgroundColor property.
+     TODO: remove this */
+  set backgroundColor(v) {
+    this.object!.background = new Color(v)
   }
 
   handleWindowResize() {

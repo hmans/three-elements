@@ -3,6 +3,7 @@ import { ThreeScene } from "./elements/three-scene"
 import { TickerCallbacks } from "./TickerCallbacks"
 import { IConstructable } from "./types"
 import { camelize } from "./util/camelize"
+import { getThreeObjectBySelector } from "./util/getThreeObjectBySelector"
 
 /**
  * The `BaseElement` class extends the built-in HTMLElement class with a bit of convenience
@@ -177,20 +178,30 @@ export class BaseElement extends HTMLElement {
   attributeChangedCallback(key: string, _: string | null, value: string): boolean {
     this.debug("attributeChangedCallback", key, value)
 
-    switch (key) {
-      case "tick":
-        this[key] = value
-        return true
-    }
+    /*
+    We're going to look for a property that matches the camelcased version of the
+    attribute name. If we can write to it (and it's not a function), we'll
+    automatically set it.
+    */
 
-    /* Automatically map all tick-* attributes to their corresponding properties. */
-    if (key.endsWith("-tick")) {
-      const propName = camelize(key)
-      if (propName in this) (this[propName as keyof this] as any) = value
-      else
-        console.error(
-          `"${key}" was mapped to propert "${propName}", which is not a valid property on this element. `
-        )
+    const propName = camelize(key) as keyof this
+
+    console.log(key)
+
+    if (propName in this && typeof this[propName] !== "function") {
+      console.log("Property found:", propName)
+
+      /*
+      If the property is an object, we'll assume that this attribute's new
+      string value refers to another DOM element, and grab the object that is
+      wrapped by it and use it as our property's new value here.
+      */
+      if (typeof this[propName] === "object") {
+        Object.assign(this, { [propName]: getThreeObjectBySelector(value) })
+      } else {
+        Object.assign(this, { [propName]: value })
+      }
+
       return true
     }
 
