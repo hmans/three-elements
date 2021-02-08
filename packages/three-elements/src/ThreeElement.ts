@@ -139,7 +139,7 @@ export class ThreeElement<T = any> extends BaseElement {
     Okay, at this point, we'll just assume that the property lives on the wrapped object.
     Good times! Let's assign it directly. If we have an object, that is.
     */
-    return this.object && applyProp(this.object, key, newValue)
+    return this.object ? applyProp(this.object, key, newValue) : false
   }
 
   static for<T>(constructor: IConstructable<T>): IConstructable<ThreeElement<T>> {
