@@ -2,7 +2,7 @@ import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { TickerCallbacks } from "./TickerCallbacks"
 import { IConstructable } from "./types"
-import { applyProp, applyPropWithDirective } from "./util/applyProps"
+import { applyPropWithDirective } from "./util/applyProps"
 import { camelize } from "./util/camelize"
 
 /**
@@ -13,6 +13,13 @@ import { camelize } from "./util/camelize"
  * need access to the game's ticker or renderer.
  */
 export class BaseElement extends HTMLElement {
+  /**
+   * A list of properties that can also be set through attributes on the element's tag.
+   * Attribute names are expected to be kebab-cased versions of the original
+   * property names (eg. "renderTick" can be set through the attribute "render-tick".)
+   */
+  static exposedProperties = ["tick", "lateTick", "frameTick", "renderTick"]
+
   isMounted = false
 
   /**

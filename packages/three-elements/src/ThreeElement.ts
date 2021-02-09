@@ -5,6 +5,8 @@ import { applyProp, applyPropWithDirective } from "./util/applyProps"
 import { attributeValueToArray } from "./util/attributeValueToArray"
 
 export class ThreeElement<T = any> extends BaseElement {
+  static exposedProperties = BaseElement.exposedProperties
+
   /** Constructor that will instantiate our object. */
   static threeConstructor?: IConstructable
 

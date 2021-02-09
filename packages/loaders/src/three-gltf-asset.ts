@@ -5,6 +5,8 @@ import { ThreeElement, registerThreeElement } from "three-elements"
 const loader = new GLTFLoader()
 
 export class ThreeGLTFAsset extends ThreeElement.for(Group) {
+  static exposedProperties = [...ThreeElement.exposedProperties, "url"]
+
   /**
    * Has the GLTF been loaded?
    */

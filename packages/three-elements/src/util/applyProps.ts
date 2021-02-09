@@ -1,3 +1,4 @@
+import { BaseElement } from "../BaseElement"
 import { IStringIndexable } from "../types"
 import { attributeValueToArray } from "./attributeValueToArray"
 import { camelize } from "./camelize"
@@ -45,6 +46,14 @@ export const applyProp = (object: IStringIndexable, name: string, value: any): b
   /* Skip all data attributes. */
   if (firstKey.startsWith("data-")) return false
 
+  /* If the object is one of our elements, only continue if the property is whitelisted. */
+  if (
+    object instanceof BaseElement &&
+    !(object.constructor as typeof BaseElement).exposedProperties.includes(key)
+  ) {
+    return false
+  }
+
   /* Recursively handle nested keys, eg. position.x */
   if (key in object && rest.length > 0) {
     return applyProp(object[key], rest.join("."), value)
@@ -58,18 +67,6 @@ export const applyProp = (object: IStringIndexable, name: string, value: any): b
   if (typeof object[key] === "boolean") {
     object[key] = ![undefined, null, false, "no", "false"].includes(value)
     return true
-  }
-
-  /*
-  Handle function properties, but only if their name starts with "on".
-  */
-  if (typeof object[key] === "function") {
-    if (key.startsWith("on")) {
-      object[key] = new Function(value).bind(object)
-      return true
-    } else {
-      return false
-    }
   }
 
   /* It is attribute-setting time! Let's try to parse the value. */

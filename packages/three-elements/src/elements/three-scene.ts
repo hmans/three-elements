@@ -4,6 +4,8 @@ import { ThreeElement } from "../ThreeElement"
 import { registerThreeElement } from "../util/registerElement"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
+  static exposedProperties = [...ThreeElement.exposedProperties, "backgroundColor", "camera"]
+
   /**
    * Background color of the scene.
    */
