@@ -25,7 +25,7 @@ export class ThreeTemplate extends HTMLElement {
     const tag = this.getAttribute("tag")
 
     if (!tag || tag === "") {
-      this.error("You must specify the tag attribute when defining a <three-template>.")
+      console.error("You must specify the tag attribute when defining a <three-template>.")
       return
     }
 
