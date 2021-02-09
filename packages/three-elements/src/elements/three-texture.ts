@@ -3,6 +3,8 @@ import { ThreeElement } from "../ThreeElement"
 import { registerThreeElement } from "../util/registerElement"
 
 export class ThreeTexture extends ThreeElement.for(Texture) {
+  static exposedProperties = [...ThreeElement.exposedProperties, "url"]
+
   private _url?: string
 
   public get url() {
