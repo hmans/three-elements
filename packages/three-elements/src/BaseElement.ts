@@ -36,8 +36,10 @@ export class BaseElement extends HTMLElement {
       throw "Something is accessing my .game property while I'm not connected. This shouldn't happen! 😭"
 
     const game = this.find((node) => node instanceof ThreeGame) as ThreeGame
+
     if (!game)
       throw "No <three-game> tag found! If you're seeing this error, it might be a sign that you're importing multiple versions of three-elements."
+
     return game
   }
 
@@ -55,9 +57,13 @@ export class BaseElement extends HTMLElement {
       throw "Something is accessing my .scene property while I'm not connected. This shouldn't happen! 😭"
 
     const scene = this.find((node: any) => node.object?.isScene) as ThreeScene
+
     if (!scene) throw "No <three-scene> tag found!"
+
     return scene
   }
+
+  /*** TICKER CALLBACKS ***/
 
   callbacks = new TickerCallbacks(this)
 
