@@ -29,7 +29,8 @@ export const applyPropWithDirective = (
       return referencedObject ? applyProp(object, rest, referencedObject) : false
 
     default:
-      return applyProp(object, rest, value)
+      console.error(`Unknow directive: ${directive}`)
+      return false
   }
 }
 

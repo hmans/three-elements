@@ -1,6 +1,8 @@
-import { expect } from "@open-wc/testing"
-import { applyProps, applyProp } from "../../src/util/applyProps"
+import { expect, fixture, nextFrame, html } from "@open-wc/testing"
 import * as THREE from "three"
+import "../../src"
+import { ThreeElement, ThreeScene } from "../../src"
+import { applyProp, applyProps, applyPropWithDirective } from "../../src/util/applyProps"
 
 describe("applyProp", () => {
   it("can directly assign root-level properties", () => {
@@ -76,5 +78,38 @@ describe("applyProps", () => {
     applyProps(object, { foo: 1, bar: 2 })
     expect(object.foo).to.equal(1)
     expect(object.bar).to.equal(2)
+  })
+})
+
+describe("applyPropWithDirective", () => {
+  const renderGame = () =>
+    fixture(html`
+      <three-game>
+        <three-scene>
+          <three-perspective-camera id="cam"></three-perspective-camera>
+        </three-scene>
+      </three-game>
+    `)
+
+  describe("with the ref: directive", () => {
+    it("treats the value as a DOM reference", async () => {
+      await renderGame()
+
+      const $scene = document.querySelector("three-scene") as ThreeScene
+      const $camera = document.querySelector("three-perspective-camera") as ThreeElement
+
+      applyPropWithDirective($scene, "ref:camera", "#cam")
+
+      expect($scene.camera).to.be.instanceOf(THREE.PerspectiveCamera)
+      expect($scene.camera).to.eq($camera.object)
+    })
+  })
+
+  describe("with unknown directives", () => {
+    it("logs an error message", async () => {
+      await renderGame()
+      const $scene = document.querySelector("three-scene") as ThreeScene
+      applyPropWithDirective($scene, "absolutelyunknown:camera", "#cam")
+    })
   })
 })
