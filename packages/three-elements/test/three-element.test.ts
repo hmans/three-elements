@@ -41,16 +41,6 @@ describe("<three-*> powered by ThreeElement", () => {
       expect(el.object.position.x).to.equal(1)
     })
 
-    it("supports colon attributes (position:x)", async () => {
-      const el = await renderMeshElement()
-
-      el.object.position.x = 0
-      expect(el.object.position.x).to.equal(0)
-
-      el.setAttribute("position:x", "1")
-      expect(el.object.position.x).to.equal(1)
-    })
-
     it("supports settable Vector3 attributes", async () => {
       const el = await renderMeshElement()
 

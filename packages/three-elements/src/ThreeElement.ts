@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import { BaseElement } from "./BaseElement"
 import { IConstructable, isDisposable } from "./types"
-import { applyProp } from "./util/applyProps"
+import { applyProp, applyPropWithDirective } from "./util/applyProps"
 import { attributeValueToArray } from "./util/attributeValueToArray"
 
 export class ThreeElement<T = any> extends BaseElement {
@@ -139,7 +139,7 @@ export class ThreeElement<T = any> extends BaseElement {
     Okay, at this point, we'll just assume that the property lives on the wrapped object.
     Good times! Let's assign it directly. If we have an object, that is.
     */
-    return this.object ? applyProp(this.object, key, newValue) : false
+    return this.object ? applyPropWithDirective(this.object, key, newValue) : false
   }
 
   static for<T>(constructor: IConstructable<T>): IConstructable<ThreeElement<T>> {

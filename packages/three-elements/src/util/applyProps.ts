@@ -12,14 +12,29 @@ export const applyProps = (object: IStringIndexable, props: IStringIndexable) =>
   }
 }
 
-export const applyProp = (object: IStringIndexable, name: string, value: any): boolean => {
-  let [firstKey, ...rest] = name.split(/[\.:]/)
+export const applyPropWithDirective = (
+  object: IStringIndexable,
+  name: string,
+  value: any
+): boolean => {
+  let [directive, rest] = name.split(":")
+
+  /* If no rest was returned, there was no directive. */
+  if (!rest) return applyProp(object, name, value)
 
   /* Resolve "ref" directive */
-  if (firstKey === "ref") {
-    const referencedObject = getThreeObjectBySelector(value)
-    return referencedObject ? applyProp(object, rest.join("."), referencedObject) : false
+  switch (directive) {
+    case "ref":
+      const referencedObject = getThreeObjectBySelector(value)
+      return referencedObject ? applyProp(object, rest, referencedObject) : false
+
+    default:
+      return applyProp(object, rest, value)
   }
+}
+
+export const applyProp = (object: IStringIndexable, name: string, value: any): boolean => {
+  let [firstKey, ...rest] = name.split(".")
 
   const key = camelize(firstKey)
 

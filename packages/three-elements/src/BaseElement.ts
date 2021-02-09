@@ -2,7 +2,7 @@ import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { TickerCallbacks } from "./TickerCallbacks"
 import { IConstructable } from "./types"
-import { applyProp } from "./util/applyProps"
+import { applyProp, applyPropWithDirective } from "./util/applyProps"
 import { camelize } from "./util/camelize"
 
 /**
@@ -177,7 +177,7 @@ export class BaseElement extends HTMLElement {
 
   attributeChangedCallback(key: string, _: string | null, value: string): boolean {
     const propName = camelize(key)
-    return applyProp(this, propName, value)
+    return applyPropWithDirective(this, propName, value)
   }
 
   /**
