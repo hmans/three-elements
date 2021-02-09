@@ -160,10 +160,14 @@ export class BaseElement extends HTMLElement {
     })
   }
 
+  /**
+   * Helper method that will make sure all attributes set on the element are passed
+   * through `attributeChangedCallback`. We mostly need this because of how we're
+   * _not_ using `observedAttributes`.
+   */
   applyAllAttributes() {
-    const attributes = this.getAllAttributes()
-    for (const key in attributes) {
-      this.attributeChangedCallback(key, "", attributes[key])
+    for (const key of this.getAttributeNames()) {
+      this.attributeChangedCallback(key, "", this.getAttribute(key))
     }
   }
 
@@ -188,18 +192,8 @@ export class BaseElement extends HTMLElement {
     }
   }
 
-  attributeChangedCallback(key: string, _: string | null, value: string): boolean {
+  attributeChangedCallback(key: string, _: any, value: any): boolean {
     return applyPropWithDirective(this, camelize(key), value)
-  }
-
-  /**
-   * Returns a dictionary containing all attributes on this element.
-   */
-  getAllAttributes() {
-    return this.getAttributeNames().reduce((acc, name) => {
-      acc[name] = this.getAttribute(name)
-      return acc
-    }, {} as Record<string, any>)
   }
 
   requestFrame() {
