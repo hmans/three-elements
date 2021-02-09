@@ -3,6 +3,8 @@ import { ThreeElement } from "../ThreeElement"
 import { registerThreeElement } from "../util/registerElement"
 
 export class ThreeTexture extends ThreeElement.for(Texture) {
+  static exposedProperties = [...ThreeElement.exposedProperties, "url"]
+
   private _url?: string
 
   public get url() {
@@ -24,16 +26,6 @@ export class ThreeTexture extends ThreeElement.for(Texture) {
     }
 
     this._url = url
-  }
-
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    switch (name) {
-      case "url":
-        this.url = newValue
-        return true
-      default:
-        return super.attributeChangedCallback(name, oldValue, newValue)
-    }
   }
 }
 

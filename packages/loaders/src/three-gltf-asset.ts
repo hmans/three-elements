@@ -5,6 +5,8 @@ import { ThreeElement, registerThreeElement } from "three-elements"
 const loader = new GLTFLoader()
 
 export class ThreeGLTFAsset extends ThreeElement.for(Group) {
+  static exposedProperties = [...ThreeElement.exposedProperties, "url"]
+
   /**
    * Has the GLTF been loaded?
    */
@@ -37,17 +39,6 @@ export class ThreeGLTFAsset extends ThreeElement.for(Group) {
   }
 
   protected _url?: string
-
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    switch (name) {
-      case "url":
-        this.url = newValue
-        return true
-
-      default:
-        return super.attributeChangedCallback(name, oldValue, newValue)
-    }
-  }
 
   private setupGLTF(gltf: GLTF) {
     /* Create a copy of the GLTF just for this element */

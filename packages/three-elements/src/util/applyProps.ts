@@ -1,88 +1,112 @@
+import { BaseElement } from "../BaseElement"
 import { IStringIndexable } from "../types"
+import { attributeValueToArray } from "./attributeValueToArray"
 import { camelize } from "./camelize"
 import { getThreeObjectBySelector } from "./getThreeObjectBySelector"
-import { attributeValueToArray } from "./attributeValueToArray"
 import { parseDeg } from "./parseDeg"
 
-const IGNORED_KEYS = ["id"]
+const IGNORED_KEYS = ["args", "id"]
 
 export const applyProps = (object: IStringIndexable, props: IStringIndexable) => {
-  for (const incoming in props) {
-    const value = props[incoming]
-    let [firstKey, ...rest] = incoming.split(/[\.:]/)
+  for (const name in props) {
+    applyProp(object, name, props[name])
+  }
+}
 
-    const key = camelize(firstKey)
+export const applyPropWithDirective = (
+  object: IStringIndexable,
+  name: string,
+  value: any
+): boolean => {
+  let [directive, rest] = name.split(":")
 
-    /* Skip all ignored keys. */
-    if (IGNORED_KEYS.includes(key)) return
+  /* If no rest was returned, there was no directive. */
+  if (!rest) return applyProp(object, name, value)
 
-    /* Skip all data attributes. */
-    if (firstKey.startsWith("data-")) return
-
-    /* Recursively handle nested keys, eg. position.x */
-    if (key in object && rest.length > 0) {
-      applyProps(object[key], { [rest.join(".")]: value })
-      return
-    }
-
-    /*
-    Handle boolean properties. We will check against the only values that we consider falsey here,
-    taking into account that they might be coming from string-based HTML element attributes, where a
-    stand-alone boolean attribute like "cast-shadow" will emit a value of "". Eh!
-    */
-    if (typeof object[key] === "boolean") {
-      object[key] = ![undefined, null, false, "no", "false"].includes(value)
-      return
-    }
-
-    /* It is attribute-setting time! Let's try to parse the value. */
-    const parsed = typeof value === "string" ? parseJson(value) ?? parseDeg(value) : value
-
-    /* Handle properties that provide .set methods */
-    if (object[key]?.set !== undefined) {
-      /* If the value is an array, feed its destructured representation to the set method. */
-      if (Array.isArray(parsed)) {
-        object[key].set(...parsed)
-        return
-      }
-
-      /* A bit of special handling for "scale" properties, where we'll also accept a single numerical value */
-      if (key === "scale" && typeof parsed === "number") {
-        object[key].setScalar(parsed)
-        return
-      }
-
-      /* If we have a parsed value, set it directly */
-      if (parsed) {
-        object[key].set(parsed)
-        return
-      }
-
-      /* Otherwise, set the original string value, but split by commas */
-      const list = attributeValueToArray(value)
-      object[key].set(...list)
-      return
-    }
-
-    /*
-    Is the property an object? In that case, we'll assume that the string value of the attribute
-    contains a DOM selector that references another object that we should assign here.
-    */
-    if (typeof object[key] === "object") {
+  /* Resolve "ref" directive */
+  switch (directive) {
+    case "ref":
       const referencedObject = getThreeObjectBySelector(value)
+      return referencedObject ? applyProp(object, rest, referencedObject) : false
 
-      if (referencedObject) {
-        object[key] = referencedObject
-      }
+    default:
+      console.error(`Unknow directive: ${directive}`)
+      return false
+  }
+}
 
-      return
+export const applyProp = (object: IStringIndexable, name: string, value: any): boolean => {
+  let [firstKey, ...rest] = name.split(".")
+
+  const key = camelize(firstKey)
+
+  /* Skip all ignored keys. */
+  if (IGNORED_KEYS.includes(key)) return false
+
+  /* Skip all data attributes. */
+  if (firstKey.startsWith("data-")) return false
+
+  /* If the object is one of our elements, only continue if the property is whitelisted. */
+  if (
+    object instanceof BaseElement &&
+    !(object.constructor as typeof BaseElement).exposedProperties.includes(key)
+  ) {
+    return false
+  }
+
+  /* Recursively handle nested keys, eg. position.x */
+  if (key in object && rest.length > 0) {
+    return applyProp(object[key], rest.join("."), value)
+  }
+
+  /*
+  Handle boolean properties. We will check against the only values that we consider falsey here,
+  taking into account that they might be coming from string-based HTML element attributes, where a
+  stand-alone boolean attribute like "cast-shadow" will emit a value of "". Eh!
+  */
+  if (typeof object[key] === "boolean") {
+    object[key] = ![undefined, null, false, "no", "false"].includes(value)
+    return true
+  }
+
+  /* It is attribute-setting time! Let's try to parse the value. */
+  const parsed = typeof value === "string" ? parseJson(value) ?? parseDeg(value) : value
+
+  /* Handle properties that provide .set methods */
+  if (object[key]?.set !== undefined) {
+    /* If the value is an array, feed its destructured representation to the set method. */
+    if (Array.isArray(parsed)) {
+      object[key].set(...parsed)
+      return true
     }
 
-    /*
-    If we've reached this point, we're finally able to set a property on the object.
-    Amazing! But let's only do it if the property key is actually known.
-    */
-    if (key in object) object[key] = parsed !== undefined ? parsed : value
+    /* A bit of special handling for "scale" properties, where we'll also accept a single numerical value */
+    if (key === "scale" && typeof parsed === "number") {
+      object[key].setScalar(parsed)
+      return true
+    }
+
+    /* If we have a parsed value, set it directly */
+    if (parsed) {
+      object[key].set(parsed)
+      return true
+    }
+
+    /* Otherwise, set the original string value, but split by commas */
+    const list = attributeValueToArray(value)
+    object[key].set(...list)
+    return true
+  }
+
+  /*
+  If we've reached this point, we're finally able to set a property on the object.
+  Amazing! But let's only do it if the property key is actually known.
+  */
+  if (key in object) {
+    object[key] = parsed !== undefined ? parsed : value
+    return true
+  } else {
+    return false
   }
 }
 

@@ -2,6 +2,7 @@ import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { TickerCallbacks } from "./TickerCallbacks"
 import { IConstructable } from "./types"
+import { applyPropWithDirective } from "./util/applyProps"
 import { camelize } from "./util/camelize"
 
 /**
@@ -12,6 +13,13 @@ import { camelize } from "./util/camelize"
  * need access to the game's ticker or renderer.
  */
 export class BaseElement extends HTMLElement {
+  /**
+   * A list of properties that can also be set through attributes on the element's tag.
+   * Attribute names are expected to be kebab-cased versions of the original
+   * property names (eg. "renderTick" can be set through the attribute "render-tick".)
+   */
+  static exposedProperties = ["tick", "lateTick", "frameTick", "renderTick"]
+
   isMounted = false
 
   /**
@@ -28,8 +36,10 @@ export class BaseElement extends HTMLElement {
       throw "Something is accessing my .game property while I'm not connected. This shouldn't happen! 😭"
 
     const game = this.find((node) => node instanceof ThreeGame) as ThreeGame
+
     if (!game)
       throw "No <three-game> tag found! If you're seeing this error, it might be a sign that you're importing multiple versions of three-elements."
+
     return game
   }
 
@@ -47,9 +57,13 @@ export class BaseElement extends HTMLElement {
       throw "Something is accessing my .scene property while I'm not connected. This shouldn't happen! 😭"
 
     const scene = this.find((node: any) => node.object?.isScene) as ThreeScene
+
     if (!scene) throw "No <three-scene> tag found!"
+
     return scene
   }
+
+  /*** TICKER CALLBACKS ***/
 
   callbacks = new TickerCallbacks(this)
 
@@ -146,10 +160,14 @@ export class BaseElement extends HTMLElement {
     })
   }
 
+  /**
+   * Helper method that will make sure all attributes set on the element are passed
+   * through `attributeChangedCallback`. We mostly need this because of how we're
+   * _not_ using `observedAttributes`.
+   */
   applyAllAttributes() {
-    const attributes = this.getAllAttributes()
-    for (const key in attributes) {
-      this.attributeChangedCallback(key, "", attributes[key])
+    for (const key of this.getAttributeNames()) {
+      this.attributeChangedCallback(key, "", this.getAttribute(key))
     }
   }
 
@@ -174,37 +192,8 @@ export class BaseElement extends HTMLElement {
     }
   }
 
-  attributeChangedCallback(key: string, _: string | null, value: string): boolean {
-    this.debug("attributeChangedCallback", key, value)
-
-    switch (key) {
-      case "tick":
-        this[key] = value
-        return true
-    }
-
-    /* Automatically map all tick-* attributes to their corresponding properties. */
-    if (key.endsWith("-tick")) {
-      const propName = camelize(key)
-      if (propName in this) (this[propName as keyof this] as any) = value
-      else
-        console.error(
-          `"${key}" was mapped to propert "${propName}", which is not a valid property on this element. `
-        )
-      return true
-    }
-
-    return false
-  }
-
-  /**
-   * Returns a dictionary containing all attributes on this element.
-   */
-  getAllAttributes() {
-    return this.getAttributeNames().reduce((acc, name) => {
-      acc[name] = this.getAttribute(name)
-      return acc
-    }, {} as Record<string, any>)
+  attributeChangedCallback(key: string, _: any, value: any): boolean {
+    return applyPropWithDirective(this, camelize(key), value)
   }
 
   requestFrame() {

@@ -11,7 +11,7 @@
 
   <body>
     <three-game id="game" autorender>
-      <three-scene camera=".active">
+      <three-scene ref:camera=".active">
         <!-- camera -->
         <three-perspective-camera
           class="active"
@@ -28,9 +28,9 @@
         <area-light id="light2" position="0, 5, 5" color="green"></area-light>
         <area-light id="light3" position="5, 5, 5" color="blue"></area-light>
 
-        <three-rect-area-light-helper light="#light1"></three-rect-area-light-helper>
-        <three-rect-area-light-helper light="#light2"></three-rect-area-light-helper>
-        <three-rect-area-light-helper light="#light3"></three-rect-area-light-helper>
+        <three-rect-area-light-helper ref:light="#light1"></three-rect-area-light-helper>
+        <three-rect-area-light-helper ref:light="#light2"></three-rect-area-light-helper>
+        <three-rect-area-light-helper ref:light="#light3"></three-rect-area-light-helper>
 
         <!-- torus knot -->
         <three-mesh position.y="5" tick="object.rotation.y = performance.now() / 1000">

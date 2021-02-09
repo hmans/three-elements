@@ -6,7 +6,7 @@ describe("the args attribute", () => {
   const render = () =>
     fixture(html`
       <three-game>
-        <three-scene camera=".active">
+        <three-scene ref:camera=".active">
           <three-perspective-camera class="active" position="5, 5, 50"></three-perspective-camera>
         </three-scene>
       </three-game>

@@ -63,13 +63,15 @@
         const y = Math.sin(t / 300) * 5 * f + Math.cos((t / 4000) * 3)
         const z = Math.cos((t + 200) / 400) * 3
 
-        return html`<three-mesh
-          position.x=${x}
-          position.y=${y}
-          position.z=${z}
-          geometry="#geometry"
-          material="#material"
-        ></three-mesh>`
+        return html`
+          <three-mesh
+            position.x=${x}
+            position.y=${y}
+            position.z=${z}
+            ref:geometry="#geometry"
+            ref:material="#material"
+          ></three-mesh>
+        `
       }
 
       const Swarm = (count = 10) => {

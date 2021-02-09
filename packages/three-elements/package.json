@@ -47,5 +47,8 @@
   "peerDependencies": {
     "three": ">=0.121.0"
   },
-  "gitHead": "c3f0dd533ca26538b691b7ff6f5a7548f3512c36"
+  "gitHead": "c3f0dd533ca26538b691b7ff6f5a7548f3512c36",
+  "devDependencies": {
+    "sinon": "^9.2.4"
+  }
 }

@@ -1,10 +1,18 @@
 import { Camera, Color, OrthographicCamera, PerspectiveCamera, Scene, WebGLRenderer } from "three"
 import { PointerEvents } from "../PointerEvents"
 import { ThreeElement } from "../ThreeElement"
-import { getThreeObjectBySelector } from "../util/getThreeObjectBySelector"
 import { registerThreeElement } from "../util/registerElement"
 
 export class ThreeScene extends ThreeElement.for(Scene) {
+  static exposedProperties = [...ThreeElement.exposedProperties, "backgroundColor", "camera"]
+
+  /**
+   * Background color of the scene.
+   */
+  set backgroundColor(v: string) {
+    this.object!.background = new Color(v)
+  }
+
   /** The current camera that is being used to render the scene. */
   private _camera: Camera = new PerspectiveCamera(
     75,
@@ -18,8 +26,12 @@ export class ThreeScene extends ThreeElement.for(Scene) {
   }
 
   set camera(camera) {
-    this._camera = camera
-    this.handleWindowResize()
+    if (camera instanceof Camera) {
+      this._camera = camera
+      this.handleWindowResize()
+    } else {
+      this.error("Can't accept this as a camera:", camera)
+    }
   }
 
   /** The pointer events system. */
@@ -67,20 +79,6 @@ export class ThreeScene extends ThreeElement.for(Scene) {
     window.removeEventListener("resize", this.handleWindowResize)
 
     super.disconnectedCallback()
-  }
-
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    switch (name) {
-      case "background-color":
-        this.object!.background = new Color(newValue)
-        return true
-
-      case "camera":
-        const camera = getThreeObjectBySelector(newValue)
-        if (camera) this.camera = camera
-    }
-
-    return super.attributeChangedCallback(name, oldValue, newValue)
   }
 
   handleWindowResize() {
