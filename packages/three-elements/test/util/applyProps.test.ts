@@ -2,7 +2,7 @@ import { expect } from "@open-wc/testing"
 import { applyProps, applyProp } from "../../src/util/applyProps"
 import * as THREE from "three"
 
-describe("applyProps", () => {
+describe("applyProp", () => {
   it("can directly assign root-level properties", () => {
     const object = {
       foo: 0
@@ -63,5 +63,18 @@ describe("applyProps", () => {
     expect(object.foo.x).to.equal(1)
     expect(object.foo.y).to.equal(2)
     expect(object.foo.z).to.equal(3)
+  })
+})
+
+describe("applyProps", () => {
+  const object = {
+    foo: 0,
+    bar: 0
+  }
+
+  it("assigns multiple values", () => {
+    applyProps(object, { foo: 1, bar: 2 })
+    expect(object.foo).to.equal(1)
+    expect(object.bar).to.equal(2)
   })
 })
