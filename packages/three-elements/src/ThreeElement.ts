@@ -4,11 +4,18 @@ import { IConstructable, isDisposable } from "./types"
 import { applyProp, applyPropWithDirective } from "./util/applyProps"
 import { attributeValueToArray } from "./util/attributeValueToArray"
 
+/**
+ * The `ThreeElement` class extends `BaseElement` with some code that manages an instance
+ * of a given Three.js class. It's the centerpiece of three-elements, with most elements
+ * provided by the library derived from it.
+ */
 export class ThreeElement<T = any> extends BaseElement {
   static exposedProperties = BaseElement.exposedProperties
 
   /** Constructor that will instantiate our object. */
   static threeConstructor?: IConstructable
+
+  /*** MANAGED THREE.JS OBJECT ***/
 
   /** The THREE.* object managed by this element. */
   get object() {
@@ -38,7 +45,11 @@ export class ThreeElement<T = any> extends BaseElement {
         object = new constructor()
       }
 
-      /* Store a reference to this element in the wrapped object's userData. */
+      /*
+      Store a reference to this element in the wrapped object's userData -- we'll
+      need it whenever we want to link a Three.js scene object back to the DOM element
+      that owns it.
+      */
       if (object instanceof THREE.Object3D) {
         object.userData.threeElement = this
       }
@@ -109,20 +120,23 @@ export class ThreeElement<T = any> extends BaseElement {
         attach = "geometry"
       } else if ((this.object as any).isFog) {
         attach = "fog"
+      } else if ((this.object as any).isColor) {
+        attach = "color"
       }
     }
 
-    /* If the wrapped object has an "attach" attribute, automatically assign it to the
-       value of the same name in the parent object. */
+    /*
+    If the wrapped object has an "attach" attribute, automatically assign it to the
+    value of the same name in the parent object.
+    */
     if (attach) {
       const parent = this.find((node) => node instanceof ThreeElement)
 
       if (!parent) {
         this.error(`Tried to attach to the "${attach} property, but there was no parent! 😢`)
-        return
       } else if (parent instanceof ThreeElement) {
         this.debug("Attaching to:", parent)
-        parent.object[attach!] = this.object
+        parent.object[attach] = this.object
       } else {
         this.error(
           `Tried to attach to the "${attach} property of ${parent}, but it's not a ThreeElement! It's possible that the target element has not been upgraded to a ThreeElement yet. 😢`

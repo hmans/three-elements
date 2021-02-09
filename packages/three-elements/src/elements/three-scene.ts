@@ -30,7 +30,7 @@ export class ThreeScene extends ThreeElement.for(Scene) {
       this._camera = camera
       this.handleWindowResize()
     } else {
-      console.error("Can't accept this as a camera:", camera)
+      this.error("Can't accept this as a camera:", camera)
     }
   }
 
