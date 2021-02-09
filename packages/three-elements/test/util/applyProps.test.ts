@@ -1,4 +1,5 @@
-import { expect, fixture, nextFrame, html } from "@open-wc/testing"
+import { expect, fixture, html } from "@open-wc/testing"
+import sinon from "sinon"
 import * as THREE from "three"
 import "../../src"
 import { ThreeElement, ThreeScene } from "../../src"
@@ -107,9 +108,13 @@ describe("applyPropWithDirective", () => {
 
   describe("with unknown directives", () => {
     it("logs an error message", async () => {
+      const spy = sinon.spy(console, "error")
+
       await renderGame()
       const $scene = document.querySelector("three-scene") as ThreeScene
       applyPropWithDirective($scene, "absolutelyunknown:camera", "#cam")
+
+      expect(spy).to.have.been.calledWith("Unknow directive: absolutelyunknown")
     })
   })
 })
