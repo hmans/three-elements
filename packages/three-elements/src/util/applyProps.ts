@@ -5,7 +5,7 @@ import { camelize } from "./camelize"
 import { getThreeObjectBySelector } from "./getThreeObjectBySelector"
 import { parseDeg } from "./parseDeg"
 
-const IGNORED_KEYS = ["id"]
+const IGNORED_KEYS = ["args", "id"]
 
 export const applyProps = (object: IStringIndexable, props: IStringIndexable) => {
   for (const name in props) {

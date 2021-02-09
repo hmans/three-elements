@@ -183,8 +183,7 @@ export class BaseElement extends HTMLElement {
   }
 
   attributeChangedCallback(key: string, _: string | null, value: string): boolean {
-    const propName = camelize(key)
-    return applyPropWithDirective(this, propName, value)
+    return applyPropWithDirective(this, camelize(key), value)
   }
 
   /**
