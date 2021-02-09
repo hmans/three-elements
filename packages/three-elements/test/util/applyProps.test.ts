@@ -1,5 +1,5 @@
 import { expect } from "@open-wc/testing"
-import { applyProps } from "../../src/util/applyProps"
+import { applyProps, applyProp } from "../../src/util/applyProps"
 import * as THREE from "three"
 
 describe("applyProps", () => {
@@ -7,7 +7,7 @@ describe("applyProps", () => {
     const object = {
       foo: 0
     }
-    applyProps(object, { foo: 1 })
+    applyProp(object, "foo", 1)
     expect(object.foo).to.equal(1)
   })
 
@@ -17,7 +17,7 @@ describe("applyProps", () => {
         bar: 0
       }
     }
-    applyProps(object, { "foo.bar": 1 })
+    applyProp(object, "foo.bar", 1)
     expect(object.foo.bar).to.equal(1)
   })
 
@@ -25,7 +25,7 @@ describe("applyProps", () => {
     const object = {
       foo: 0
     }
-    applyProps(object, { foo: "1.5" })
+    applyProp(object, "foo", "1.5")
     expect(object.foo).to.equal(1.5)
   })
 
@@ -33,7 +33,7 @@ describe("applyProps", () => {
     const object = {
       foo: 1
     }
-    applyProps(object, { foo: "0" })
+    applyProp(object, "foo", "0")
     expect(object.foo).to.equal(0)
   })
 
@@ -41,7 +41,7 @@ describe("applyProps", () => {
     const object = {
       foo: 0
     }
-    applyProps(object, { foo: "90deg" })
+    applyProp(object, "foo", "90deg")
     expect(object.foo).to.equal(Math.PI / 2)
   })
 
@@ -49,7 +49,7 @@ describe("applyProps", () => {
     const object = {
       foo: new THREE.Vector3()
     }
-    applyProps(object, { foo: "90deg 1.23 -90deg" })
+    applyProp(object, "foo", "90deg 1.23 -90deg")
     expect(object.foo.x).to.equal(Math.PI / 2)
     expect(object.foo.y).to.equal(1.23)
     expect(object.foo.z).to.equal(Math.PI / -2)
@@ -59,7 +59,7 @@ describe("applyProps", () => {
     const object = {
       foo: new THREE.Vector3()
     }
-    applyProps(object, { foo: "[1, 2, 3]" })
+    applyProp(object, "foo", "[1, 2, 3]")
     expect(object.foo.x).to.equal(1)
     expect(object.foo.y).to.equal(2)
     expect(object.foo.z).to.equal(3)
