@@ -58,6 +58,8 @@ export class ThreeElement<T = any> extends BaseElement {
     }
   }
 
+  /*** CALLBACKS ***/
+
   mountedCallback() {
     super.mountedCallback()
 
@@ -88,6 +90,16 @@ export class ThreeElement<T = any> extends BaseElement {
     }
 
     super.removedCallback()
+  }
+
+  attributeChangedCallback(key: string, oldValue: any, newValue: any) {
+    if (super.attributeChangedCallback(key, oldValue, newValue)) return true
+
+    /*
+    Okay, at this point, we'll just assume that the property lives on the wrapped object.
+    Good times! Let's assign it. If we have an object, that is.
+    */
+    return this.object ? applyPropWithDirective(this.object, key, newValue) : false
   }
 
   protected addObjectToParent() {
@@ -143,16 +155,6 @@ export class ThreeElement<T = any> extends BaseElement {
         )
       }
     }
-  }
-
-  attributeChangedCallback(key: string, oldValue: any, newValue: any) {
-    if (super.attributeChangedCallback(key, oldValue, newValue)) return true
-
-    /*
-    Okay, at this point, we'll just assume that the property lives on the wrapped object.
-    Good times! Let's assign it. If we have an object, that is.
-    */
-    return this.object ? applyPropWithDirective(this.object, key, newValue) : false
   }
 
   static for<T>(constructor: IConstructable<T>): IConstructable<ThreeElement<T>> {
