@@ -1,4 +1,4 @@
-import { Camera, Intersection, Object3D, Raycaster, Renderer, Scene, Vector2 } from "three"
+import { Intersection, Object3D, Raycaster, Vector2 } from "three"
 import { ThreeScene } from "./elements/three-scene"
 import { ThreeElement } from "./ThreeElement"
 import { cloneEvent, eventForwarder } from "./util/eventForwarder"
