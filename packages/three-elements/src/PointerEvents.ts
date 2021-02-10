@@ -27,12 +27,6 @@ export class PointerEvents {
     let previousIntersections: Intersection[]
     let previousIntersection: Intersection | undefined
 
-    /* When the pointer moves, update its position */
-    renderer.domElement.addEventListener("pointermove", (e) => {
-      this.__pointerMoveEvent = e
-      normalizePointerPosition(renderer, e.x, e.y, this.position)
-    })
-
     /* On every tick, raycast the current pointer position against the scene */
     this.sceneElement.game.emitter.on("tick", () => {
       /* If we haven't previously received a pointermove event, bail now. */
@@ -49,15 +43,6 @@ export class PointerEvents {
       this.intersections = this.raycaster.intersectObjects(scene.children, true)
       this.intersection = this.intersections[0]
 
-      /* pointermove and pointerover */
-      if (this.intersection) {
-        this.dispatchEventToIntersection(cloneEvent(this.__pointerMoveEvent), this.intersection)
-        this.dispatchEventToIntersection(
-          new PointerEvent("pointerover", this.__pointerMoveEvent),
-          this.intersection
-        )
-      }
-
       /* Simulate pointerenter and friends */
       if (this.intersection?.object !== previousIntersection?.object) {
         if (previousIntersection) {
@@ -72,8 +57,27 @@ export class PointerEvents {
         }
 
         if (this.intersection) {
+          /* pointerenter */
           this.dispatchEventToIntersection(new PointerEvent("pointerenter"), this.intersection)
+
+          /* pointerover */
+          this.dispatchEventToIntersection(
+            new PointerEvent("pointerover", this.__pointerMoveEvent),
+            this.intersection
+          )
         }
+      }
+    })
+
+    /* When the pointer moves, update its position */
+    renderer.domElement.addEventListener("pointermove", (e) => {
+      /* Update normalized pointer position */
+      this.__pointerMoveEvent = e
+      normalizePointerPosition(renderer, e.x, e.y, this.position)
+
+      /* pointermove */
+      if (this.intersection) {
+        this.dispatchEventToIntersection(cloneEvent(this.__pointerMoveEvent), this.intersection)
       }
     })
 
