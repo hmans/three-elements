@@ -2528,7 +2528,7 @@
   dependencies:
     semver "^7.3.4"
 
-"@web/dev-server-core@^0.3.0", "@web/dev-server-core@^0.3.2", "@web/dev-server-core@^0.3.3", "@web/dev-server-core@^0.3.5", "@web/dev-server-core@^0.3.6":
+"@web/dev-server-core@^0.3.0", "@web/dev-server-core@^0.3.2", "@web/dev-server-core@^0.3.3", "@web/dev-server-core@^0.3.6":
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/@web/dev-server-core/-/dev-server-core-0.3.6.tgz#935c0c969959901eb0d03acf938ea53018ba11bc"
   integrity sha512-AAVdxMVMJd7st3NsLDlRWBQRPUL0pYZxTqsdnoYwhcf5hDmxAWwcR2wcQRuM3g2pa+Vh+9qjpJeinU58ZBfzqw==
@@ -2586,7 +2586,7 @@
     rollup "^2.35.1"
     whatwg-url "^8.4.0"
 
-"@web/dev-server@^0.1.6":
+"@web/dev-server@^0.1.6", "@web/dev-server@^0.1.7":
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/@web/dev-server/-/dev-server-0.1.7.tgz#aaa1119d322451f7c269caf9a545d65f03263c8e"
   integrity sha512-JFUGvSQMCoNJwkdLuzbxAv/Fj7hcWRW/DFUwBFh1Qz61wIOMnoj6iJ5rGZnTiC/9aK8SLIBXaDWA5Kd2X3ntcw==
@@ -2640,14 +2640,14 @@
   dependencies:
     "@web/test-runner-core" "^0.10.8"
 
-"@web/test-runner-core@^0.10.10", "@web/test-runner-core@^0.10.8", "@web/test-runner-core@^0.10.9":
-  version "0.10.10"
-  resolved "https://registry.yarnpkg.com/@web/test-runner-core/-/test-runner-core-0.10.10.tgz#6dd92b43c3363e567f0062833b205f06e68f4e40"
-  integrity sha512-mN4BGfduqWHDlUCWSQNlfgXkQrMsawvkr1K5e1U/XliviYrgt72xCfPPAPWLH1qan7or38Zovsam3LZHbTVz7w==
+"@web/test-runner-core@^0.10.11", "@web/test-runner-core@^0.10.8", "@web/test-runner-core@^0.10.9":
+  version "0.10.11"
+  resolved "https://registry.yarnpkg.com/@web/test-runner-core/-/test-runner-core-0.10.11.tgz#d88ae941845298a7ad7ea53daca93b7fcd5e10cb"
+  integrity sha512-0V2eF58vtQgo4TR6jPEw53CRaT3lD+PlgjjDcnZb8rWp/1ZIt3QAnzNCeSsV4DsuABzE3eyUkIBNILLky541rw==
   dependencies:
     "@babel/code-frame" "^7.12.11"
     "@web/browser-logs" "^0.2.1"
-    "@web/dev-server-core" "^0.3.5"
+    "@web/dev-server-core" "^0.3.6"
     chalk "^4.1.0"
     chokidar "^3.4.3"
     cli-cursor "^3.1.0"
@@ -2694,16 +2694,16 @@
     puppeteer "^5.5.0"
 
 "@web/test-runner@^0.12.14":
-  version "0.12.14"
-  resolved "https://registry.yarnpkg.com/@web/test-runner/-/test-runner-0.12.14.tgz#2e0499062cfb43a9514fcf57a0dc45d0e6d10456"
-  integrity sha512-5o+8pNGiAjcrFj81BH24k8Hgt4WaWKBkf22Z2dIhx5PxnVb6qmwReXSEEU1iAMUcqBip8r+wEon8lJW2DD+TMg==
+  version "0.12.15"
+  resolved "https://registry.yarnpkg.com/@web/test-runner/-/test-runner-0.12.15.tgz#5989c6d00c8490247282c0e0fbf861e5674cc356"
+  integrity sha512-v9VehhdoELkPs9u0XQrXu8BKzIRlx/U8F8YLsz8tV/bi8Mb7Riqvku0OdFu1P4vjf4NnElpx9J97/WBXURBwLg==
   dependencies:
     "@web/browser-logs" "^0.2.0"
     "@web/config-loader" "^0.1.3"
-    "@web/dev-server" "^0.1.6"
+    "@web/dev-server" "^0.1.7"
     "@web/test-runner-chrome" "^0.9.4"
     "@web/test-runner-commands" "^0.4.1"
-    "@web/test-runner-core" "^0.10.10"
+    "@web/test-runner-core" "^0.10.11"
     "@web/test-runner-mocha" "^0.7.2"
     camelcase "^6.2.0"
     chalk "^4.1.0"
