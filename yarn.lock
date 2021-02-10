@@ -2528,14 +2528,14 @@
   dependencies:
     semver "^7.3.4"
 
-"@web/dev-server-core@^0.3.0", "@web/dev-server-core@^0.3.2", "@web/dev-server-core@^0.3.3", "@web/dev-server-core@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@web/dev-server-core/-/dev-server-core-0.3.5.tgz#9bbde14e2b53dd03f346b08a306825f28587dc04"
-  integrity sha512-sflV1pg2bRhM+S643J/bnCLPE3oTd59UoeQslrhHNLC6ZMkePIhOtiC99F9hTEHLsVrP5oIs1bAhz0YJMXw/cw==
+"@web/dev-server-core@^0.3.0", "@web/dev-server-core@^0.3.2", "@web/dev-server-core@^0.3.3", "@web/dev-server-core@^0.3.5", "@web/dev-server-core@^0.3.6":
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/@web/dev-server-core/-/dev-server-core-0.3.6.tgz#935c0c969959901eb0d03acf938ea53018ba11bc"
+  integrity sha512-AAVdxMVMJd7st3NsLDlRWBQRPUL0pYZxTqsdnoYwhcf5hDmxAWwcR2wcQRuM3g2pa+Vh+9qjpJeinU58ZBfzqw==
   dependencies:
     "@types/koa" "^2.11.6"
     "@types/ws" "^7.4.0"
-    "@web/parse5-utils" "^1.0.0"
+    "@web/parse5-utils" "^1.2.0"
     chokidar "^3.4.3"
     clone "^2.1.2"
     es-module-lexer "^0.3.26"
@@ -2587,15 +2587,15 @@
     whatwg-url "^8.4.0"
 
 "@web/dev-server@^0.1.6":
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/@web/dev-server/-/dev-server-0.1.6.tgz#cdc20cd2f2d9806f1ba4b30e2a67bb00153c7eca"
-  integrity sha512-bPG9St6zAD/hdeqghzgr1Mlp8rzGfL39bCyIHm3lUF64vrZ17xGjv3Wilhe6NhR37cYn359Qrh75qSumhPxt8g==
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@web/dev-server/-/dev-server-0.1.7.tgz#aaa1119d322451f7c269caf9a545d65f03263c8e"
+  integrity sha512-JFUGvSQMCoNJwkdLuzbxAv/Fj7hcWRW/DFUwBFh1Qz61wIOMnoj6iJ5rGZnTiC/9aK8SLIBXaDWA5Kd2X3ntcw==
   dependencies:
     "@babel/code-frame" "^7.12.11"
     "@rollup/plugin-node-resolve" "^11.0.1"
     "@types/command-line-args" "^5.0.0"
     "@web/config-loader" "^0.1.3"
-    "@web/dev-server-core" "^0.3.5"
+    "@web/dev-server-core" "^0.3.6"
     "@web/dev-server-rollup" "^0.3.2"
     camelcase "^6.2.0"
     chalk "^4.1.0"
@@ -2607,10 +2607,18 @@
     open "^7.3.0"
     portfinder "^1.0.28"
 
-"@web/parse5-utils@^1.0.0", "@web/parse5-utils@^1.1.2":
+"@web/parse5-utils@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@web/parse5-utils/-/parse5-utils-1.1.2.tgz#b53e7f62679170371da36023517b23bbb1f7c582"
   integrity sha512-/JQHbK53BmYiFK2igr2B+Psl2Ivp2ju75Nx1InZweTbxLQNGG9yUBaudER85aqebIH6smkPkKwVtpdBXBiwy1A==
+  dependencies:
+    "@types/parse5" "^5.0.3"
+    parse5 "^6.0.1"
+
+"@web/parse5-utils@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@web/parse5-utils/-/parse5-utils-1.2.0.tgz#214a69cf4bc3d5863fb154506050edc44ceaa3db"
+  integrity sha512-/v1L5rBFh76BuXHPzoozS+viBzbErEtOBVEq8SSr9LpUzRlPSohzgMvJN3EgYW5FrbgXJkigWd19V67w7B/aJw==
   dependencies:
     "@types/parse5" "^5.0.3"
     parse5 "^6.0.1"
