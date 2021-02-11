@@ -1,7 +1,7 @@
 {
   "name": "@three-elements/preact",
   "private": false,
-  "version": "0.4.0-alpha.12",
+  "version": "0.4.0-alpha.13",
   "author": {
     "name": "Hendrik Mans",
     "email": "hendrik@mans.de",
@@ -50,7 +50,7 @@
     "preact": "^10.5.12"
   },
   "dependencies": {
-    "@three-elements/proxy": "^0.4.0-alpha.12"
+    "@three-elements/proxy": "^0.4.0-alpha.13"
   },
   "peerDependencies": {
     "preact": ">=10.0.0",
