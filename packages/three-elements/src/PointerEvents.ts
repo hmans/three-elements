@@ -35,7 +35,6 @@ export class PointerEvents {
       const { camera } = this.sceneElement
 
       /* Raycast against all objects in scene, and keep the intersections for later. */
-      this.raycaster.layers.enableAll()
       this.raycaster.setFromCamera(this.position, camera)
 
       previousIntersections = this.intersections
