@@ -1,6 +1,6 @@
 import * as THREE from "three"
 import { BaseElement } from "./BaseElement"
-import { IConstructable, isDisposable } from "./types"
+import { IConstructor, isDisposable } from "./types"
 import { applyProp, applyPropWithDirective } from "./util/applyProps"
 import { attributeValueToArray } from "./util/attributeValueToArray"
 
@@ -13,7 +13,7 @@ export class ThreeElement<T = any> extends BaseElement {
   static exposedProperties = BaseElement.exposedProperties
 
   /** Constructor that will instantiate our object. */
-  static threeConstructor?: IConstructable
+  static threeConstructor?: IConstructor
 
   /*** MANAGED THREE.JS OBJECT ***/
 
@@ -157,7 +157,7 @@ export class ThreeElement<T = any> extends BaseElement {
     }
   }
 
-  static for<T>(constructor: IConstructable<T>): IConstructable<ThreeElement<T>> {
+  static for<T>(constructor: IConstructor<T>): IConstructor<ThreeElement<T>> {
     /*
     Create an anonymous class that inherits from our cool base class, but sets
     its own Three.js constructor property.

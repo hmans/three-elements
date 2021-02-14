@@ -1,4 +1,4 @@
-export interface IConstructable<T = any> {
+export interface IConstructor<T = any> {
   new (...args: any): T
 }
 

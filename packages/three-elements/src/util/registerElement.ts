@@ -1,4 +1,4 @@
-import { IConstructable } from "../types"
+import { IConstructor } from "../types"
 
 /**
  * Convenience method to create a new custom element.
@@ -24,7 +24,7 @@ export const registeredThreeElements: Record<string, string> = {}
 export const registerThreeElement = (
   tagName: string,
   threeName: string,
-  klass: IConstructable<HTMLElement>
+  klass: IConstructor<HTMLElement>
 ) => {
   registerElement(tagName, klass)
   registeredThreeElements[threeName] = tagName

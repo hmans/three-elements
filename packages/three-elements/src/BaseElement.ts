@@ -1,7 +1,7 @@
 import { ThreeGame, TickerFunction } from "./elements/three-game"
 import { ThreeScene } from "./elements/three-scene"
 import { TickerCallbacks } from "./TickerCallbacks"
-import { IConstructable } from "./types"
+import { IConstructor } from "./types"
 import { applyPropWithDirective } from "./util/applyProps"
 import { camelize } from "./util/camelize"
 
@@ -222,7 +222,7 @@ export class BaseElement extends HTMLElement {
     } while (node)
   }
 
-  findElementWithInstanceOf<T = HTMLElement>(constructor: IConstructable): T | undefined {
+  findElementWithInstanceOf<T = HTMLElement>(constructor: IConstructor): T | undefined {
     return this.find((node: any) => node.object instanceof constructor) as T | undefined
   }
 
