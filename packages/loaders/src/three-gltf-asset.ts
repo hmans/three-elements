@@ -44,14 +44,15 @@ export class ThreeGLTFAsset extends ThreeElement.for(Group) {
     /* Create a copy of the GLTF just for this element */
     const scene = gltf.scene.clone(true)
 
-    /* Apply shadow settings */
+    /* Apply shadows and layer settings */
     scene.traverse((node) => {
-      node.castShadow = this.object!.castShadow
-      node.receiveShadow = this.object!.receiveShadow
+      node.layers.mask = this.object.layers.mask
+      node.castShadow = this.object.castShadow
+      node.receiveShadow = this.object.receiveShadow
     })
 
     /* Add the GLTF to our local group */
-    this.object!.add(scene)
+    this.object.add(scene)
 
     /* And make sure a frame will be rendered */
     this.game.requestFrame()
