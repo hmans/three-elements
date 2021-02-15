@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.0] - unreleased
 
+- **Breaking Change:** When referencing the objects managed by other elements -- like a custom camera, or a geometry or material you want to reuse across multiple meshes -- you now have to prefix the attribute with the new `ref:` directive:
+
+  ```html
+  <three-mesh ref:geometry="#my-geometry" ref:material="#my-material"></three-mesh>
+  ```
+
+- **Breaking Change:** `<three-web-gl-renderer>` now is `<three-webgl-renderer>`.
+
 - **New: GLTF loading & rendering!** We now provide a new `@three-elements/loaders` package that will house a series of extra elements that can load 3D models in various formats via HTTP and render them, starting with the `<three-gltf-asset>` element:
 
   ```html
@@ -38,17 +46,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **New: Experimental Preact Bindings!** We now provide a `@three-elements/preact` package that provides some light-weight bindings for use in Preact applications using its hyperscript syntax. This makes use of an experimental new proxy generator (housed in the equally new `@three-elements/proxy` package) that can be used to create three-elements bindings for all sorts of web frameworks, so expect to see more of this in the future.
 
-- **Breaking Change:** When referencing the objects managed by other elements -- like a custom camera, or a geometry or material you want to reuse across multiple meshes -- you now have to prefix the attribute with the new `ref:` directive:
+* **Fixed:** When switching a scene to a new camera, this new camera would not be picked up by the scene's pointer event manager, pretty much breaking pointer interactions for the entire scene. This has now been resolved.
 
-  ```html
-  <three-mesh ref:geometry="#my-geometry" ref:material="#my-material"></three-mesh>
-  ```
-
-- **Breaking Change:** `<three-web-gl-renderer>` now is `<three-webgl-renderer>`.
-
-- **Fixed:** When switching a scene to a new camera, this new camera would not be picked up by the scene's pointer event manager, pretty much breaking pointer interactions for the entire scene. This has now been resolved.
-
-- **Fixed:** Pointer event handling has been made significantly more reliable.
+* **Fixed:** Pointer event handling has been made significantly more reliable.
 
 ### Internals
 
