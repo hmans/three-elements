@@ -132,6 +132,19 @@ export class BaseElement extends HTMLElement {
   removedCallback() {}
 
   connectedCallback() {
+    /*
+    From MDN:
+
+    > Note: connectedCallback may be called once your element is no longer connected,
+    > use Node.isConnected to make sure."
+
+    Okay!
+    */
+    if (!this.isConnected) {
+      this.debug("connectedCallback called while not connected")
+      return
+    }
+
     this.debug("connectedCallback")
 
     /* Emit connected event */
