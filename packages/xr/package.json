@@ -1,0 +1,52 @@
+{
+  "name": "@three-elements/xr",
+  "private": false,
+  "version": "0.4.0-alpha.14",
+  "author": {
+    "name": "Hendrik Mans",
+    "email": "hendrik@mans.de",
+    "url": "https://hmans.co/"
+  },
+  "description": "GLTF etc. loaders for three-elements.",
+  "homepage": "https://github.com/hmans/three-elements",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hmans/three-elements"
+  },
+  "keywords": [
+    "webgl",
+    "three",
+    "graphics",
+    "gamedev",
+    "webcomponents"
+  ],
+  "sideEffects": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "unpkg": "dist/index.umd.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.modern.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "docs": "typedoc",
+    "watch": "yarn clean && microbundle watch --globals three=THREE",
+    "build": "yarn clean && microbundle --globals three=THREE",
+    "test": "web-test-runner --puppeteer",
+    "prepublishOnly": "yarn build && yarn test"
+  },
+  "dependencies": {
+    "three": ">=0.125.2",
+    "three-elements": "^0.4.0-alpha.14"
+  }
+}
