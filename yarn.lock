@@ -12051,9 +12051,9 @@ trim-off-newlines@^1.0.0:
   integrity sha1-n5up2e+odkw4dpi8v+sshI8RrbM=
 
 troika-three-text@^0.39.1:
-  version "0.39.1"
-  resolved "https://registry.yarnpkg.com/troika-three-text/-/troika-three-text-0.39.1.tgz#42819e7c05a19b3db6cd8e0dd233ee6fc4f5041c"
-  integrity sha512-j+8jGodj/rBucsvPyTmH7sQ7C30L00HzG7DzURJhrH9ls4zh372y9BRqdALV/FBQDsm9ZqQNXETbgFEMRPSj5A==
+  version "0.39.2"
+  resolved "https://registry.yarnpkg.com/troika-three-text/-/troika-three-text-0.39.2.tgz#6481b1957c75260280aed4611ffdf5e4e9279c17"
+  integrity sha512-ayRTxBnp84fC5NeOo+N43pgLHwMhx+mEeM2EUhMCzs90rEpcu8OsbLP+0bNq6mUcxXEtIj3hrG5r+KSa0kWinw==
   dependencies:
     troika-three-utils "^0.39.0"
     troika-worker-utils "^0.39.0"
