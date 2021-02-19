@@ -30,7 +30,7 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.38.5",
     "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.29.0",
+    "rollup-plugin-typescript2": "^0.30.0",
     "three": "^0.125.2",
     "typedoc": "^0.20.23",
     "typescript": "^4.1.3",
