@@ -12078,23 +12078,23 @@ trim-off-newlines@^1.0.0:
   resolved "https://registry.yarnpkg.com/trim-off-newlines/-/trim-off-newlines-1.0.1.tgz#9f9ba9d9efa8764c387698bcbfeb2c848f11adb3"
   integrity sha1-n5up2e+odkw4dpi8v+sshI8RrbM=
 
-troika-three-text@^0.39.1:
-  version "0.39.2"
-  resolved "https://registry.yarnpkg.com/troika-three-text/-/troika-three-text-0.39.2.tgz#6481b1957c75260280aed4611ffdf5e4e9279c17"
-  integrity sha512-ayRTxBnp84fC5NeOo+N43pgLHwMhx+mEeM2EUhMCzs90rEpcu8OsbLP+0bNq6mUcxXEtIj3hrG5r+KSa0kWinw==
+troika-three-text@^0.40.0:
+  version "0.40.0"
+  resolved "https://registry.yarnpkg.com/troika-three-text/-/troika-three-text-0.40.0.tgz#67e955c7e5f2696f1c290af46237f0502f1cbb11"
+  integrity sha512-ikkKXmuZir/wTny4z0xM26bpYFcHMxWSXtlkWNMWKV6UzWEjeT75O0tewEhI0T76L4+pS+xAYpK1bML0Bzn3Ag==
   dependencies:
-    troika-three-utils "^0.39.0"
-    troika-worker-utils "^0.39.0"
+    troika-three-utils "^0.40.0"
+    troika-worker-utils "^0.40.0"
 
-troika-three-utils@^0.39.0:
-  version "0.39.0"
-  resolved "https://registry.yarnpkg.com/troika-three-utils/-/troika-three-utils-0.39.0.tgz#c773d41f38cd44292b8827fe54a9722d4439ba70"
-  integrity sha512-0bJjHkfWhyOCq1KkGtWrpfiuhX0lKWv0OtQITW7OVWf+dgxkb3iCAa8LIof9uAdBhyujk5tUfheq9KIy0tMH/A==
+troika-three-utils@^0.40.0:
+  version "0.40.0"
+  resolved "https://registry.yarnpkg.com/troika-three-utils/-/troika-three-utils-0.40.0.tgz#0a6e1cc586014b072272096783e5c3fc6195651e"
+  integrity sha512-hhk7dG44M07xiRWtusIRuE3GVJd4tGNpu/ZL9h0a2aC+Dpc4/RYl9w3Y6xAurkwn6XY+qg/TO/f65r9OuD59pw==
 
-troika-worker-utils@^0.39.0:
-  version "0.39.0"
-  resolved "https://registry.yarnpkg.com/troika-worker-utils/-/troika-worker-utils-0.39.0.tgz#33b0f90c4aea28ab3a4a2c843183e62acfde23b4"
-  integrity sha512-TKrn77HGeqyRBtdoEDH+eMEsKEZO9Crc9G0b9L+ItHUU45eTL3SLY/BbETsA3ratH9Q29Bq7Zo6M8jkZIOirgw==
+troika-worker-utils@^0.40.0:
+  version "0.40.0"
+  resolved "https://registry.yarnpkg.com/troika-worker-utils/-/troika-worker-utils-0.40.0.tgz#71211311ae3d7cec4af7dcfb8bfd7c773704b4a5"
+  integrity sha512-wlSvufSoYP5KXxZzm/aovca2Zoq008CuMcGQWoUzPG6xDtxhdfP43I8cB8K3PoJb3hRQyaZI2fdG33F2yCyPZw==
 
 tslib@2.0.1:
   version "2.0.1"
