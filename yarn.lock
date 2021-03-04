@@ -919,9 +919,9 @@
     to-fast-properties "^2.0.0"
 
 "@esm-bundle/chai@^4.3.0":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@esm-bundle/chai/-/chai-4.3.0.tgz#4a849d1627f30967cef9c688ee5f2377615ace9a"
-  integrity sha512-Hbg4vBb8ZtZCrtFRKVXy3+V5SFCopVJt1w1bS46rGf+NEVfMqg5QyhsvDRjjYvyKEPTZ2khG6SmcouhVyPWE6g==
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/@esm-bundle/chai/-/chai-4.3.3.tgz#3d9a036915f6835038cfb43117c860bf9354cd9f"
+  integrity sha512-nrgzOIpvXcmtrM4v9TWtzYrKCoZM/vxJHkXcJsvU2oIEC24rk75MgOaP1et37mGpfCZAg1dIYH1aOliA3NKJ0w==
   dependencies:
     "@types/chai" "^4.2.12"
 
