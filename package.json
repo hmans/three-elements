@@ -20,7 +20,7 @@
     "@web/dev-server": "^0.1.6",
     "@web/dev-server-esbuild": "^0.2.11",
     "@web/dev-server-import-maps": "^0.0.5",
-    "@web/test-runner": "^0.12.14",
+    "@web/test-runner": "^0.13.4",
     "@web/test-runner-puppeteer": "^0.9.3",
     "concurrently": "^6.0.0",
     "lerna": "^3.22.1",
