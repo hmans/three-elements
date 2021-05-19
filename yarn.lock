@@ -4436,13 +4436,13 @@ concat-with-sourcemaps@^1.1.0:
     source-map "^0.6.1"
 
 concurrently@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/concurrently/-/concurrently-6.0.0.tgz#c1a876dd99390979c71f8c6fe6796882f3a13199"
-  integrity sha512-Ik9Igqnef2ONLjN2o/OVx1Ow5tymVvvEwQeYCQdD/oV+CN9oWhxLk7ibcBdOtv0UzBqHCEKRwbKceYoTK8t3fQ==
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/concurrently/-/concurrently-6.1.0.tgz#00d22525d3fcdce7f34cc7f3c9753f90a57d6208"
+  integrity sha512-jy+xj49pvqeKjc2TAVXRIhrgPG51eBKDZti0kZ41kaWk9iLbyWBjH6KMFpW7peOLkEymD+ZM83Lx6UEy3N/M9g==
   dependencies:
     chalk "^4.1.0"
     date-fns "^2.16.1"
-    lodash "^4.17.20"
+    lodash "^4.17.21"
     read-pkg "^5.2.0"
     rxjs "^6.6.3"
     spawn-command "^0.0.2-1"
@@ -10973,9 +10973,9 @@ rollup-pluginutils@^2.8.2:
     estree-walker "^0.6.1"
 
 rollup@^2.35.1, rollup@^2.38.5:
-  version "2.40.0"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.40.0.tgz#efc218eaede7ab590954df50f96195188999c304"
-  integrity sha512-WiOGAPbXoHu+TOz6hyYUxIksOwsY/21TRWoO593jgYt8mvYafYqQl+axaA8y1z2HFazNUUrsMSjahV2A6/2R9A==
+  version "2.48.0"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.48.0.tgz#fceb01ed771f991f29f7bd2ff7838146e55acb74"
+  integrity sha512-wl9ZSSSsi5579oscSDYSzGn092tCS076YB+TQrzsGuSfYyJeep8eEWj0eaRjuC5McuMNmcnR8icBqiE/FWNB1A==
   optionalDependencies:
     fsevents "~2.3.1"
 
