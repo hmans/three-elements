@@ -23,7 +23,7 @@
     "@web/test-runner": "^0.13.4",
     "@web/test-runner-puppeteer": "^0.9.3",
     "concurrently": "^6.0.0",
-    "lerna": "^3.22.1",
+    "lerna": "^4.0.0",
     "lit-element": "^2.4.0",
     "microbundle": "^0.13.0",
     "preact": "^10.5.12",
