@@ -3474,6 +3474,13 @@ before-after-hook@^2.0.0:
   resolved "https://registry.yarnpkg.com/before-after-hook/-/before-after-hook-2.1.1.tgz#99ae36992b5cfab4a83f6bee74ab27835f28f405"
   integrity sha512-5ekuQOvO04MDj7kYZJaMab2S8SPjGJbotVNyv7QYFCOAwrGZs/YnoDNlh1U+m5hl7H2D/+n0taaAV/tfyd3KMA==
 
+bidi-js@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/bidi-js/-/bidi-js-1.0.2.tgz#1a497a762c2ddea377429d2649c9ce0f8a91527f"
+  integrity sha512-rzSy/k7WdX5zOyeHHCOixGXbCHkyogkxPKL2r8QtzHmVQDiWCXUWa18bLdMWT9CYMLOYTjWpTHawuev2ouYJVw==
+  dependencies:
+    require-from-string "^2.0.2"
+
 big.js@^3.1.3:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-3.2.0.tgz#a5fc298b81b9e0dca2e458824784b65c52ba588e"
@@ -10701,6 +10708,11 @@ require-directory@^2.1.1:
   resolved "https://registry.yarnpkg.com/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
   integrity sha1-jGStX9MNqxyXbiNE/+f3kqam30I=
 
+require-from-string@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/require-from-string/-/require-from-string-2.0.2.tgz#89a7fdd938261267318eafe14f9c32e598c36909"
+  integrity sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==
+
 require-main-filename@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-2.0.0.tgz#d0b329ecc7cc0f61649f62215be69af54aa8989b"
@@ -12118,23 +12130,24 @@ trim-off-newlines@^1.0.0:
   resolved "https://registry.yarnpkg.com/trim-off-newlines/-/trim-off-newlines-1.0.1.tgz#9f9ba9d9efa8764c387698bcbfeb2c848f11adb3"
   integrity sha1-n5up2e+odkw4dpi8v+sshI8RrbM=
 
-troika-three-text@^0.40.0:
-  version "0.40.0"
-  resolved "https://registry.yarnpkg.com/troika-three-text/-/troika-three-text-0.40.0.tgz#67e955c7e5f2696f1c290af46237f0502f1cbb11"
-  integrity sha512-ikkKXmuZir/wTny4z0xM26bpYFcHMxWSXtlkWNMWKV6UzWEjeT75O0tewEhI0T76L4+pS+xAYpK1bML0Bzn3Ag==
+troika-three-text@^0.43.0:
+  version "0.43.0"
+  resolved "https://registry.yarnpkg.com/troika-three-text/-/troika-three-text-0.43.0.tgz#7f221f0a20f64d761f8f37496c8d10e165b63592"
+  integrity sha512-lZcTImvd5VkrZGA1qQx8zRs20Eel5Ue4ZpxnHtvgpGHi+lJemNIpkwtGOgk73DmLAkBm6it3nG5RCE5IxufqCg==
   dependencies:
-    troika-three-utils "^0.40.0"
-    troika-worker-utils "^0.40.0"
+    bidi-js "^1.0.2"
+    troika-three-utils "^0.43.0"
+    troika-worker-utils "^0.43.0"
 
-troika-three-utils@^0.40.0:
-  version "0.40.0"
-  resolved "https://registry.yarnpkg.com/troika-three-utils/-/troika-three-utils-0.40.0.tgz#0a6e1cc586014b072272096783e5c3fc6195651e"
-  integrity sha512-hhk7dG44M07xiRWtusIRuE3GVJd4tGNpu/ZL9h0a2aC+Dpc4/RYl9w3Y6xAurkwn6XY+qg/TO/f65r9OuD59pw==
+troika-three-utils@^0.43.0:
+  version "0.43.0"
+  resolved "https://registry.yarnpkg.com/troika-three-utils/-/troika-three-utils-0.43.0.tgz#ffa1b7afd6774eff3ab717997eec888765473b24"
+  integrity sha512-UVc4jOob1VjrX0awA0dHxmHZ8yvgq8W/kmtihMnMeObm0HNOobPKAWm/N6o34/k/FPgOtUMDHYgkw+TG2RNouA==
 
-troika-worker-utils@^0.40.0:
-  version "0.40.0"
-  resolved "https://registry.yarnpkg.com/troika-worker-utils/-/troika-worker-utils-0.40.0.tgz#71211311ae3d7cec4af7dcfb8bfd7c773704b4a5"
-  integrity sha512-wlSvufSoYP5KXxZzm/aovca2Zoq008CuMcGQWoUzPG6xDtxhdfP43I8cB8K3PoJb3hRQyaZI2fdG33F2yCyPZw==
+troika-worker-utils@^0.43.0:
+  version "0.43.0"
+  resolved "https://registry.yarnpkg.com/troika-worker-utils/-/troika-worker-utils-0.43.0.tgz#f24bbf3d7d25f87f72150b37bf35fa105f7160bd"
+  integrity sha512-8YXWwfviJ1N/9+nuE5dT9RFttmDsIF8CP7d6rRsBBhH55il3fBqpFSuzTlOcdgC1yq8Hmhi6GgIl6eK4Zt+hTw==
 
 tslib@2.0.1:
   version "2.0.1"
