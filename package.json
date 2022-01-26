@@ -31,7 +31,7 @@
     "rollup": "^2.38.5",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
-    "three": "^0.125.2",
+    "three": "^0.137.0",
     "typedoc": "^0.21.0",
     "typescript": "^4.1.3",
     "vuepress": "^1.8.0",
