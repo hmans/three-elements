@@ -1,3 +1,13 @@
+## New Maintainer Wanted!
+
+### I am no longer working on this library (since I am also no longer using it, unfortunately.) If you're interested in taking over, please contact me at hendrik@mans.de. Thanks!
+
+----
+
+----
+
+----
+
 [![Version](https://img.shields.io/npm/v/three-elements)](https://www.npmjs.com/package/three-elements)
 [![Version](https://img.shields.io/npm/v/three-elements/next?color=red)](https://www.npmjs.com/package/three-elements/v/next)
 [![CI](https://github.com/hmans/three-elements/workflows/CI/badge.svg)](https://github.com/hmans/three-elements/actions?query=workflow%3ACI)
